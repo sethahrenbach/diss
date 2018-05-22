@@ -1,0 +1,406 @@
+\chapter{Application: Runtime Monitor}
+	\label{CH_05}
+\section{Formal Analysis of Pilot Error}~\label{formal}
+
+In~\cite{AhrenbachNFM}, the author develops a Dynamic Agent Safety Logic (DASL) for analyzing safety-critical information flow during aviation mishaps. It is a modal logic based on Dynamic Epistemic Logic (DEL), a dynamic modal logic for reasoning about how knowledge and actions are related~\cite{DEL}. The Dynamic Agent Safety Logic (DASL) used in this paper has the following syntax.
+
+%, combining elements of Dynamic Epistemic Logic (DEL) and Agent Safety Logic (ASL).
+%\begin{tcolorbox}
+	$$ \varphi \ ::=\   \lpp  \bnf \tlnot \varphi \bnf \varphi \tland \varphi  \bnf \Kns{i} \varphi \bnf \Bels{i}\varphi \bnf \Pal{i, \laa}\varphi \bnf \Pal{i,\laa,S}\varphi,$$
+%\end{tcolorbox}
+where $\lpp \in AtProp$ is an atomic proposition, $\mathbf{i}$ refers
+to $i \in Agents$, and $\mathbf{\laa} \in Actions$. The knowledge operator
+$\Kns{i}$ indicates that ``agent \emph{i} knows that ..." Similarly,
+the operator for belief, $\Bels{i}$ can be read, ``agent \emph{i}
+believes that..." The operators $\Pal{i,\laa}$ and
+$\Pal{i,\laa,S}$ are the dynamic operators for agent $i$ executing
+action $\laa$ in the former case, and
+doing so safely in the latter case. Note that the $\mathbf{S}$ in
+$\Pal{i,\laa,S}$ is a constant in the syntax of the logic denoting
+`safety', and is not a variable, whereas the $\mathbf{i,\laa}$ are
+variables for agents and actions,
+respectively. One can read the action operators as ``after $i$
+executes $\laa$, $\varphi$ is true.'  We define the dual modal
+operators $\Poss{i}$, $\BPoss{i}$, $\PalPos{i}{\laa}$, and
+$\SPalPos{i}{\laa}$ in the usual way:
+\begin{align*}
+\Poss{i}\varphi &\equiv \tlnot \Kns{i} \tlnot \varphi \\
+\BPoss{i} \varphi &\equiv \tlnot \Bels{i} \tlnot \varphi \\
+\PalPos{i}{\laa}\varphi &\equiv \tlnot \Pal{i, \laa} \tlnot \varphi \\
+\SPalPos{i}{\laa}\varphi &\equiv \tlnot \Pal{i,\laa,S}\tlnot \varphi
+\end{align*} 
+DASL is axiomatized by the following Hilbert system.\\
+
+\begin{tcolorbox}{\normalsize}
+	All propositional tautologies are axioms.\\
+		$\Kns{i}$ is T (knowledge relation is reflexive)\\
+	$\Bels{i}$ is KD45 (belief relation is serial, transitive, and Euclidean)\\
+	EP1: $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ \\
+	EP2: $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$\\
+	EP3: $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$\\
+	SP: $\Pal{i,\laa}\varphi \iimplies \Pal{i,\laa,S}\varphi$\\
+	%\SPalPos{i}{\laa}\varphi \iimplies \PalPos{i}{\laa}\varphi$\\
+	PR: $\PalPos{i}{\laa}\varphi \iimplies \Bels{i}\SPalPos{i}{\laa}\varphi$,\\
+\end{tcolorbox}
+\noindent plus the inference rules Modus Ponens and Necessitation for $\Kns{i}$ and $\Bels{i}$.
+
+DASL allows for formal representation of and reasoning about a pilot's knowledge, belief, actions, and \emph{safe} or \emph{unsafe} actions, and how they all relate to each other logically. In particular, the following theorem is proven:
+\begin{theorem}[Unawareness of Safety-Critical Information]
+	\label{unawareness}
+	A rational pilot executes an unsafe action only if she is unaware that the action is unsafe.
+\end{theorem}
+
+The work has its foundations in economics, computer science, and philosophy, where the construction of formal models of reasoning and agent knowledge is of primary concern. DASL improves on the work in those domains for the purposes of practical application to aviation safety by developing a more realistic model of human agents who can be mistaken in their beliefs. The notion of a \emph{rational pilot} in DASL is one who executes an action only if she believes that it is safe, although she may be wrong about this. Merely believing something does not entail knowledge of it. This is critical for our purposes, because we must be able to model agents who are mistaken, but still rational\footnote{This approach to rationality has been taken up recently in the literature with attempts to model agents whose rationality is \emph{bounded}, but by and large, most of the literature treats agents as being perfectly rational.}. 
+
+In DASL, an action is safe or unsafe depending on the conditions under which it is executed. If the conditions for acting are safe, then its \emph{safety precondition} has been met. In the aforementioned work the authors envision the safety precondition of an aviation action as the set of instrument configurations that would permit the action, according to a flight safety manual of the aircraft. Formally, a conjunction of propositions capturing each instrument's value constitutes a \emph{configuration} of the flight deck, \emph{e.g.} ``the left airspeed indicator is VERY FAST \emph{and} the right airspeed indicator is SLOW \emph{and} ...", where `very fast' and `slow' refer to ranges of the instrument's potential values. The safety precondition function $(pre_s)$ is defined as a mapping from flight control inputs (actions) to the set of configurations under which that input is considered safe according to a flight safety manual.
+
+
+When the actual configuration of the flight deck conflicts with the safety precondition of an action, executing that action is unsafe. DASL establishes a logical connection between a pilot's actions and her epistemic state, or state of knowledge, through Theorem \ref{unawareness}. The mental state of being \emph{unaware} of $\varphi$ has the following formal definition:
+\begin{equation*}
+\label{formal_unawareness}
+\tlnot \Kns{i} \varphi \tland \tlnot \Kns{i} \tlnot \Kns{i} \varphi,
+\end{equation*}
+read as ``the pilot \boldmath{i} does not know $\varphi$, and \boldmath{i} does not know that \boldmath{i} does not know $\varphi$," where $\varphi$ is a proposition~\cite{unawareness}. In epistemic logic, this is identical to a failure of negative introspection~\cite{Hintikka,FHMV}. Theorem \ref{unawareness} establishes that unsafe action from a rational pilot implies a failure of negative introspection about the action's safety precondition. A key upshot from this formal analysis is that by providing negative introspection about the safety precondition, the rational pilot will cease to execute the unsafe action. We prove this in the following corollary.
+
+%
+%\begin{lemma}
+%If a rational pilot, $P$, knows that $P$ does not know a safety precondition $S$, then $P$ does not believe $S$.
+%\end{lemma}
+%\begin{proof}\mbox{}
+%	\begin{enumerate}
+%		\item $\Kns{P}\tlnot \Kns{P}S$
+%		\item $\Kns{P} \varphi \iimplies \Bels{P} \varphi$
+%	    \item $\Bels{P}\tlnot \Kns{P}S$
+%	    \item $\Bels{P}\varphi \iimplies \Bels{P}\Kns{P} \varphi$
+%	    
+%	\end{enumerate}
+%\end{proof}
+
+\begin{theorem}[Awareness of Safety-Critical Information]
+	\label{awareness}
+	If a rational pilot $\mathbf{i}$ has awareness about the safety precondition of action a and the safety precondition is false, then $\mathbf{i}$ does not execute a.
+\end{theorem}
+%	 Awareness here is defined as the negation of unawareness, which has been formalized in the literature as the failure of negative introspection. A rational pilot, $P$, executes action $A$ only if $P$ believes that the safety precondition for $A$ is true, call it $S$. If $P$ has negative introspection about $S$, then $P$ knows that $P$ does not know $S$. If $P$ knows that $P$ does not know $S$, then $P$ does not believe $S$. Therefore, $P$ does not execute $A$. 
+
+\begin{proof}\mbox{}
+	\begin{enumerate}
+		%		\item $\tlnot pre_s(a) \iimplies \PalPos{i}{a}\true \iimplies \tlnot \Kns{i}\tlnot\Kns{i}pre_s(a)$ ............. Theorem
+		%		\item $\PalPos{i}{a}\true \iimplies \Bels{i}\pre_s(a)$ ........................ Axiom
+		\item $\tlnot \Kns{i} pre_s(a) \iimplies \Kns{i}\tlnot \Kns{i}pre_s(a)$ ....... Awareness Assumption
+		\item $\tlnot pre_s(a)$............................ Safety Precondition Assumption
+		\item $\tlnot pre_s(a) \iimplies \PalPos{i}{a}\true \iimplies \tlnot \Kns{i}\tlnot \Kns{i}pre_s(a)$........ Theorem 1
+		\item $\PalPos{i}{a}\true \iimplies \tlnot \Kns{i}\tlnot \Kns{i}pre_s(a)$............... 2, 3 Modus Ponens
+		\item $\tlnot \Kns{i}pre_s(a)$.................................................... 2, $\Know$ reflexive
+		\item $\Kns{i}\tlnot\Kns{i}pre_s(a)$........................................ 1, 5 Modus Ponens
+%		\item $\Bels{i}\tlnot\Kns{i}pre_s(a)$.................................................4, EP1 Axiom
+%		\item $\tlnot \BPoss{i}\Kns{i}pre_s(a)$.................................................. 5, Def. $\BPos$
+%		\item $\tlnot \Bels{i}\Kns{i}pre_s(a)$.................................................... 6, $\Bel$ serial
+%		\item $\tlnot\Bels{i}pre_s(a)$.................................................... 7, EP2 Axiom
+		\item $\tlnot \PalPos{i}{a}\true$.............................................. 4, 6 Modus Tollens
+		\item $\Pal{i, a}\false$........................................................... Def. $\PalPos{i}{a}$  $\Box$
+		%		\item $\tlnot \Bels{i}\Kns{i} pre_s(a) \iimplies \tlnot\Bels{i}pre_s(a)$
+		%		\item $\tlnot \Bels{i}\Kns{i}pre_s(a) \iimplies \tlnot \Kns{i}pre_s(a)$
+	\end{enumerate}
+\end{proof}
+
+Thus, if the countermeasure succeeds in establishing the pilot's awareness of the safety-critical information's being false, it follows by the logic of DASL that the agent discontinues the unsafe action. The goal is to convince her that she does not know what she thinks she knows, like the airspeed, or the horizontal attitude.
+
+The insight gained from the formal analysis allows us to increase aviation safety, but we require a means for computing the safety-critical information that the pilot is unaware of. We do this by encoding the actual configuration of the flight deck and the safety precondition of an input action as a set of constraints and a formula to be examined by a SMT solver, and then check whether it is satisfiable. If it is not, we are interested in retrieving the specific instrument readings that conflict with the safety precondition. In SMT solving, this collection of clauses is called the unsatisfiable core. In the next section, we describe the formal properties of the unsatisfiable core and other ways it is used in formal methods research.
+
+Before providing background on the unsatisfiable core's role in other applications of formal methods, we will provide a bit more discussion on the safety precondition. For this paper, we take it as a given that the safety precondition of an action can be determined by formally representing the contents of flight safety manuals. The specificity of instructions one finds in aviation manuals is one of the principle reasons we have this confidence. Aviation safety frequently discusses the notion of a ``flight envelop" as a range of conditions in which safe actions can be executed. In a sense, we are formalizing the flight envelop as constraints for a SMT solver. However, we do not represent the safety preconditions for actions as they would appear in a higher fidelity system, but rather approximate them with a little bit of common sense, in order to achieve a balance between illustration of the approach and brevity. Were this approach to be engineered for real-world applications, the safety preconditions, and indeed the instrument configurations, would no doubt be more complex.
+% We hope that we have struck the balance we have sought for the purposes of this paper.
+%%
+%In practice, the computation of the safety preconditions, once they have been formally represented, will be as simple as a predefined look up table, with a set of clauses associated with each possible flight input. These clauses, of course, would be formalizations of the information found in the flight safety manuals of the plane. For this work, we have provided basic safety conditions like minimum and maximum speed, to avoid a stall and airframe break up respectively, as well as the conditions associated with the safety of the particular actions in the case studies. 
+
+\section{SMT Solving and the Unsatisfiable Core}~\label{smt}
+
+Satisfiability Modulo Theories (SMT) is a decision problem from theoretical computer science where a formula from first order logic, constrained by theories in the form of other first order formulas, is assessed for satisfiability. Tools exist to solve engineering problems amenable to formalization in first order logic with constraining theories.
+
+Consider the following example. The first order logic formula is
+\begin{align*}
+(x < y) \tland 
+(y = 10) \tland
+(x > 20) \tland 
+(z = 40).
+\end{align*}
+The constraining theory is the standard set of axioms of arithmetic. The formula is unsatisfiable.
+
+When a formula constrained by theories is unsatisfiable, the unsatisfiable core refers to the set of subformulas responsible for a clausal formula's being unsatisfiable. That is, the unsatisfiable core of the formula is the portion of it that conflicts with respect either to internal consistency or with the constraining theories. In the example above, the unsatisfiable core is the first three propositions. The unsatisfiable core is successfully applied as a formal method for engineering in the domains of hardware and software verification. When engineers design a chip, before fabricating it they need to verify that the design meets the specifications. One approach to this is to formalize the chip components as variables in a first order formula, and to formalize the specification as a set of constraints on the formula. Then, running the design and specification through a SMT solver, one can identify which aspects of the design are in conflict with the specification. Software is similarly formalized and analyzed during its specification stage.
+
+Some recent work has applied SMT solving to what are known as cyber physical systems, or hybrid systems~\cite{RushbyMC}. In particular, some hybrid systems are those that involve human machine interaction. Efforts to apply SMT solving to human machine interaction have succeeded in identifying execution paths the system can go down that could cause the human user to become confused. Furthermore, this approach has been applied to the domain of aviation safety. However, as yet no efforts have been undergone to apply SMT solving for the run-time diagnosis and error correction of human error in hybrid systems. 
+
+This work does so by leveraging the logical connection between a pilot's action, her knowledge and beliefs about the system, and the features of the system that make the action safe or unsafe. We model the conditions of the action's safe execution as a constraining theory of instrument readings, and the actual instrument readings as a first order formula to be tested for satisfiability modulo that theory. If the formula modeling the actual instrument readings is not satisfiable, we extract the unsatisfiable core. Based on the logical connection established by DASL, we identify the unsatisfiable core with the safety-critical information that the pilot is unaware of when she executes an unsafe action.
+
+\section{Encoding and Case Studies}~\label{encodings}
+
+We develop an encoding of the instruments and the safety preconditions of actions so that they can be fed into the Z3 SMT solver and, if the actual instrument readings conflict with the constraining safety precondition, their unsatisfiable core may be extracted~\cite{z3}. The case studies we present as examples in this section are meant to illustrate the encoding and the usefulness of the approach. With length limitations, we include three case studies in order to show the versatility of the approach, but sacrifice the complexity of the representations. The actual values of the case studies have been simplified for presentation, and the encodings themselves have been abridged to include only enough of the instrumentation and safety preconditions so as to illustrate the approach.
+
+%%The value of representing the safety precondition as a first order formula, rather than as a propositional formula, is that it is both more succinct and a more accurate representation of the way aviation safety experts reason about the relationship between instrument readings and actions. Because instruments have values drawn from the real number space, it is natural to represent them as variables over numbers, as is possible in first order logic. The previous approach using propositional logic that ``chunks'' the instruments into distinct predicates of values, like \emph{airspeedlow}, \emph{airspeedmedium}, and \emph{airspeedhigh}, is a clunky way of achieving a less accurate goal.
+%%
+%%The propositional approach unnecessarily imposes a trade-off between the space complexity of the encoding and its precision. For example, if each instrument is ``chunked'' into three predicates, that means there are three propositions for each instrument, a subformula specifying that their truth values are mutually exclusive (because a single instrument cannot have two different readings at the same time), and the safety precondition must explicitly encode each distinct combination of instrument readings that allow the action to be safely executed. Imagine a very precise ``chunking" of the instrument space, say each natural number value gets its own proposition. Then there would have to be an explosion of clauses enumerating every permitting configuration of instrument readings. The files would be huge, and the computation would be less efficient. 
+
+In this section we describe the first order logic encoding of actions and their safety preconditions, and present case studies as examples. We begin with Air France 447\footnote{The source code for the case studies can be found here: https://github.com/sethahrenbach/UnsatCore}.
+%\noindent
+
+\subsection{Air France 447 Encoded}
+
+Air France flight 447 from Rio de Janeiro, Brazil, to Paris, France, occurred June 1, 2009. The Airbus A330 encountered adverse weather over the Atlantic Ocean, resulting in a clogged Pitot-static system. Consequently, the airspeed indicators delivered unreliable data to the pilot flying, resulting in confusion. A chain of events transpired in which the pilot overcorrected the plane's horizontal attitude again and again, and continued to input nose up pitch commands, all while losing airspeed. Perhaps most confusing to the pilot was the following situation: the aircraft's  angle of attack (AOA) was so high it was considered invalid by the computer, so no stall warning sounded until the nose pitched down into the valid AOA range, at which point the stall warning would sound. When the pilot pulled up, the AOA would be considered invalid again, and the stall warning would cease. The aircraft entered a spin and crashed into the ocean. Palmer~\cite{AFPalmer} argues that had the pilot merely taken no action, the Pitot tubes would have cleared in a matter of seconds, and the autopilot could have returned to Normal Mode. The official Bureau d'Enqu\^etes et d'Analyses pour la S\'ecurit\'e de l'Aviation Civile (BEA) investigation found that a procedure for safely dealing with unknown airspeeds was known to the pilots but not engaged in, and this may have saved the flight as well.
+
+For this case study, we encode the segment of the mishap chain concerning the inconsistent airspeed indicator readings and the hard nose up pitch command that the pilot continuously executed. We begin by declaring the variables of the scenario.
+\noindent
+\begin{tcolorbox}
+\begin{lstlisting}
+;; Air France 447 Case
+(set-option :produce-unsat-cores true)
+
+;; right side instruments
+(declare-const right-airspeed Int)
+(declare-const right-pitch Int)
+(declare-const right-bank Int)
+
+;; middle instruments
+(declare-const middle-airspeed Int)
+(declare-const middle-pitch Int)
+(declare-const middle-bank Int)
+
+;; left side instruments
+(declare-const left-airspeed Int)
+(declare-const left-pitch Int)
+(declare-const left-bank Int)
+\end{lstlisting}
+\end{tcolorbox}
+\noindent
+Next we encode the actual instrument readings during the flight. We give these clauses names, so that the unsatisfiable core extraction can refer to them if they are responsible for a logical conflict.
+\noindent
+\begin{tcolorbox}
+	\begin{lstlisting}
+;; actual instrument readings
+(assert (!(= left-airspeed 135) :named lair))
+(assert (!(= right-airspeed 100) :named rair))
+(assert (!(= middle-airspeed 100) :named mair))
+(assert (!(= right-pitch 15) :named rpitch))
+(assert (!(= middle-pitch 15) :named mpitch))
+(assert (!(= left-pitch 15) :named lpitch))
+(assert (!(= right-bank 15) :named rbank))
+(assert (!(= middle-bank 15) :named mbank))
+(assert (!(= left-bank 15) :named lbank))
+
+\end{lstlisting}
+\end{tcolorbox}
+\noindent
+Next, we encode the safety precondition of the hard nose up input action. We capture the requirement that a hard nose up should not be engaged in if the indicators for the same aspect of flight, like airspeed, are in disagreement. We also capture some upper and lower bounds between which the indicators must read in order for the input to be considered safe. Normally, these bounds are thought of as the flight envelope.
+
+\begin{tcolorbox}
+	\begin{lstlisting}
+;; safety precondition of action: Hard Nose Up
+(assert (= left-airspeed right-airspeed))
+(assert (= left-airspeed middle-airspeed))
+(assert (= middle-airspeed right-airspeed))
+(assert (= right-pitch left-pitch))
+(assert (= right-pitch middle-pitch))
+(assert (= middle-pitch left-pitch))
+(assert (< right-airspeed 700))
+(assert (> right-airspeed 99))
+(assert (< middle-airspeed 700))
+(assert (> middle-airspeed 99))
+(assert (< left-airspeed 700))
+(assert (> left-airspeed 99))
+
+(check-sat)
+(get-unsat-core)
+
+\end{lstlisting}
+\end{tcolorbox}
+The final commands of the .smt2 file tell Z3 to check whether the formula is satisfiable, and if not, to retrieve and print the unsatisfiable core. The command line input and output for running Z3 on the file appear below.
+\noindent
+\begin{tcolorbox}
+	\begin{lstlisting}
+	input : z3 af447.smt2
+	output: unsat
+	output: (lair rair)
+	\end{lstlisting}
+\end{tcolorbox}
+\noindent
+After downloading the Z3 executable\footnote{https://github.com/Z3Prover/z3/releases} and creating the af447.smt2 file, we run Z3 on the file in a single command line input, and receive two output lines. One line tells us that the formula is unsatisfiable, which means that there is some conflict between the actual instrument readings and the safety precondition for the action. The second line tells us which instrument readings are responsible for the conflict. In this case, the instrument readings $lair$ and $rair$ are determined to be the conflict. If we look up at the file contents, we see that the clauses with those labels capture the left airspeed indicator, reading 135, and the right airspeed indicator, reading 100. According to the safety precondition, these values should be equal. Otherwise, a hard nose up input is unsafe, because the airspeed is not known. 
+
+The unsatisfiable core of the formula, as extracted by the Z3 SMT solver, infers the safety-critical information of the case, because it is that pair of instrument readings that render the safety precondition false, by contradicting the condition that they be in agreement.
+
+At this point, one might fairly wonder why $mair$ is not likewise included in the set. This is because it is not necessary for identifying the source of the contradiction. Having found that $lair$ and $rair$ conflict, these suffice to serve as the unsatisfiable core. And indeed, it is irrelevant whether the core is identified as $lair$ and $rair$ or $lair$ and $mair$, because either will adequately serve as the safety critical information. Both sufficiently demonstrate a conflict in the relevant indicators.
+
+\noindent
+\subsection{Copa Flight 201 Encoded}
+
+Copa flight 201 departed Panama City, Panama for Cali, Colombia in June, 1992~\cite{copa}. Due to faulty wiring in the captain's Attitude Indicator, he incorrectly believed he was in a left bank position. In response to this, he directed the plane into an 80 degree roll to the right, which caused the plane to enter a steep rolling dive. At some point one of the pilots switched the input to the backup Attitude Indicator to be that of the pilot's faulty one, furthering confusion. Approximately 29 minutes after takeoff, the plane crashed into the jungle and all passengers and crew perished. We formalize the moment at which the pilot provides the hard right roll input.
+
+We encode the variables the same as before, and leave out the code to save space. A simplification of the actual instrument readings is encoded as follows.
+\noindent
+\begin{tcolorbox}
+	\begin{lstlisting}
+	;; actual instrument readings
+	(assert (!(= left-airspeed 135) :named lair))
+	(assert (!(= right-airspeed 135) :named rair))
+	(assert (!(= middle-airspeed 135) :named mair))
+	(assert (!(= right-pitch 15) :named rpitch))
+	(assert (!(= middle-pitch 15) :named mpitch))
+	(assert (!(= left-pitch 15) :named lpitch))
+	(assert (!(= right-bank -15) :named rbank))
+	(assert (!(= middle-bank 0) :named mbank))
+	(assert (!(= left-bank 0) :named lbank))
+	\end{lstlisting}	
+\end{tcolorbox}	
+\noindent
+Then the safety precondition for a hard right bank would include the condition that the instrument readings agree on the plane's actual bank position.
+\noindent
+\begin{tcolorbox}
+	\begin{lstlisting}
+	;;safety precondition of action: Hard Right Bank
+	(assert (= left-airspeed right-airspeed))
+	(assert (= left-airspeed middle-airspeed))
+	(assert (= middle-airspeed right-airspeed))
+	(assert (= right-bank left-bank))
+	(assert (= right-bank middle-bank))
+	(assert (= middle-bank left-bank))
+	(assert (< right-airspeed 700))
+	(assert (> right-airspeed 99))
+	(assert (< middle-airspeed 700))
+	(assert (> middle-airspeed 99))
+	(assert (< left-airspeed 700))
+	(assert (> left-airspeed 99))
+	
+	(check-sat)
+	(get-unsat-core)
+	\end{lstlisting}	
+\end{tcolorbox}	
+\noindent
+When we save the file as copa201.smt2 and run Z3 on it, we see the following in the terminal.
+\noindent
+\begin{tcolorbox}
+	\begin{lstlisting}
+	input : z3 copa201.smt2
+	output: unsat
+	output: (rbank lbank)
+	\end{lstlisting}
+\end{tcolorbox}
+\noindent
+Again, as before, the Z3 SMT solver allows us to infer which safety-critical information in particular the pilot is unaware of, because it is the information that conflicts with the safety precondition. What the pilot's action reveals is that he mistakenly believed, at least at first, that he was in a steep left bank, because he was relying on the faulty instrument in front of him. Had he grasped the safety-critical information, that the attitude indicators were in stark disagreement, he would have realized that he did not know the plane's bank position. In this case, safety procedure is to maintain a level horizontal input, absent other convincing evidence that a steep left bank is occurring, which there was not in this case. Before executing such an extreme action, proper cross-checking of other instruments must occur.  
+
+\subsection{Asiana Flight 214 Encoded}
+
+Asiana flight 214 from South Korea to San Francisco departed in the evening of July 6, 2013 and was scheduled to land just before noon that morning~\cite{asiana}. Air traffic control cleared the pilots to perform a visual approach to the runway. The plane came in short and crashed against an embankment in front of the runway, resulting in the deaths of three passengers and 187 injured. The National Transportation Safety Board (NTSB) investigation found that the captain had mismanaged the approach and monitoring of the airspeed, resulting in the plane being too high for a landing. When the pilot realized the plane's glide path was too high, he accidentally disconnected the autopilot's monitoring of the airspeed. This caused an autothrottle (A/T) protection to turn off, so when he pitched the nose down, the plane descended faster than was safe, causing it to collide with the embankment in front of the runway. We will formalize the moment at which the pilot pitches the nose down, unaware that the autothrottle is turned off.
+
+In encoding this state of affairs, we add a new global state variable to capture the autothrottle status.
+\noindent
+\begin{tcolorbox}
+	\begin{lstlisting}
+	;; Asiana 214 Case
+	(set-option :produce-unsat-cores true)
+	
+	;; global state
+	(declare-const autothrottle Bool)
+	\end{lstlisting}
+\end{tcolorbox}
+\noindent
+We likewise include right, middle, and left instruments for altitude in the variable declarations, omitted here for space. The encoding of the actual instrument readings is as follows.
+\noindent
+\begin{tcolorbox}
+	\begin{lstlisting}
+;; actual instrument readings
+(assert (!(= autothrottle false) :named at-status))
+(assert (!(= right-alt 5000) :named ralt))
+(assert (!(= middle-alt 5000) :named malt))
+(assert (!(= left-alt 5000) :named lalt))
+
+(assert (!(= left-airspeed 200) :named lair))
+(assert (!(= right-airspeed 200) :named rair))
+(assert (!(= middle-airspeed 200) :named mair))
+	\end{lstlisting}
+\end{tcolorbox}
+\noindent
+Finally, for the action of a Hard Nose Down, we show how to encode a conditional constraint, that if the altitude is less than 10000 feet, then the autothrottle must be on in order for a Hard Nose Down to safely be executed. Logically, this conditional is equivalent to the proposition that either the altitude is greater than (or equal to, but we omit this in the formalization) 10000 feet, or the autothrottle is on.
+\noindent
+\begin{tcolorbox}
+	\begin{lstlisting}
+;; safety precondition of action: Hard Nose Down
+(assert (= left-alt right-alt))
+(assert (= left-alt middle-alt))
+(assert (= middle-alt right-alt))
+(assert (= left-airspeed right-airspeed))
+(assert (= left-airspeed middle-airspeed))
+(assert (= middle-airspeed right-airspeed))
+(assert (or (> right-alt 10000) (= autothrottle true)))
+
+
+(check-sat)
+(get-unsat-core)
+	\end{lstlisting}
+\end{tcolorbox}
+\noindent
+When we save the file as asiana.smt2 and run Z3 on it, we see the following in the terminal.
+\noindent
+\begin{tcolorbox}
+	\begin{lstlisting}
+	input : z3 asiana.smt2
+	output: unsat
+	output: (at-status ralt)
+	\end{lstlisting}
+\end{tcolorbox}
+\noindent
+This indicates that the safety-critical information is the combination of the altitude, here Z3 returns only the right side altimeter reading because it is sufficient, and the fact that the autothrottle is off, just as the NTSB report concluded.
+
+\section{The Unsatisfiable Core is the Safety-Critical Information}~\label{safetycritical}
+
+This section establishes the identification of the unsatisfiable core extracted from Z3 with the safety-critical information that a pilot is unaware of when she executes an unsafe action. To do this, we examine a case study formalized in DASL, and compare the results with the same case study encoded as an SMT problem that was run through Z3.
+
+Consider the following formalization of Copa flight 201 in DASL. Line 1 represents a conjunction over the actual instrument readings, encoded as atomic propositions. The relevant propositions included in the text state that the right attitude indicator (\emph{RightBank}) reads that the aircraft is pitching left considerably (\emph{SteepLeft}), but that the left attitude indicator (\emph{LeftBank}) reads level flight. We ignore the middle attitude indicator to try and keep it readable, but if it were included, it would be present in the conclusion as well. Line 2 expresses in DASL that the pilot executes a hard right bank action. Line 3 concludes with the theorem's application, which states that the pilot lacks awareness either the left indicator or the right indicator: she is unaware of the falsity of one of them. This analysis establishes that the attitude indicators' values together are a piece of safety-critical information, because it shows that the pilot engages in the unsafe action \emph{only if} she remains unaware of them jointly.
+
+\begin{tcolorbox}	
+	\begin{enumerate}
+		\item $\mathit{(Right Bank SteepLeft)} \tland \mathit{(Left Bank Level)} \dots\dots\dots$.. configuration.
+		\item $\PalPos{\mathit{pilot}}{\mathit{hardrightbank}}\mathit{true} \dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots$.. pilot input.
+		\item $\tlnot \Kns{\mathit{pilot}}(\mathit{Left Bank SteepLeft} \tlor \mathit{Right Bank Level}) \tland$ $\tlnot \Kns{\mathit{pilot}} \tlnot \Kns{\mathit{pilot}}(\mathit{Left Bank SteepLeft} \tlor \mathit{Right Bank Level}) \dots\dots$1,2,Th 1. 
+	\end{enumerate}
+\end{tcolorbox}	
+Compare this with the results of running the SMT encoding through Z3. The instrument readings construed as a first order forumla are unsatsifiable modulo the constraints imposed by the action's safety precondition. The unsatisfiable core identified by Z3, that is, the reason it is unsatisfiable, is because the right attitude indicator ($rbank$) and the left attitude indicator ($lbank$) are in disagreement. This is consistent with the DASL analysis, which identifies the left attitude indicator's value as the one the pilot is critically unaware of.
+
+The way these two formalisms work together is that the DASL theorem establishes the connection between the action, pilot knowledge, and safety conditions, and the SMT solver performs the safety-critical inference in an efficient and expressive way. They are different in an interesting way, though. DASL works by identifying a proposition from the safety precondition of the action that is \emph{false}, not currently present on the instrument panel. For example, a hard right bank action's safe execution requires the attitude indicators to be in agreement. If the attitude indicators disagree, and the pilot executes the action anyway, then DASL allows us to infer unawareness of the false propositions from the safety precondition. The SMT formalization operates by identifying which of the \emph{true} propositions from the instrument panel conflict with the safety precondition of the action. Thus, the result of DASL: the pilot is unaware regarding the left indicator's being in a steep left bank or the right indicator's being level; Z3 infers that the actual instrument readings of the right airspeed indicator and the left airspeed indicator are the ones that the pilot needs to see. We built it this way so that the instruments themselves, not the safety precondition, are the output of the Z3 engine, for reasons to be discussed in the next section.
+
+%states, in DASL, that the pilot executes a hard right bank. Line 3 states that the pilot believes that the middle attitude indicator also reads a considerable left bank, via an inference one can make in DASL that the pilot executes an action only if she believes that the safety precondition for that action is true. In this case, a hard right bank is safe only if the instruments all agree that the plane is in a steep left bank. Line 3 states that she does not know that the middle attitude indicator has this reading, namely because it is not true. Line 5 draws a DASL inference that she nonetheless believes that she knows it, because a rational pilot would act in such a way only if she believed with good reason that it was safe. 
+
+%In this section we show how a monitor based on the Z3 unsatisfiable core extraction will work to diagnose and correct unsafe pilot actions. We formalize the monitor as an agent in the system, along with the pilot, which observes pilot actions and instrument configurations, and infers which safety-critical information the pilot must be unaware of. With this inference, it then acts as an informative agent to bring the pilot's unawareness to her attention. As the DASL analysis established, the problem typical of unsafe pilot actions is not what the pilot doesn't know; rather, the problem is that she doesn't know that she doesn't know it. When a pilot doesn't know her airspeed, there are safe actions she can take. However, if she believes that she knows her airspeed, but is mistaken, then it is this unawareness that leads to unsafe actions. A run-time monitor can diagnose and correct this unawareness in a way that we will presently describe.
+
+\section{Application Design}~\label{application}
+This section briefly describes how this encoding of aviation activity and the Z3 theorem prover might be used in a runtime monitor application.
+
+The application would execute the following algorithm in a loop.
+
+	\begin{algorithm}[H]
+	\caption{Monitor Algorithm}\label{monitor}
+	\begin{algorithmic}
+	    \While{$\textit{flying}$}
+%		\BState \emph{set}:
+			\State $\textit{smt2\_actual\_readings} \gets \text{instrument readings}$
+			\State $\textit{smt2\_safety\_preconditions} \gets \textit{lookup\_safety\_precondition(}\text{flight control input}\textit{)}$
+			\State $\textit{smt2\_file} \gets \textit{concat(smt2\_actual\_readings, smt2\_safety\_precondtions)}$
+			\State $\textit{unsat\_core} \gets \text{Z3 } \textit{smt2\_file}$
+			\If {$\textit{unsat\_core is} \text{ } \textit{empty}$} $\textit{undim all}$ 
+			\ElsIf {$\textit{unsat\_core is} \text{ } \textit{not } \textit{empty}$} 
+			\State $\textit{map}(\textit{dim}, [x|x \not\in \textit{unsat\_core}])$
+			\EndIf
+			\EndWhile
+	\end{algorithmic}
+%		\item Monitor the state of the instrument readings in real time.
+%		\item Monitor pilot flight control inputs in real time.
+%		\item Encode the instrument readings and flight control input into an smt2 file that can extract an unsatisfiable core.
+%		\item Execute Z3 on the constructed smt2 file.
+%		\item If the formula in the constructed smt2 file is unsatisfiable, extract the unsatisfiable core.
+%		\item Dim all the instruments and alarms not related to the conflict of the readings on the unsatisfiable core.
+	\end{algorithm}
+
+This algorithm, though simple, represents a dramatic departure from contemporary safety practices, in that it aims to draw the pilot's attention to the safety-critical information by \emph{dimming} the information that is not, at the moment, safety-critical. Dimming, of course, is not a technical term, and has not been defined. Its definition and implementation depends on the context and the technical details of the cockpit. 
+
+In most emergency situations, a number of alarms are going off at once, and the pilots suffer from information overload, which decreases their situational awareness. The safety-critical information is right in front of them, and perhaps even has an alarm and blinking light accompanying it. And yet they still crash. This algorithm addresses the problem by temporarily \emph{removing} the alarms and blinking lights that are not related to the safety-critical information identified by Z3's returned unsatisfiable core, based on the encoding of the configuration and action. If the only alarm or blinking lights are those highlighting the fact that, say, the airspeed indicators are in disagreement, immediately following the pilot's action to dramatically reduce thrust, then the chances that he or she notices this problem must increase.
+
+This runtime monitor will increase the likelihood that the pilot notices the safety-critical information. Noticing it, he or she will cease the unsafe action.  
+\section{Related Work}~\label{related}
+
+Over the past decade related work in applying formal methods to the human component of aviation safety have advanced the state of the art and contributed to aviation safety~\cite{RushbyMC,Rushby_Mode_Confusion,RushbyFMbook,ButlerModeConfusion}. However, previous work applies formal methods to the specification stage of systems, typically using model checking or SAT/SMT solving to discover possible states of the system in which a human might become disoriented or confused. This work is important. The present work advances a different but related line of effort, applying formal methods to the run-time stage of systems, with the goal of diagnosing and correcting unsafe system behaviors as they occur, especially those caused by human confusion. To do this, we have taken a formal model of the pilot's reasoning in the form of DASL and used the resulting analysis to develop a tool for delivering safety-critical information to the pilot when it is needed. 

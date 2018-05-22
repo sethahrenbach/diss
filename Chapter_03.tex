@@ -1,52 +1,238 @@
-\chapter{Title of third chapter}
+\chapter{Dynamic Agent Safety Logic}
 	\label{CH_03}
 
 
-\section{This is an example section title which will span two lines both here and in the table of contents}
-Further illustration of how chapters are presented.
+The logic for reasoning about information flow in knowledge games is called Dynamic Epistemic Logic (DEL). As its name suggests, it combines elements of epistemic logic and dynamic logic. Epistemic logic is the static logic for reasoning about knowledge, and dynamic logic is used to reason about actions. In dynamic logic semantics, nodes are states of the system or the world, and relations on nodes are transitions via programs or actions from node to node. If we think of each node in dynamic logic as being a model of epistemic logic, then actions become relations on models, representing transitions from one multi-agent epistemic model to another. For example, if we have a static epistemic model $M1$ representing the knowledge states of agents $1$ and $2$ at a moment, then the action $``p?"$ is a relation between $M1$ and $M2$, a new static epistemic model of $1$'s and $2$'s knowledge after the question is asked. All of this is captured by DEL.
+
+\begin {center}
+\begin {tikzpicture}[-latex ,auto ,node distance =3 cm and 4cm ,on grid ,
+semithick ,
+state/.style ={ circle ,top color =white , bottom color = white ,
+	draw, text=black , minimum width =1 cm}]
+
+\node[state] (A)  {$M1$};
+\node[state] (B) [right =of A] {$M2$};
+
+\path (A) edge  node[above] {$``p?"$} (B);
+%\path (C) edge [bend left =25] node[below =0.15 cm] {$1/2$} (A);
+%\path (A) edge [bend right = -15] node[below =0.15 cm] {$1/2$} (C);
+%\path (A) edge [bend left =25] node[above] {$1/4$} (B);
+%\path (B) edge [bend left =15] node[below =0.15 cm] {$1/2$} (A);
+%\path (C) edge [bend left =15] node[below =0.15 cm] {$1/2$} (B);
+%\path (B) edge [bend right = -25] node[below =0.15 cm] {$1/2$} (C);
+\end{tikzpicture}
+\end{center}
+
+The above figure illustrates the relationship between static epistemic models and dynamic logic models. As a purely dynamic model, the figure shows the action $``p?"$ transitioning between nodes $M1$ and $M2$. If we were to zoom in on the nodes, we would see their structure as epistemic models, with their own nodes and edges, representing possible worlds and epistemic relations.
+
+We are concerned with an additional element: the \emph{safety} status of an action, and an agent's knowledge and belief about that. To capture this, we extend DEL and call the new logic Dynamic Agent Safety Logic (DASL). The remainder of this section presents DASL's syntax, semantics, and proves its soundness. 
+\section{Syntax and Semantics}
+\subsection{Syntax}
+The Dynamic Agent Safety Logic (DASL) used in this paper has the following syntax.
+%, combining elements of Dynamic Epistemic Logic (DEL) and Agent Safety Logic (ASL).
+\begin{tcolorbox}
+	$$ \varphi \ ::=\   \lpp  \bnf \tlnot \varphi \bnf \varphi \tland \varphi  \bnf \Kns{i} \varphi \bnf \Bels{i}\varphi \bnf \Pal{i, (A,\laa)}\varphi \bnf \Pal{i, (A,\laa),S}\varphi,$$
+\end{tcolorbox}
+where $\lpp \in AtProp$ is an atomic proposition, $\mathbf{i}$ refers to $i \in Agents$, $\mathbf{\laa}$ is the name of an action, called an action token, belong to a set of such tokens, $Actions$, and $\mathbf{A}$ refers to an action structure. The knowledge operator $\Kns{i}$ indicates that ``agent \emph{i} knows that ..." Similarly, the operator for belief, $\Bels{i}$ can be read, ``agent \emph{i} believes that..." The notion of action tokens and structures will be defined in the semantics. The operators $\Pal{i,(A,\laa)}$ and $\Pal{i,(A,\laa),S}$ are the dynamic operators for agent $i$ executing action token $\laa$ from action structure $A$ in the former case, and doing so safely in the latter case. Note that the $\mathbf{S}$ in $\Pal{i,(A,\laa),S}$ stands for `safety', and is not a variable, whereas the $\mathbf{i,(A,\laa)}$ are variables for agents, action structures, and action tokens, respectively. One can read the action operators as ``after $i$ executes $\laa$ from $A$, $\varphi$ holds.' We define the dual modal operators $\Poss{i}$, $\BPoss{i}$, $\PalPos{i}{(A,\laa)}$, and $\SPalPos{i}{(A,\laa)}$ in the usual way. 
+%The bold font of agents, action structures, and action tokens is used to distinguish labels in the object language for the entities versus referring to them in italic font directly in the metalanguage.
+
+The semantics of DASL involve two structures that are defined simultaneously, one for epistemic models, and one for action structures capturing the transition relation among epistemic models. Additionally, we define numerous helper functions that straddle the division between metalanguage and object language. 
+
+\subsection{Metalanguage}
+\subsubsection{Kripke Model}%$\mathbf{Definition}$. Kripke Model.\\ 
+A Kripke model $M\in Model$ is a tuple $\langle W, \{\Rel{k}^i\}, \{\Rel{b}^i\}, w, V \rangle$. It is a set of worlds, sets of epistemic and doxastic relations on worlds for agents, a world denoting the actual world, and a valuation function \emph{V} mapping atomic propositions to the set of worlds satisfying them. Most readers will be somewhat familiar with epistemic logic, the logic for reasoning about knowledge. Doxastic logic is a similar logic for reasoning about belief\cite{Hintikka}.
+
+\subsubsection{Action Structure}
+%$\mathbf{Definition}$. Action Structure.\\ 
+An action structure $A\in ActionStruct$ is a tuple $\langle Actions,\\\{\chi_{k}^i\}, \{\chi_{b}^i\}, \laa \rangle$. It is a set of action tokens, sets of epistemic and doxastic relations on action tokens for agents, and an action token, $\laa$, denoting an actual action token executed. 
+
+An action structure captures the associated subjective events of an action occurring, including how it is observed by various agents, incorporating their uncertainty. The action tokens are the actual objective events that might occur. For example, if I am handed a piece of paper telling me who won the Oscar for Best Actress, and I read it, and you see me read it, then the action structure will include possible tokens in which I read that each nominee has won, and you will consider each of these tokens to be possible. When I read the paper, I consider only one action token to be the one executed. This action structure represents that transition from one epistemic model, in which both of us considers all nominees the potential winner, to an epistemic model in which I know the winner and you still do not know the winner. We can think of the action structure $A$ as the general action ``Agent 1 reads the piece of paper" and the tokens as the specific actions ``Agent 1 reads that nominee \emph{n} has won the award."
 
 
-\subsection{Title of subsection}
-Here is a subsection.  The following figure will show up in the `List of Figures'.
-
-\begin{figure}[h] % h places the image 'here' (as long as LaTeX thinks it will fit here well), 't' for top of page, 'b' for bottom of page, 'H' for I WANT IT HERE!!! (regardless of whether the latex compiler thinks it will fit.)
-	\centering
-	\includegraphics[width=2.0in]{Figures/figure1}
-	\caption[Box figure]{A sample image which will show up in the the List of Figures as `Box figure'}
-\end{figure}
-\begin{table}[t]
-	\centering
-	\begin{tabular}{|r|l|}
-	\hline
-	7C0 & hexadecimal \\
-	3700 & octal \\ \cline{2-2}
-	11111000000 & binary \\
-	\hline \hline
-	1984 & decimal \\
-	\hline
-	\end{tabular}
-	\caption[Digit representation]{A sample table which will show up in the the List of Tables as `Digit representation table'; it is set to align at the top of a page}
-\end{table}
-
-Some paragraph text follows. Some paragraph text follows. Some paragraph text follows. Some paragraph text follows. Some paragraph text follows. Some paragraph text follows. Some paragraph text follows. Some paragraph text follows. Some paragraph text follows. Some paragraph text follows. Some paragraph text follows. Some paragraph text follows. Some paragraph text follows. Some paragraph text follows. Some paragraph text follows. Some paragraph text follows. Some paragraph text follows. Some paragraph text follows. 
-
-\begin{table}[h]
-	\centering
-	\begin{tabular}{llr}
-	\hline
-	\multicolumn{2}{c}{Item} \\
-	\cline{1-2}
-	Animal & Description & Price (\$) \\
-	\hline
-	Gnat  & per gram & 13.65 \\
-	 & each     &  0.01 \\
-	Gnu   & stuffed  & 92.50 \\
-	Emu   & stuffed  & 33.33 \\
-	Armadillo & frozen & 8.99 \\
-	\hline
-	\end{tabular}
-	\caption[Odd foods]{Another table which will show up in the the List of Tables as `Odd foods'; it is set to align ``here" in the text.}
-\end{table}
+\subsubsection{Model Relation}
+%$\mathbf{Definition}$. Model Relation.\\ 
+Just as $\Rel{k}^i$ denotes a relation on worlds, $\llbracket i,(A,\laa) \rrbracket$ denotes a relation on Kripke model-world pairs. It represents the relation that holds between $M,w$ and $M',w'$ when agent $i$ executes action $(A,\laa)$ at $M,w$ and causes the world to transition to $M',w'$.
 
 
+\subsubsection{Precondition Function}
+%$\mathbf{Definition}$. 
+The Precondition function, $pre :: Actions \mapsto \varphi$, maps an action to the formula capturing the conditions under which the action can occur. For example, if we assume agents tell the truth, then an announcement action has as a precondition that the announced proposition is true, as with regular Public Announcement Logic. 
 
+
+%$\mathbf{Definition}$. Postcondition Function.\\ $post :: A \times Agents \mapsto \varphi$. The postcondition function assigns a conjunction of atomic propositions to actions performed by an agent, representing the atomic facts of the world that are true after the action occurs:\\ $post(\laa) = \bigwedge_{p\in AtProp}\{p| \forall w,\ update(M,A,w,\laa,i)\models p\}$.
+
+\subsubsection{Postcondition Function}
+%$\mathbf{Definition}$. 
+The Postcondition function, $post :: A \times AtProp \mapsto AtProp$, takes an action structure and an atomic proposition, and maps to the corresponding atomic proposition after the action occurs.
+\begin{align*}
+post(A,p)= p\ \mbox{if}\ update(M,A,w,\laa,i)\models p,\  \mbox{else}\ \tlnot p.
+\end{align*} 
+
+\subsubsection{Update Function}
+%$\mathbf{Definition}$.
+The Update function, $update :: (Model \times ActionStruct \times W \times Actions \times Agents) \mapsto (Model \times W)$, takes a Kripke model $M$, an action structure $A$, a world from the Kripke model, an action token from the Action structure, and an agent executing the action, and returns a new Kripke model-world pair. It represents the effect actions have on models, and is more complicated than other DEL semantics in that actions can change the facts on the ground in addition to the knowledge and belief relations. It is a partial function that is defined iff a model-world pair satisfies the action's preconditions.
+\\
+
+$update(M,A,w,\laa,i) = (M',w')\ where:\\$
+$1.\  M = \langle W, \{\Rel{k}^{i}\}, \{\Rel{b}^{i}\}, w, V \rangle$\\
+$2.\  A = \langle Actions, \{\chi_{k}^i\}, \{\chi_{b}^i\}, \laa, pre, post \rangle$\\
+$3.\  M' = \langle W', \{\Rel{k}'^{i}\}, \{\Rel{b}'^{i}\}, w', V' \rangle$\\
+$4.\  W' = \{(w,\laa) | w\in W,\laa \in Actions,\ \aand\ w\models pre(\laa)\}$\\
+$5.\  \Rel{k}'^{i} = \{((w,\laa),(v,\lbb))|w\Rel{k}^i v \aand \laa \chi_{k}^i \lbb \}$\\
+$6.\  \Rel{b}'^{i} = \{((w,\laa),(v,\lbb))|w\Rel{b}^i v \aand \laa \chi_{b}^i \lbb \}$\\
+$7.\  w' = (w,\laa)$\\ 
+$8.\  V'(p) = post(A,p)$
+
+\subsubsection{Safety Precondition Function}
+%$\mathbf{Definition}$. 
+The Safety Precondition Function, $pre_s :: Actions \mapsto \varphi$, is a more restrictive function than $pre$. Where $pre$ returns the conditions that dictate whether the action is possible, $pre_s$ returns the conditions that dictate whether the action is safely permissible. This function is the key reason the dynamic approach allows for easy inference from action to safety-critical information.
+
+%$\mathbf{Definition}$. Possibility Valuation Function.\\ $V^p :: Actions \mapsto W.$ The possibility valuation function takes an action and maps it to the set of worlds satisfying that action's precondition:\\ $V^p (\laa) = \{w|w\models pre(\laa)\}$.
+%\\
+%$\mathbf{Definition}$. Postcondition Valuation Function.\\ $V^{post} :: Actions \mapsto W.$ The postcondition valuation function maps an action to the worlds that satisfy its postconditions after the update:\\ $V^{post} (\laa) = \{w|w \in M' \aand update(M,A,w,\laa,i)=M',w \models post(\laa)\}$.
+%$\mathbf{Definition}$. Safety Valuation Function.\\ $V^s :: Actions \mapsto W.$ The safety valuation function takes an action and maps it to the set of worlds satisfying that action's safety precondition:\\ $V^s (\laa) = \{w|w\models pre_s(\laa)\}$.
+%\\
+\subsection{Semantics}
+The logic DASL has the following Kripke semantics.
+\begin{tcolorbox}
+	\begin{align*}
+	M,w \models p  &\iiff w \in V(p) \\
+	M,w \models \tlnot \varphi  &\iiff M,w \not\models \varphi \\ 
+	M,w \models \varphi \tland \psi &\iiff M,w \models \varphi \aand M,w \models \psi \\
+	M,w \models \Kns{i}\varphi &\iiff \forall v,\ w\Rel{k}^i v\ \timplies\ M,v \models \varphi \\
+	M,w \models \Bels{i}\varphi &\iiff \forall v,\ w\Rel{b}^i v\ \timplies\ M,v \models \varphi \\
+	M,w \models \Pal{i,(A,\laa)}\varphi &\iiff \forall M',w',\  (M,w) \llbracket i,(A,\laa) \rrbracket (M',w')\ \\&\timplies\ M',w' \models \varphi \\
+	M,w \models \Pal{i,(A,\laa),S}\varphi &\iiff \forall M',w',\  (M,w) \llbracket i,(A,\laa),S \rrbracket (M',w')\ \\&\timplies\ M',w' \models \varphi 
+	\end{align*}
+\end{tcolorbox}
+The definitions of the dynamic modalities make use of a relation between two model-world pairs, which we now define.
+\begin{tcolorbox}
+	\begin{align*}
+	(M,w)\llbracket i,(A,\laa)\rrbracket (M',w') &\iiff M,w \models \pre(\laa) \\&\aand update(M,A,w,\laa,i) = (M',w') \\
+	(M,w)\llbracket i, (A,\laa),S \rrbracket (M',w') &\iiff M,w \models pre_s(\laa) \\&\aand update(M,A,w,\laa, i) = (M',w') 
+	\end{align*}
+\end{tcolorbox}
+
+
+\subsection{Hilbert System}
+DASL is axiomatized by the following Hilbert system.\\
+
+\begin{tcolorbox}All propositional tautologies are axioms.\\$\Kns{i}$ is T (knowledge relation is reflexive)\\
+	$\Bels{i}$ is KD45 (belief relation is serial, transitive, and Euclidean)\\
+	EP1: $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ \\
+	EP2: $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$\\
+	EP3: $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$\\
+	SP: $\Pal{i,(A,\laa)}\varphi \iimplies \Pal{i,(A,\laa),S}\varphi$\\
+	%\SPalPos{i}{\laa}\varphi \iimplies \PalPos{i}{\laa}\varphi$\\
+	PR: $\PalPos{i}{(A,\laa)}\varphi \iimplies \Bels{i}\SPalPos{i}{(A,\laa)}\varphi$,\\
+\end{tcolorbox}
+\noindent plus the inference rules Modus Ponens and Necessitation for $\Kns{i}$ and $\Bels{i}$.
+
+Above are the axioms characterizing the logic. Knowledge is weaker here than in most epistemic logics, and belief is standard~\cite{FHMV}. They are related logically by EP(1-3), which hold that knowledge entails belief, belief entails that one believes that one knows, and belief entails than one knows that one believes. Finally, actions and safe actions are logically related by SP and PR, which hold that necessary consequences of \emph{mere} action are also necessary consequences of \emph{safe} actions, and that a pilot can execute an action only if he believes that he is executing a safe action. 
+
+Below are the axioms characterizing the reduction laws from the dynamic logic to a purely static logic through recursive application.\\
+\begin{tcolorbox}
+	Aprop: $\Pal{i,(A,\laa)}p \Leftrightarrow (pre(\laa)\iimplies(post(A,p) \iimplies p))$\\
+	AN: $\Pal{i,(A,\laa)}\tlnot\varphi \Leftrightarrow (pre(\laa) \iimplies \tlnot \Pal{i(A,\laa)}\varphi)$\\
+	AC: $\Pal{i,(A,\laa)}(\varphi \tland \psi) \Leftrightarrow (\Pal{i,(A,\laa)}\varphi \tland \Pal{i,(A,\laa)}\psi)$\\
+	AK: $\Pal{i,(A,\laa)}\Kns{i}\varphi \Leftrightarrow (pre(\laa) \iimplies \bigwedge_{\laa\chi_{k}^i \lbb}\Kns{i}\Pal{i,(A,\lbb)}\varphi)$\\
+	AB: $\Pal{i,(A,\laa)}\Bels{i}\varphi \Leftrightarrow (pre(\laa) \iimplies \bigwedge_{\laa\chi_{b}^i \lbb}\Bels{i}\Pal{i,(A,\lbb)}\varphi)$\\
+	Sprop: $\Pal{i,(A,\laa),S}p \Leftrightarrow (pre_s(\laa) \iimplies (post(A,p) \iimplies p))$\\
+	SN: $\Pal{i,(A,\laa),s}\tlnot\varphi \Leftrightarrow (pre_s(\laa) \iimplies \tlnot \Pal{i(A,\laa),S}\varphi)$\\
+	SC: $\Pal{i,(A,\laa),S}(\varphi \tland \psi) \Leftrightarrow (\Pal{i,(A,\laa),S}\varphi \tland \Pal{i,(A,\laa),S}\psi)$\\
+	SK: $\Pal{i,(A,\laa),S}\Kns{i}\varphi \Leftrightarrow (pre_s(\laa) \iimplies \bigwedge_{\laa\Rel{k}'^{i}\lbb}\Kns{i}\Pal{i,(A,\lbb),S}\varphi)$\\
+	SB: $\Pal{i,(A,\laa),S}\Bels{i}\varphi \Leftrightarrow (pre_s(\laa) \iimplies \bigwedge_{\laa\Rel{b}'^{i}\lbb}\Bels{i}\Pal{i,(A,\lbb),S}\varphi)$\\
+\end{tcolorbox}
+
+%\PalPos{i}{\laa}\varphi \iimplies \Bels{i}\SPalPos{i}{\laa}\varphi$\\
+
+
+
+\section{Soundness}
+\begin{tcolorbox}
+	\begin{theorem}[Soundness]
+		Dynamic Agent Safety Logic is sound for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, transitive, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, \\(4) $\llbracket i,(A,\laa),S\rrbracket \subseteq \llbracket i,(A,\laa)\rrbracket$%for all $\laa,\  V^s(\laa) \subseteq V^p(\laa),$ [Questionable]
+		and\\ (5) $(\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i) \subseteq \llbracket i, (A,\laa)\rrbracket$.
+	\end{theorem}
+\end{tcolorbox}
+$\mathbf{Proof}.$ $(1)\  and\  (2)$ correspond to the axioms that $\Kns{i}$ is a T modality and $\Bels{i}$ is a KD45 modality in the usual way. $(3)$ corresponds to EP1, EP2, and EP3. Axioms AP through SB are reduction axioms. This leaves $(4)$, corresponding to SP, and $(5)$ which corresponds to PR. Here we will prove $(5)$. Let $M$ be a Kripke structure satisfying the five conditions above. Let $A$ be an Action structure with $\laa$ and $i$ as its actual action token and agent. 
+
+We prove $(5)$ via the contrapositive of PR: $\BPoss{i}\Pal{i,(A,\laa),S}\varphi \iimplies \Pal{i, (A,\laa)}\varphi$.
+Assume $M,w \models \BPoss{i}\Pal{i.(A,\laa),S}\varphi$. By the semantics of $\BPoss{i}$, there exists a $v$, such that $w\Rel{b}^i v$ and $v \models \Pal{i,(A,\laa),S}\varphi$. From the semantics, it follows that forall $M',v'$, if $(M,v)\llbracket i,(A,\laa),S\rrbracket (M',v')$ then $M',v' \models \varphi$. By slightly abusing the notation, and letting $(W,w)\Rel{b}^i (W,v)$ be equivalent to $w\Rel{b}^i v$, we can create the composed relation $(\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i)$. It then holds, by condition $(5)$, that $(M,w) (\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i) (M',v')$ implies $(M,w)\llbracket i, (A,\laa)\rrbracket (M',v')$. So, for all $M',v'$, if $(M,w) \llbracket i,(A,\laa)\rrbracket (M',v')$, then $M',v' \models \varphi$. So, $M,w \models \Pal{i,(A,\laa)}\varphi$. $\Box$
+
+%We leave out proofs of the reduction axioms for space.
+$\mathbf{Aprop: \iimplies}$. Assume $M,w \models \Pal{i,(A,\laa)}p$. We must show that $M,w \models pre(\laa)\iimplies (post(A,p) \iimplies p)$. By the semantics of $\Pal{i,(A,\laa)}$, for all $(M',w')$, if $M,w \models pre(\laa)$ and $update(M,A,w,\laa,i)= (M',w')$, then $M',w' \models p$. By definition of $post(A,p)$, if $update(M,A,w,\laa,i)=(M',w')$ and $M',w' \models p$, then $post(A,p)=p$. So, if $M,w \models pre(\laa)$, then $post(A,p) = p$, and thus $post(A,p)\iimplies p$. 
+
+$\Leftarrow$. Assume $M,w \models pre(\laa) \iimplies (post(A,p)\iimplies p)$. By the definition of $post(A,p)$, if $post(A,p)=p$ then $update(M,A,w,\laa,i)\models p$. So, if $M,w \models pre(\laa)$, then $update(M,A,w,\laa,i)\models p$. Therefore, $M,w\models \Pal{i,(A,\laa)}p$.
+
+$\mathbf{AN: \iimplies}$. Assume $M,w \models \Pal{i,(A,\laa)}\tlnot \varphi$. It suffices to show that $M,w \models pre(\laa) \iimplies \PalPos{i}{(A,\laa)}\tlnot \varphi$. From the assumption and the semantics, for all $(W',w')$, if $(M,w)\llbracket i, (A,\laa) \rrbracket (M',w')$ then $M',w' \models \tlnot \varphi$. So, if $M,w \models pre(\laa)$ and $update(\\M,A,w,\laa,i)=(M',w')$, then $M',w' \models \tlnot \varphi$. Assume $M,w \models pre(\laa)$, and it follows that $update(M,A,w,\laa,i)$ is defined, so there exists a $M',w'$ such that $(M,w)\llbracket i, (A,\laa) \rrbracket(M',w')$ and $update(M,A,i)=(M',w')$ and $M',w' \models \tlnot \varphi$. Therefore, $M,w \models pre(\laa) \iimplies \PalPos{i}{(A,\laa)}\tlnot \varphi$.
+
+$\Leftarrow$. Assume $M,w \models pre(\laa) \iimplies \tlnot \Pal{i,(A,\laa)}\varphi$. This is equivalent to $M,w \models pre(\laa) \iimplies \PalPos{i}{(A,\laa)}\tlnot \varphi$.  By the semantics, if $M,w \models pre(\laa)$, then there exists a $(M',w')$ such that $(M,w)\llbracket i, (A,\laa)\rrbracket (M',w') \aand M',w' \models \tlnot \varphi$. The relation $\llbracket i, (A,\laa)\rrbracket$ is functional, so $\exists$ implies $\forall$. So, for all $(M',w')$, if $(M,w)\llbracket i,(A,\laa)\rrbracket (M',\\w')$, then $M',w' \models \tlnot \varphi$, and therefore $M,w\models \Pal{i,(A,\laa)}\tlnot \varphi$.
+
+$\mathbf{AC}$ is obvious.
+
+$\mathbf{AK}$. For this proof, assume for simplicity, without loss of generality, that $Actions = \{\laa\}$.
+
+$\iimplies$. Assume $M,w \models \Pal{i,(A,\laa)}\Kns{i}\varphi$. Unfolding the semantics, for all $(M',w')$, if $(M,w)\models pre(\laa)$ and $update(M,A,w,\laa,\\i)=(M',v')$, then $M',w'\models\Kns{i}\varphi$. $M',w'\models \Kns{i}\varphi$ iff for all $v\in W$, if $w\Rel{k}^iv$ and $M,v\models pre(\laa)$ and $update(M,A,v,\laa,i)=(M',v')$ and  $\laa\chi_{k}^i\laa$, then $M',v'\models\varphi$. That is, $M,w\models \Kns{i}\Pal{i,(A,\laa)}\varphi$. 
+
+$\Leftarrow$. Assume $M,w \models pre(\laa) \iimplies \Kns{i}\Pal{i,(A,\laa)}\varphi$. We must show $M,w \models \Pal{i,(A,\laa)}\\\Kns{i}\varphi$. Thus, we must show $M,w \models pre(\laa)$ and $update(M,A,w,\laa,i)=(M',w')$ implies $M',w' \models \Kns{i}\varphi$. So it suffices to show that if $update(M,A,w,\laa,i)=(M',w')$ and $M,w\models \Kns{i}\Pal{i,(A,\laa)}\varphi$, then $M',w'\models \Kns{i}\varphi$. Assume $update(M,A,w,\\\laa,i)=(M',w')$ and $M,w\models\Kns{i}\Pal{i,(A,\laa)}\varphi$. Then for all $v$, if $w\Rel{k}^iv$, then $M,v\models\Pal{i,(A,\laa)}\varphi$. It follows that $M,v\models pre(\laa)$ and $update(M,A,v,\laa,i)=(M',v')$ implies $M',v'\models\varphi$. Since $w\Rel{k}^iv$ and $\laa\chi_{k}^i\laa$, it holds that $w'\Rel{k}^{i'}v'$. Thus, $M',w'\models\Kns{i}\varphi$.
+
+Proofs for $\mathbf{AB}$ through $\mathbf{SB}$ follow the above proofs exactly analogously. $\Box$ 
+
+Assume $M,w \models \PalPos{i}{\laa}true.$ By the semantics of $\PalPos{i}{\laa},$ $M,w \models pre(\laa)$ and $update(M,w,\chi)\models true$. Let $(M',w') = update(M,w,\chi)$. Then $M',w' \models true$. From $(5)$ above, it holds that $\Rel{b}^i (w) \subseteq V^s (\laa)$. $\Rel{b}$ is serial, so there is at least one such $v \in \Rel{b}^i$. Then $M,v \models pre_s(\laa)$. From (4), $M,v \models pre(\laa)$, so $update(M,v,\chi)$ is defined, call it $(M'',v')$. Because $(M'',v')$ is defined, $M'',v' \models true$. So, $M,v \models pre_s(\laa)$ and $update(M,v,\chi)\models true$. This holds for all $v$, such that $w\Rel{b}v$. Thus, $M,w \models \Bels{i}\SPalPos{i}{\laa}true$. Therefore, $M,w \models \PalPos{i}{\laa}true \iimplies \Bels{i}\SPalPos{i}{\laa}true$. $\square$ 
+
+Next we turn to completeness.
+
+\subsection{Completeness}
+
+\begin{tcolorbox}
+	\begin{theorem}[Completeness]
+		The language of Dynamic Agent Safety Logic, $\mathcal{L}_{DASL}$, is complete for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, transitive, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, \\(4) $\llbracket i,(A,\laa),S\rrbracket \subseteq \llbracket i,(A,\laa)\rrbracket$%for all $\laa,\  V^s(\laa) \subseteq V^p(\laa),$ [Questionable]
+		and\\ (5) $(\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i) \subseteq \llbracket i, (A,\laa)\rrbracket$.
+	\end{theorem}
+\end{tcolorbox}
+
+$\mathbf{Proof\ Sketch}.$ Completeness states that if a formula $\varphi$ is valid, then it is deducible. The sketch for this proceeds proceeds by contraposition. \\
+$\mathbf{Proof\ Goal}.$ For every formula $\varphi$ in the language $\mathcal{L}_{DASL}$, $\not\vdash\varphi \timplies \not\models\varphi.$\\
+We define the notions of a \emph{Maximal Consistent Set}, and a \emph{Canonical Model} for the logic. \\
+\\
+$\mathbf{Definition}$. Maximal Consistent Set.\\
+For a set of formulas $\Gamma \subseteq \mathcal{L}_{DASL}$, $\Gamma$ is maximal consistent iff\\
+1. $\Gamma$ is consistent: $\Gamma \not \vdash \bot$.\\
+2. $\Gamma$ is maximal: there is no $\Gamma'\subseteq\mathcal{L}_{DASL}$ such that $\Gamma \subset \Gamma'$ and $\Gamma'\vdash\bot$.\\
+$\mathbf{Definition}$. Canonical Model. A canonical model $M^C = \langle W^C,\ \Rel{k,i}^C,\ \Rel{b,i}^C,\ w,\ V^C\rangle$ is defined:\\
+1. $W^C = \{\Gamma | \Gamma$ is maximal consistent$ \}$\\
+2. $\Gamma \Rel{k,i}^C \Delta$ iff $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma\} = \{\Kns{i}\varphi | \Kns{i}\varphi \in \Delta\}$\\
+3. $\Gamma \Rel{b,i}^C \Delta$ iff $\{\Bels{i}\varphi | \Bels{i}\varphi \in \Gamma\} = \{\Bels{i}\varphi | \Bels{i}\varphi \in \Delta\}$\\
+4. $V^C = \{\Gamma \in W^C| \Gamma \subseteq V(p)\}$\\
+
+The proof appeals to the following lemmas, proven in~\cite{DEL}:\\
+$\mathbf{Lindenbaum}$: Every consistent set of formulas is a subset of a maximal consistent set of formulas.\\
+$\mathbf{Properties}$: If $\Gamma$ and $\Delta$ are maximal consistent sets, then:
+\begin{itemize}
+	\item 1. $\Gamma$ and $\Delta$ are deductively closed.
+	\item 2. $\varphi \in \Gamma$ iff $\tlnot \varphi \not\in \Gamma$.
+	\item 3. $(\varphi \tland \psi) \in \Gamma$ iff $\varphi \in \Gamma$ and $\psi \in Gamma$.
+	\item 4. $\Gamma \Rel{k,i}^C\Delta$ iff $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma\} \subseteq \Delta$.
+	\item 5. $\Gamma \Rel{b,i}^C\Delta$ iff $\{\Bels{i}\varphi | \Bels{i}\varphi \in \Gamma\} \subseteq \Delta$.
+	\item 6. $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma \} \vdash \psi$ iff $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma\} \vdash \Kns{i}\psi$.
+\end{itemize}
+$\mathbf{Truth}$: For every $\varphi \in \mathcal{L}_{DASL}$, and every maximal consistent set $\Gamma$:\\
+
+\begin{eqnarray*}
+	\varphi \in \Gamma \iiff (M^C,\Gamma)\models\varphi
+\end{eqnarray*}
+$\mathbf{Canonicity}$: The canonical model satisfies the above frame conditions.\\
+With these lemmas, we assume $\not\vdash\varphi$, and show that $\not\models\varphi$. Since $\not\vdash\varphi$, the set $\{\tlnot\varphi\}$ is consistent. From Lindenbaum, $\{\tlnot\varphi\}$ is part of a maximal consistent set, call it $\Gamma$. From the Truth Lemma, $(M^C,\Gamma)\models\tlnot\varphi$. Therefore, $\not\models\varphi$.$\Box$
+
+Because the static logic is complete and we have translation axioms that convert the dynamic formulas to equivalent static ones, we can conclude that the entirety of DASL is complete. Next we examine case studies and a mechanization of the logic.
+%We can proceed by case analysis on the frame conditions and axioms in conjunction with the rules of Modus Ponens and Necessitation. For brevity, we appeal to the well-known theorems establishing that the axioms of the static fragment of DASL are complete for system T and KD45. It remains to show that EP1, EP2, EP3, SP, and PR are complete for the frame conditions. For each frame condition, we assume that there exists a valid formula that is not deducible, and derive a contradiction. 
+%
+%For $(3)$, assume $\varphi$ is valid for all frames with partially-ordered relations $\Rel{b}^i \subseteq \Rel{k}^i$, but that $\varphi$ is not deducible. The relation states that for all $w,v$, if $w\Rel{k}^iv$ then $w\Rel{b}^iv$. Since $\varphi$ is valid for such frames, for all $v$, if $w\Rel{k}^iv$, $v\models\varphi$, in which case $w\models\Kns{i}\varphi$. But since the knowledge relation implies the belief relation, it follows that for all $v$, $w\Rel{b}^iv$ implies $v\models \varphi$, and therefore that $w\models\Bels{i}\varphi$. Thus, the axiom EP1 is valid for such frames. Since $\varphi$ is not deducible, and the axiom EP1 is valid for all such frames, it must be that EP1 and $\tlnot \varphi$ are consistent.
+
+%$(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, and that $\varphi$ is not deducible. Since $\varphi$ is valid, by Necessitation of $\Bels{i}$, so is $\Bels{i}\varphi$. Thus, for all $v$, if $w \Rel{b}^i v$, $v \models \varphi$. 
+
+
+%induction on the structure of $\varphi$.\\
+%$p$: Suppose $\tlnot p$ is consistent. Then any $M,w$ such that $w \not\in V(p)$ serve as a model/world pair for $M,w \models \tlnot p$.
+%$\varphi \tland \psi$: We suppose $\tlnot (\varphi \tland \psi)$ is consistent, which is the case when $(\tlnot \varphi \tlor \tlnot \psi)$ is consistent.

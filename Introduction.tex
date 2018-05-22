@@ -1,4 +1,35 @@
 \chapter{Introduction}
 	\label{CH_Intro}
 
-Introduce the reader to the current problem that you wish to solve, and why anyone should care about it.
+In this doctoral thesis, I present a logic for reasoning about safety-critical information flow among machines and humans. The thesis advances the domain of modal logic by developing a rich and expressive logic suitable for reasoning about real humans in real situations, which in turn provides a new tool for formal methods researchers interested in developing safe human-machine hybrid systems. Thus, the thesis is quite interdisciplinary, pulling from fields as diverse as philosophy, game theory, computer science, and safety engineering.  
+%
+%My work intersects with logic, game theory, information assurance, and aviation safety. I address a problem confronting formal methods researchers in that the vast majority of the methods used to verify system safety and security fail to address the human component. In both aviation safety, and more generally in complex systems, system failure often involves human behavior playing a critical role. I solve this problem by providing a mathematically precise logic for reasoning about the relationship between agents' actions and the safety-critical information they are aware of.
+
+I have developed a logic, which I call Dynamic Agent Safety Logic (DASL). It is based on the foundations of game theory, in which models of agency formally capture how knowledge, rationality, and action relate. Game theory presents a model that, given a description of a scenario, allows one to deduce what actions are dictated by a given theory of rationality. The standard game-theoretic inference works as follows:
+\begin{equation*}
+\mathit{Knowledge\_of\_Situation} \tland \mathit{Rationality} \iimplies \mathit{Good\_Action}.
+\end{equation*}
+
+However, the foundational assumptions of game theory do not accurately capture real human reasoning, and as a result humans frequently deviate from the prescribed behavior. Game theory offers normative analysis of behavior, not descriptive. Looking at the above formula, we can ask a question: what can we infer when an agent fails to execute the prescribed action, as when pilots provide unsafe control inputs to their aircrafts? We can answer this question by examining the contrapositive of the above game-theoretic inference:
+\begin{equation*}
+\tlnot \mathit{Good\_Action} \iimplies \tlnot (\mathit{Knowledge\_of\_Situation} \tland \mathit{Rationality}),
+\end{equation*}
+or equivalently,
+\begin{equation*}
+\tlnot \mathit{Good\_Action} \iimplies \tlnot \mathit{Knowledge\_of\_Situation} \tlor \tlnot \mathit{Rationality}.
+\end{equation*}
+
+With a bit more Boolean manipulation, we have the following:
+\begin{equation*}
+\tlnot \mathit{Good\_Action} \tland \mathit{Rationality} \iimplies \tlnot \mathit{Knowledge\_of\_Situation}.
+\end{equation*}
+
+Thus, embedded in the classical game-theoretic model of agency is a logical inference from bad action to missing knowledge, assuming the agent is rational. This makes intuitive sense upon reflection. If someone is rational, yet they commit an irrational (read: ``bad") action, then it must be the case that they didn't know some crucial information. With this insight in hand, my goal was to identify the logic in which the above inference is sound, ideally with details about which particular pieces of information are missing from an agent's knowledge base when she executes a bad action. Again, it should not be surprising that such a logic exists, because classical game theory already posits a \emph{logical} relationship between knowledge of particular propositions and particular actions.
+
+With DASL, I have formally captured such inferences, where a rational agent executes a bad action, and from this we can infer which safety-critical information they are missing. I apply this technique to aviation safety as a formal method, but in principle I believe it could be applied to many domains of human agency that meet certain conditions.
+
+My research validates the approach by using DASL to analyze aviation mishaps, illustrating its usefulness. My proposal is to extend this research by constructing a monitor prototype based on the logic suitable for runtime diagnosis of information misflow, that is, when safety-critical information fails to reach the human agent and inform her actions. Because we can deduce which safety-critical information is missing from her knowledge base, we can automatically act to correct this misflow.
+
+This is where information assurance comes in. Information assurance is the field of computer science studying the desirable properties of information systems relating to information flow. In particular, information assurance is concerned with properties like confidentiality, integrity, and availability, among others. If a system is designed to interact with a human, then one of its desired properties is that the safety-critical information successfully flows to the human and informs her actions. Sometimes humans become overwhelmed by information competing for their attention, especially during emergency situations. This phenomenon is called information overload. It leads to human behavior that is suboptimal and often dangerous~\cite{hwang}. The problem, in terms of information assurance properties, is that some safety-critical information is not reaching the human component because the human component's cognitive resources are unavailable, suffering from a sort of denial-of-service attack. I propose to formally characterize this situation in my research, and offer strategies for automated enforcement of safety-critical information reaching the human component.
+
+In what follows, I will describe the relevant background material in Section~\ref{background}, including the foundations of game theory and the logical models of agency informing my developments. In Section~\ref{DASL}, I present the logic DASL, and prove that it is sound. In Section~\ref{mech}, I illustrate its application to an aviation mishap, formalized in the Coq Proof Assistant for added formal rigor. In Section~\ref{futurework}, I discuss the algorithm that can leverage the logic's power to deduce missing information from flawed action, and describe how my next steps will be to implement it as a prototype.

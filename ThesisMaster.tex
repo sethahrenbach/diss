@@ -12,6 +12,276 @@
 \usepackage{graphicx}		% Insert images in eps or pdf format
 \usepackage{setspace}		% Line-spacing
 
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{setspace}
+\doublespacing
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{color}
+\usepackage{tcolorbox}
+\usepackage{amsmath}
+\usepackage{float}% http://ctan.org/pkg/float
+\usepackage{gensymb}
+\usepackage{makeidx}  % allows for indexgeneration
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{mathrsfs}
+
+\usepackage{mathrsfs}
+\usepackage{nd3}
+\usepackage{pgf}
+\usepackage{multirow,array}
+\usepackage{mathpartir}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata,positioning}
+\usepackage{stmaryrd}
+
+%\usepackage{natbib}
+\usepackage{fancyvrb}
+%\usepackage{microtype}
+\usepackage{alltt}
+\usepackage{listings}
+%\usepackage{natbib}
+%\usepackage{microtype}
+% Coq lstlisting
+% lstlisting coq style (inspired from a file of Assia Mahboubi)
+%
+\definecolor{dkviolet}{rgb}{0.58,0,0.83}
+\definecolor{ltblue}{rgb}{0, 0, 0.55}
+\definecolor{dkgreen}{rgb}{0.0, 0.2, 0.13}
+\definecolor{dkblue}{rgb}{0,0,1}
+\definecolor{dkred}{rgb}{0.55,0,0}
+\lstdefinelanguage{Coq}{ 
+	%
+	% Anything betweeen $ becomes LaTeX math mode
+	mathescape=true,
+	%
+	% Comments may or not include Latex commands
+	texcl=false, 
+	%
+	% Vernacular commands
+	morekeywords=[1]{Function, Section, Module, End, Require, Import, Export,
+		Variable, Variables, Parameter, Parameters, Axiom, Hypothesis,
+		Hypotheses, Notation, Local, Tactic, Reserved, Scope, Open, Close,
+		Bind, Delimit, Definition, Let, Ltac, Fixpoint, CoFixpoint, Add,
+		Morphism, Relation, Implicit, Arguments, Unset, Contextual,
+		Strict, Prenex, Implicits, Inductive, CoInductive, Record,
+		Structure, Canonical, Coercion, Context, Class, Global, Instance,
+		Program, Infix, Theorem, Lemma, Corollary, Proposition, Fact,
+		Remark, Example, Proof, Goal, Save, Qed, Defined, Hint, Resolve,
+		Rewrite, View, Search, Show, Print, Printing, All, Eval, Check,
+		Projections, inside, outside, Def},
+	%
+	% Gallina
+	morekeywords=[2]{forall, exists, exists2, fun, fix, cofix, struct,
+		match, with, end, as, in, return, let, if, is, then, else, for, of,
+		nosimpl, when},
+	%
+	% Sorts
+	morekeywords=[3]{Type, Prop, Set, true, false, option},
+	%
+	% Various tactics, some are std Coq subsumed by ssr, for the manual purpose
+	morekeywords=[4]{pose, set, move, case, elim, apply, clear, hnf,
+		intro, intros, generalize, rename, pattern, after, destruct,
+		induction, using, refine, inversion, injection, rewrite, congr,
+		unlock, compute, ring, field, fourier, replace, fold, unfold,
+		change, cutrewrite, simpl, have, suff, wlog, suffices, without,
+		loss, nat_norm, assert, cut, trivial, revert, bool_congr, nat_congr,
+		symmetry, transitivity, auto, split, left, right, autorewrite},
+	%
+	% Terminators
+	morekeywords=[5]{by, done, exact, reflexivity, tauto, romega, omega,
+		assumption, solve, contradiction, discriminate},
+	%
+	% Control
+	morekeywords=[6]{do, last, first, try, idtac, repeat},
+	%
+	% Comments delimiters, we do turn this off for the manual
+	morecomment=[s]{(*}{*)},
+	%
+	% Spaces are not displayed as a special character
+	showstringspaces=false,
+	%
+	% String delimiters
+	morestring=[b]",
+	%morestring=[d],
+	%
+	% Size of tabulations
+	tabsize=3,
+	%
+	% Enables ASCII chars 128 to 255
+	extendedchars=false,
+	%
+	% Case sensitivity
+	sensitive=true,
+	%
+	% Automatic breaking of long lines
+	breaklines=false,
+	%
+	% Default style fors listings
+	basicstyle=\small,
+	%
+	% Position of captions is bottom
+	captionpos=b,
+	%
+	% flexible columns
+	columns=[l]flexible,
+	%
+	% Style for (listings') identifiers
+	identifierstyle={\ttfamily\color{black}},
+	% Style for declaration keywords
+	keywordstyle=[1]{\ttfamily\color{dkviolet}},
+	% Style for gallina keywords
+	keywordstyle=[2]{\ttfamily\color{dkgreen}},
+	% Style for sorts keywords
+	keywordstyle=[3]{\ttfamily\color{ltblue}},
+	% Style for tactics keywords
+	keywordstyle=[4]{\ttfamily\color{dkblue}},
+	% Style for terminators keywords
+	keywordstyle=[5]{\ttfamily\color{dkred}},
+	%Style for iterators
+	%keywordstyle=[6]{\ttfamily\color{dkpink}},
+	% Style for strings
+	%	stringstyle=\ttfamily,
+	% Style for comments
+	commentstyle={\ttfamily\color{dkgreen}},
+	%
+	%moredelim=**[is][\ttfamily\color{red}]{/&}{&/},
+	literate=
+	{\\forall}{{\color{dkgreen}{$\forall\;$}}}1
+	{\\exists}{{$\exists\;$}}1
+	{<-}{{$\leftarrow\;$}}1
+	{=>}{{$\Rightarrow\;$}}1
+	%	{==}{{\code{==}\;}}1
+	{==>}{{$\Longrightarrow\;$}}1
+	%    {:>}{{\code{:>}\;}}1
+	{->}{{$\rightarrow\;$}}1
+	{<->}{{$\leftrightarrow\;$}}1
+	{<==}{{$\leq\;$}}1
+	{\#}{{$^\star$}}1 
+	{\\o}{{$\circ\;$}}1 
+	{\@}{{$\cdot$}}1 
+	{\/\\}{{$\wedge\;$}}1
+	{\\\/}{{$\vee\;$}}1
+	%	{++}{{\code{++}}}1
+	{~}{{\ }}1
+	{\@\@}{{$@$}}1
+	{\\mapsto}{{$\mapsto\;$}}1
+	{\\hline}{{\rule{\linewidth}{0.5pt}}}1
+	%
+}[keywords,comments,strings]
+
+\lstnewenvironment{coq}{\lstset{language=Coq}}{}
+
+% pour inliner dans le texte
+\def\coqe{\lstinline[language=Coq, basicstyle=\small]}
+% pour inliner dans les tableaux / displaymath...
+\def\coqes{\lstinline[language=Coq, basicstyle=\scriptsize]}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% Local IspellDict: british
+%%% TeX-master: "main.tex"
+%%% End: 
+\newtheorem{theorem}{Theorem}[section]
+%%epistemic 
+%
+\newcommand{\Rel}[1]{R_{#1}}
+\newcommand{\Act}[1]{[ \mathit{#1} ]}
+\newcommand{\ActPos}[1]{\langle \mathit{XSTIT_{#1}} \rangle}
+\newcommand{\Know}{\mathbf{K}\,} 
+\newcommand{\Kns}[1]{\mathbf{K}_{\mathbf{#1}}\,} 
+\newcommand{\Bel}{\mathbf{B}\,} 
+\newcommand{\Bels}[1]{\mathbf{B}_{\mathbf{#1}}\,} 
+\newcommand{\Pos}  {\langle \mathbf{K} \rangle\,} 
+\newcommand{\Poss}[1]  {\langle \mathbf{K}_{#1} \rangle\,}
+\newcommand{\BPos} {\langle \mathbf{B} \rangle\,}
+\newcommand{\BPoss}[1]{\langle \mathbf{B}_{#1} \rangle\,}
+\newcommand{\STIT}[1] {\mathbf{[XSTIT\ {#1}]}}
+\newcommand{\Safe} {\mathbf{S}}
+\newcommand{\safe} {\mathit{safe}}
+\newcommand{\choice}[1]{\mathit{Choice_{#1}}}
+\newcommand{\neXt}{\mathit{X}}
+\newcommand{\Pal}[1]{\mathbf{[{#1}]}}
+\newcommand{\PalPos}[2]{\mathbf{\langle #1, #2 \rangle}\,}
+
+\newcommand{\SPalPos}[2]{\mathbf{\langle #1, #2,\mathbf{S} \rangle}\,}
+
+\def\firstcircle{(90:1.75cm) circle (2.5cm)}
+\def\secondcircle{(210:1.75cm) circle (2.5cm)}
+\def\thirdcircle{(330:1.75cm) circle (2.5cm)}
+
+%%qed
+%
+\newcommand{\qqed}{\hfill\mbox{$\Box$}}
+%
+%%BNF
+\newcommand{\bnf}{\ |\ }
+\newcommand{\indy}{\mathop{\parallel}}
+\newcommand{\mmid}{\mathrel{\mid}}
+%
+\newcommand{\etal}{\textit{et.~al.}}
+\newcommand{\nnot}{\textsf{\ not \ }}
+\newcommand{\oor}{\textsf{\  or \ }}
+\newcommand{\iiff}{\textsf{\  iff \ }}
+\newcommand {\aand}{ \textsf{\ and \ } }
+\newcommand {\timplies} { \textsf{\ implies \ }}
+\newcommand {\tland}{{\ \wedge \ }}
+\newcommand {\tlor}{{\ \vee \ }}
+\newcommand {\tlnot}{{\neg}}
+\newcommand {\iimplies}{{\ \Rightarrow \ }}
+%
+% Algorithm style
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+%
+%<<<<<<\newtheorem*{exam}{Example}
+%<<<<<< \newtheorem*{countex}{Counterexample}
+%
+%\\
+%\spnewtheorem{axiom}{Axiom}{\bfseries}{\itshape} 
+%\spnewtheorem{dfn}{Definition}{\bfseries}{\itshape}
+%\spnewtheorem*{rmk}{Remark}{\bfseries}{\itshape}
+%\spnewtheorem*{exam}{Example}{\bfseries}{\rmfamily}
+%\spnewtheorem*{countex}{Counterexample}{\bfseries}{\rmfamily}
+\newcommand{\li}{\mathit{i}}
+\newcommand{\pre}{\mathit{pre}}
+\newcommand{\lpp} {\mathit{p}}
+\newcommand{\lAA}{\mathit{A}}
+\newcommand{\lff} {\mathit{f}}
+\newcommand{\lhh} {\mathit{h}}
+\newcommand{\lhhp} {\mathit{h'}}
+\newcommand{\lqq} {\mathit{q}}
+\newcommand{\laa} {\mathit{a}}
+\newcommand{\lbb} {\mathit{b}}
+\newcommand{\ldd} {\mathit{\delta}}
+\newcommand{\lnn} {\mathit{n}}
+\newcommand{\luu} {\mathit{u}} 
+\newcommand{\lvv} {\mathit{v}} 
+\newcommand{\ltt}  {\mathit{t}} 
+\newcommand{\lww} {\mathit{w}}
+\newcommand{\lWW} {\mathit{W}}
+\newcommand{\lMM} {\mathit{M}}
+\newcommand{\lVV} {\mathit{V}}
+\newcommand{\lSS} {\mathit{S}}
+\newcommand{\lss} {\mathit{s}}
+\newcommand{\lssp} {\mathit{s'}}
+\newcommand{\lHH} {\mathit{H}}
+\newcommand{\false} {\mathit{False}}
+\newcommand{\true} {\mathit{True}}
+\newcommand{\lyy} {\mathit{y}}
+\newcommand{\lxx} {\mathit{x}}
+\newcommand{\lzz}{\mathit{z}}
+%
+\newcommand{\bF}{\mathbb{F}}
+\newcommand{\bR}{\mathbb{R}}
+\newcommand{\bZ}{\mathbb{Z}}
+\newcommand{\bN}{\mathbb{N}}
+\newcommand{\bQ}{\mathbb{Q}}
+%
 % Potentially useful packages:
 % \usepackage{epsfig}			% For EPS figures
 % \usepackage{subfigure}		% For side-by-side figures
@@ -45,6 +315,8 @@
 \input{Introduction}
 \input{Chapter_02}
 \input{Chapter_03}
+\input{Chapter_04}
+\input{Chapter_05}
 \input{Summary}
 
 \input{Appendix}

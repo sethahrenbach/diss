@@ -1,0 +1,309 @@
+\chapter{Case Study and Mechanization}
+	\label{CH_04}
+	
+We apply the logic just developed to the formal analysis of the Air France 447 aviation incident. We also mechanize the formalization in the Coq Proof Assistant. Our mechanization follows similar work by Malikovi\'c and \v Cubrilo~\cite{delcoq1,delcoq2}, in which they mechanize an analysis of the game of Cluedo using Dynamic Epistemic Logic, based on van Ditmarsch's formalization of the game~\cite{ditmarsch}. It is commonly assumed that games must be adversarial, but this is not the case. Games need only involve situations in which players' payoffs depend on the actions of other players. Similarly, knowledge games need not be adversarial, and must only involve diverging information. Thus, it is appropriate to model aviation incidents as knowledge games of sorts, where players' payoffs depend on what others do, specifically the way the players communicate information with each other. The goal is to achieve an accurate situational awareness and provide flight control inputs appropriate for the situation. Failures to achieve this goal result in disaster, and often result from imperfect information flow. A formal model of information flow in these situations provides insight and allows for the application of formal methods to improve information flow during emergency situations.
+\section{Air France 447}
+This case study is based on the authoritative investigative report into Air France 447 performed and released by France's  Bureau d'Enqu\^etes et d'Analyses pour la S\'ecurit\'e de l'Aviation Civile (BEA), responsible for investigating civil aviation incidents and issuing factual findings\cite{airfrance}. The case is mechanized by instantiating, in Coq, the above logic to reflect the facts of the case. One challenge associated with this is that the readings about inputs present in aviation are often real values on a continuum, whereas for our purposes we require discrete values. We accomplish this by dividing the continuum associated with inputs and readings into discrete chunks, similar to how fuzzy logic maps defines predicates with real values\cite{fuzzy}.
+
+Air France flight 447 from Rio de Janeiro, Brazil to Paris, France, departed June 1, 2009. The Airbus A330 encountered adverse weather over the Atlantic ocean, resulting in a clogged Pitot-static system. Consequently, the airspeed indicators delivered unreliable data concerning airspeed to the pilot flying, resulting in confusion. A chain of events transpired in which the pilot overcorrected the plane's horizontal attitude again and again, and continued to input nose up pitch commands, all while losing airspeed. Perhaps most confusing to the pilot was the following situation: the aircraft's  angle of attack (AOA) was so high it was considered invalid by the computer, so no stall warning sounded until the nose pitched down into the valid AOA range, at which point the stall warning would sound. When the pilot pulled up, the AOA would be considered invalid again, and the stall warning would cease. The aircraft entered a spin and crashed into the ocean. Palmer~\cite{AFPalmer} argues that had the pilot merely taken no action, the Pitot tubes would have cleared in a matter of seconds, and the autopilot could have returned to Normal Law. 
+
+This section will formalize an excerpted instance from the beginning of the case, involving an initial inconsistency among airspeed indicators, and the subsequent dangerous input provided by the pilot. Formalized in the logic, the facts of the case allow us to infer that the pilot lacked negative introspection about the safety-critical data required for his action. This demonstrates that the logic allows information about the pilot's situational awareness to flow to the computer, via the pilot's actions. It likewise establishes a safety property to be enforced by the computer, namely that a pilot should maintain negative introspection about safety-critical data, and if he fails to do so, it should be re-established as quickly as possible.
+
+\begin{enumerate}
+	\item $\tlnot\mathit{(RS=LS)} \tland \tlnot\mathit{(mode=normal)}\dots$
+	\item $\PalPos{\mathit{pilot}}{\mathit{hardnoseup}}\mathit{true}$
+	\item $\Bels{\mathit{pilot}}(\mathit{LS=RS})$
+	\item $\tlnot \Kns{\mathit{pilot}}(\mathit{LS=RS})$
+	\item $\Bels{\mathit{pilot}}\Kns{\mathit{pilot}}(\mathit{LS=RS})$
+	\item $\tlnot \Kns{\mathit{pilot}} \tlnot \Kns{\mathit{pilot}}(\mathit{LS=RS})$
+	\item $\tlnot \Kns{\mathit{pilot}}(\mathit{LS=RS}) \tland \tlnot \Kns{\mathit{pilot}} \tlnot \Kns{\mathit{pilot}}(\mathit{LS=RS})$
+	\item $\tlnot(\tlnot \Kns{\mathit{pilot}}(\mathit{LS=RS}) \iimplies \Kns{\mathit{pilot}} \tlnot \Kns{\mathit{pilot}}(\mathit{LS=RS}))$ 
+\end{enumerate}
+
+Premise 1 is a conjunction of the current instrument readings, wherein the right side airspeed indicator and the left side airspeed indicator do not indicate the same speed, and the mode is not normal. Premise 2 holds when the pilot executes the action giving the input of a hard nose up pitch. 3 follows from 2 by axiom \emph{SP} and the semantics of the safe action modality. 4 follows from 1 and the fact that the knowledge operator is reflexive. 5 follows from 3 and axiom \emph{EP2}. 6 follows from the fact that the belief modality is serial, and the contrapositive of axiom \emph{EP1}. 7 follows from 6 and 4. 8 follows from 7, as they are logically equivalent. The above argument shows that from the configuration of the instruments and the pilot's action, it is deducible that the pilot lacks negative introspection about the airspeed indicator readings.
+
+The above formalization of the case focuses on one action, and deduces one of the pieces of safety-critical information. A similar deduction follows for the pilot's unawareness of $(\mathit{\tlnot(mode=normal)})$. Similar modeling can be done involving pilot announcements to each other. Furthermore, should the autopilot be modeled, and if it has corrective actions available to it, these and their effects can be modeled as well. The next section mechanizes this model in the Coq Proof Assistant.
+
+
+%According to the official report, at 2 hours and 10 minutes into the flight, a Pitot probe likely became clogged by ice, resulting in an inconsistency between airspeed indicators, and the autopilot disconnecting. This resulted in a change of mode from Normal Law to Alternate Law 2, in which certain stall and control protections ceased to exist. The pilot then made inappropriate control inputs, namely aggressive nose up commands, the only explanation for which is that he mistakenly believed that the aircraft was in Normal Law mode with protections in place to prevent a stall. This situation, and the inference regarding the pilot's mistaken belief, is modeled in the following application and mechanization of the logic.
+%
+%%My source material for the case study will be the authoritative investigative report into Air France 447 performed and released by France's  Bureau d'Enqu\^etes et d'Analyses pour la S\'ecurit\'e de l'Aviation Civile (BEA), responsible for investigating civial aviation incidents and issuing factual findings. The mechanization procedure I utilize will be to directly mechanize the relevant aspects of the report detailing the accident and conduct the formal analysis via the Coq system. Thus, the facts of the case and the occurrence of informational events will be taken directly from the report, and the results of my logical analysis will compared with those of the investigators' analysis.
+%
+%%A basic description of the incident is provided here to indicate how a multi-agent information flow analysis could be applied. The final report of the incident indicates that it resulted from a sequence of events beginning with an external instrument becoming clogged with ice. This led to an inconsistency in the computer's measurement of the airspeed, causing the autopilot to pass control to the pilot. In the confusion, the crew failed to follow the appropriate safety procedures for inconsistent airspeed, and made inappropriate inputs to the flight controls. Finally, they were unaware of the plane's approach to a stall and failed to give inputs making recovery possible\cite{airfrance}.
+%
+%The crux of the case is that inconsistent information was being presented to the pilot, along with a cacophony of inconsistent alarms, and the pilot's control inputs indicated a lack of awareness of safety-critical information. A detailed analysis, using the Coq Proof Assistant and the logic developed by my research, will make explicit these failures of information flow, both from the computer to the pilots, between the pilot and co-pilot, and from the pilot to the computer. This will motivate the description of a prototype safety monitor that identifies and corrects information flow failures like those found in Air France 447.
+
+
+\section{Mechanization in Coq}
+The following mechanization demonstrates progress from the artificially simple toy examples normally analyzed in the literature to richer real-world examples. However, it does not represent the full richness of the approach. The actions and instrument readings mechanized in this paper are constrained to those most relevant to the case study. The approach is capable of capturing the full richness of all instrument reading configurations and actions available to a pilot. To do so, one needs to consult a flight safety manual and formally represent each action available to a pilot, and each potential instrument reading, according to the following scheme.
+
+Before beginning, we note that our use of sets in the following Coq code requires the following argument passed to coqtop before executing: -impredicative-set. In CoqIDE, this can be done by selecting the `Tools' dropdown, then `Coqtop arguments'. Type in \emph{-impredicative-set}.
+
+We first formalize the set of agents.
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Inductive Agents: Set := Pilot | CoPilot | AutoPilot.
+	\end{lstlisting}
+\end{tcolorbox}
+
+Next we formalize the set of available inputs. These themselves are not actions, but represent atomic propositions true or false of a configuration.
+
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Inductive Inputs : Set := 
+	HardThrustPlus  | ThrustPlus 
+	| HardNoseUp      | NoseUp 
+	| HardWingLeft    | WingLeft
+	| HardThrustMinus | ThrustMinus
+	| HardNoseDown    | NoseDown 
+	| HardWingRight   | WingRight.
+	\end{lstlisting}
+\end{tcolorbox}
+
+We represent readings by indicating which \emph{side} of the panel they are on. Typically, an instrument has a left-side version, a right-side version, and sometimes a middle version serving as backup. When one of these instruments conflicts with its siblings, the autopilot will disconnect and give control to the pilot.
+
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Inductive Side : Set := Left | Middle | Right.
+	\end{lstlisting}	
+	
+\end{tcolorbox}
+
+We divide the main instruments into chunks of values they can take, in order to provide them with a discrete representation in the logic. For example, the reading \emph{VertUp1} may represent a nose up reading between 0$\degree$ and 10$\degree$, while \emph{VertUp2} represents a reading between 11$\degree$ and 20$\degree$.
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Inductive Readings (s : Side) : Set := 
+	VertUp1 | VertUp2 | VertUp3 | VertUp4 
+	| VertDown1 | VertDown2 | VertDown3 | VertDown4 
+	| VertLevel | HorLeft1 | HorLeft2 | HorLeft3 
+	| HorRight1 | HorRight2 | HorRight3 | HorLevel
+	| AirspeedFast1 | AirspeedFast2 | AirspeedFast3 
+	| AirspeedSlow1 | AirspeedSlow2 | AirspeedSlow3 
+	| AirspeedCruise| AltCruise | AltClimb | AltDesc | AltLand.
+	\end{lstlisting}	
+	
+\end{tcolorbox}
+
+We define a set of potential modes the aircraft can be in.
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Inductive Mode : Set := Normal | Alternate1 | Alternate2.
+	\end{lstlisting}
+\end{tcolorbox}
+
+We define a set of global instrument readings representing the mode and all of the instrument readings, left, right, and middle, combined together. This represents the configuration of the instumentation.
+
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Inductive GlobalReadings : Set := Global (m: Mode) 
+	(rl : Readings Left) 
+	(rm : Readings Middle) 
+	(rr : Readings Right). 
+	\end{lstlisting}
+\end{tcolorbox}
+
+The set of atomic propositions we are concerned with are those representing facts about the instrumentation.
+
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Inductive Atoms : Set := 
+	| M (m : Mode)
+	| Input (a : Inputs) 
+	| InstrumentL (r : Readings Left) 
+	| InstrumentM (r : Readings Middle) 
+	| InstrumentR (r : Readings Right)
+	| InstrumentsG (g : GlobalReadings).
+	\end{lstlisting}
+\end{tcolorbox}
+
+Next we follow Malikovi\'c and \v Cubrilo~\cite{delcoq1,delcoq2} in defining a set \emph{prop} of propositions in predicate calculus, distinct from Coq's built in type \emph{Prop}. The definition provides constructors for atomic propositions consisting of particular instrument reading predicate statements, implications, propositions beginning with a knowledge modality, and those beginning with a belief modality. Interestingly, modal logic cannot be directly represented in Coq's framework~\cite{lescanne}. We first define propositions in first-order logic, which we then use to define DASL. This appears to be the standard technique for mechanizing modal logics in Coq. 
+
+
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]	
+	Inductive prop : Set :=
+	| atm : Atoms -> prop
+	| imp: prop -> prop -> prop
+	| Forall : forall (A : Set), (A -> prop) -> prop
+	| K : Agents -> prop -> prop
+	| B : Agents -> prop -> prop
+	| Ck : list Agents -> prop -> prop
+	| Cb : list Agents -> prop -> prop.
+	\end{lstlisting}
+\end{tcolorbox}
+\newpage
+We use the following notation for implication and universal quantification.
+
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Infix "==>" := imp (right associativity, at level 85).
+	Notation "\-/ p" := (Forall _ p) (at level 70, right associativity).
+	\end{lstlisting}
+\end{tcolorbox}
+
+We likewise follow Malikovi\'c and \v Cubrilo~\cite{delcoq1,delcoq2} by defining an inductive type \emph{theorem} representing a theorem of DASL. The constructors correspond to the Hilbert system, either as characteristic axioms, or inference rules. The first three represent axioms for propositional logic, then the rule Modus Ponens, then the axioms for the epistemic operator plus its Necessitation rule, then the doxastic operator and its Necessitation rule. Do not confuse the Necessitation rules with material implication in the object language. The final constructors capture the axioms relating belief and knowledge. The axioms for dynamic modal operators are defined separately, and are not included here.
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Inductive theorem : prop -> Prop :=
+	|Hilbert_K: forall p q : prop, theorem (p ==> q ==> p)
+	|Hilbert_S: forall p q r : prop, 
+	theorem ((p==>q==>r)==>(p==>q)==>(p==>r))
+	|Classic_NOTNOT : forall p : prop, theorem ((NOT (NOT p)) ==> p)
+	|MP : forall p q : prop, theorem (p ==> q) -> theorem p -> theorem q
+	|K_Nec : forall (a : Agents) (p : prop), theorem p -> theorem (K a p)
+	|K_K : forall (a : Agents) (p q : prop), 
+	theorem (K a p ==> K a (p ==> q) ==> K a q)
+	|K_T : forall (a : Agents) (p : prop), theorem (K a p ==> p)
+	|B_Nec : forall (a : Agents) (p : prop), theorem p -> theorem (B a p)
+	|B_K : forall (a : Agents) (p q : prop), 
+	theorem (B a p ==> B a (p ==> q) ==> B a q)
+	|B_Serial : forall (a : Agents) (p : prop), 
+	theorem (B a p ==> NOT (B a (NOT p)))
+	|B_4 : forall (a : Agents) (p : prop), theorem (B a p ==> B a (B a p))
+	|B_5 : forall (a : Agents) (p : prop), 
+	theorem (NOT (B a p) ==> B a (NOT (B a p)))
+	|K_B : forall (a : Agents) (p : prop), theorem (K a p ==> B a p)
+	|B_BK : forall (a : Agents) (p : prop), theorem (B a p ==> B a (K a p)).
+	
+	\end{lstlisting}\end{tcolorbox}
+
+\newpage
+We use the following notation for \emph{theorem}:
+
+
+\begin{tcolorbox}	\begin{lstlisting}[language=Coq]
+	Notation "|-- p" := (theorem p) (at level 80).
+	\end{lstlisting}
+\end{tcolorbox}
+
+We encode actions as records in Coq, recording the acting pilot, the observability of the action (whether it is observed by other agents or not), the input provided by the pilot, and the preconditions for the action and the safety preconditions for the action, both represented as global atoms.
+
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Record Action : Set := act {Ai : Agents; Aj : Agents; pi : PI; 
+	input : Inputs; c : GlobalReadings; 
+	c_s : GlobalReadings}.
+	\end{lstlisting}
+\end{tcolorbox}
+
+The variable \emph{c} holds the configuration representing the precondition for the action, while the variable \emph{c\_s} holds the configuration for the safety precondition.
+
+%\begin{tcolorbox}\emph{Record SafeAction : Set := act\_s \{Ai\_s : Agents; pi\_s : PI; input\_s : Inputs; c\_s : GlobalReadings\}.}
+%\end{tcolorbox}
+
+We encode the precondition and safety precondition functions as follows.
+
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Function pre (a:Action) : prop := atm (InstrumentsG (c a)).
+	Function pre_s (a : Action) : prop := atm (InstrumentsG (c_s a)).
+	
+	\end{lstlisting}
+\end{tcolorbox}
+
+In the object language, the dynamic modalities of action and safe action are encoded as follows.
+
+\begin{tcolorbox}\begin{lstlisting}[language=Coq]
+	Parameter aft_ex_act : Action -> prop -> prop.
+	Parameter aft_ex_act_s : Action -> prop -> prop.
+	
+	\end{lstlisting}
+\end{tcolorbox}
+
+
+Many standard properties of logic, like the simplification of conjunctions, hypothetical syllogism, and contraposition, are encoded as Coq axioms. As an example, here is how we encode simplifying a conjunction into just its left conjunct.
+
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Axiom simplifyL : forall p1 p2,
+	|-- p1 & p2 -> |-- p1.
+	\end{lstlisting}
+\end{tcolorbox}
+
+
+We formalize the configuration of the instruments at 2 hour 10 minutes into the flight as follows.
+
+\begin{tcolorbox}\begin{lstlisting}[language=Coq]
+	Definition Config_1 :=  (atm (M Alternate2)) & 
+	(atm (InstrumentL (AirspeedSlow3 Left))) & 
+	(atm (InstrumentM (AirspeedSlow3 Middle))) & 
+	(atm (InstrumentR (AirspeedCruise Right))).
+	\end{lstlisting}\end{tcolorbox}
+The mode is Alternate Law 2, and the left and central backup instruments falsely indicate that the airspeed is very slow, while the right side was not recorded, but because there was a conflict, we assume it remained correctly indicating a cruising airspeed.
+
+The pilot's dangerous input, a hard nose up command, is encoded as follows.
+
+
+\begin{tcolorbox}\begin{lstlisting}[language=Coq]
+	Definition Input1 := act Pilot Pilot Pri HardNoseUp 
+	(Global Alternate2 (AirspeedSlow3 Left) 
+	(AirspeedSlow3 Middle) 
+	(AirspeedCruise Right))
+	(Global Normal (AirspeedCruise Left) 
+	(AirspeedCruise Middle) 
+	(AirspeedCruise Right)).
+	\end{lstlisting}\end{tcolorbox}
+
+The action is represented in the object language by taking the dual of the dynamic modality, $\tlnot \Pal{i,(A,\laa)}\tlnot True$, equivalently $\PalPos{i}{(A,\laa)}True$, indicating that the precondition is satisfied and the action token is executed.
+
+\begin{tcolorbox}\begin{lstlisting}[language=Coq]
+	Definition Act_1 :=  NOT (aft_ex_act Input1 (NOT TRUE)).
+	\end{lstlisting}
+\end{tcolorbox}
+
+The actual configuration satisfies the precondition for the action, but it is inconsistent with the safety precondition. The safety precondition for the action indicates that the mode should be Normal and the readings should consistently indicate cruising airspeed. However, in Config\_1, the conditions do not hold. Thus, the action is unsafe. From the configuration and the action, DASL allows us to deduce that the pilot lacks negative introspection of the action's safety preconditions.
+
+Negative introspection is an agent's awareness of the current unknowns. To lack it is to be unaware of one's unknown variables, so lacking negative introspection about one's safety preconditions is to be unaware that they are unknown.
+
+\begin{tcolorbox}\begin{lstlisting}[language=Coq]
+	Theorem NegIntroFailMode : 
+	|-- (Config_1 ==> Act_1 ==>
+	((NOT (K Pilot (pre_s(Action1)))) &
+	(NOT (K Pilot (NOT (K Pilot (pre_s(Action1)))))))).
+	\end{lstlisting}\end{tcolorbox}
+
+In fact, in general it holds that if the safety preconditions for an action are false, and the pilot executes that action, then the pilot lacks negative introspection of those conditions. We have proven both the above theorem, and the more general theorem, in Coq.
+
+\begin{tcolorbox}\begin{lstlisting}[language=Coq]
+	Theorem neg_intro_failure : 
+	forall (A Ao : Agents) (pi : PI) (inp : Inputs) 
+	(m : Mode) 
+	(rl : Readings Left) (rm : Readings Middle) (rr : Readings Right) 
+	(ms : Mode) 
+	(rls : Readings Left) (rms : Readings Middle) (rrs : Readings Right) 
+	phi,
+	|--  (NOT 
+	(aft_ex_act 
+	(act A Ao pi inp (Global m rl rm rr) (Global ms rls rms rrs)) 
+	(NOT phi)) ==>
+	NOT (atm (InstrumentsG (Global ms rls rms rrs))) ==>
+	(NOT (K A (atm (InstrumentsG (Global ms rls rms rrs)))) & 
+	(NOT (K A (NOT (K A (atm (InstrumentsG (Global ms rls rms rrs))))))))).
+	
+	\end{lstlisting}
+\end{tcolorbox}
+
+This indicates that negative introspection about safety preconditions is a desirable safety property to maintain, consistent with the official report's criticism that the Airbus cockpit system did not clearly display the safety critical information. The logic described in this research accurately models the report's findings that the pilot's lack of awareness about safety-critical information played a key role in his decision to provide what turned out to be unsafe inputs. Furthermore, the logic supports efforts to automatically infer which safety-critical information the pilot is unaware of and effectively display it to him.
+
+\section{Advantages of this Approach}
+
+Compared to earlier efforts to bring formal methods to bear on pilot error, this approach has several differences and advantages.
+\begin{enumerate}
+	\item The formalization of the pilot's mental model is generated by her own behavior
+	\item It better copes with the unpredictability of human behavior
+	\item It is system non-specific
+\end{enumerate}
+
+As mentioned in Section~\ref{background}, earlier efforts to bring formal methods to bear do not directly model the human's mental model. This approach complements those by doing so. Similarly, rather than generating a behavior model of the user at specification-time and seeking to prevent bad runs, this approach works in the opposite direction. By formalizing the analyses produced by decades of aviation mishap analysis, safety properties can be identified. Just as the accident investigators read through data from prior to the crash to figure out what went wrong, a computational approach equipped with DASL can draw the same inferences as the investigators, but immediately after the bad action occurs, and hopefully before the plane crashes. Thus, the myriad ways a human can mess up need not all be modeled at specification time, but merely expressible at runtime, as this approach allows. Because DASL is not designed with one specific aircraft in mind, its safety preconditions can be tailored to any system, beyond even aviation. Any system with a human component, rigorously definable guidelines for proper action, and a computer with a global view of the system, can be modeled by DASL.
