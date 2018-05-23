@@ -2,7 +2,7 @@
 	\label{CH_03}
 
 
-The logic for reasoning about information flow in knowledge games is called Dynamic Epistemic Logic (DEL). As its name suggests, it combines elements of epistemic logic and dynamic logic. Epistemic logic is the static logic for reasoning about knowledge, and dynamic logic is used to reason about actions. In dynamic logic semantics, nodes are states of the system or the world, and relations on nodes are transitions via programs or actions from node to node. If we think of each node in dynamic logic as being a model of epistemic logic, then actions become relations on models, representing transitions from one multi-agent epistemic model to another. For example, if we have a static epistemic model $M1$ representing the knowledge states of agents $1$ and $2$ at a moment, then the action $``p?"$ is a relation between $M1$ and $M2$, a new static epistemic model of $1$'s and $2$'s knowledge after the question is asked. All of this is captured by DEL.
+The logic for reasoning about information flow in knowledge games is called Dynamic Epistemic Logic (DEL). As its name suggests, it combines elements of epistemic logic and dynamic logic. Epistemic logic is the static logic for reasoning about knowledge, and dynamic logic is used to reason about actions. In dynamic logic semantics, nodes are states of the system (or of the world), and relations on nodes are transitions via programs or actions from node to node. If we think of each node in dynamic logic as being a model of epistemic logic, then actions become relations on models, representing transitions from one multi-agent epistemic model to another. For example, if we have a static epistemic model $M1$ representing the knowledge states of agents $1$ and $2$ at a moment, then the action $``p?"$ is a relation between $M1$ and $M2$, a new static epistemic model of $1$'s and $2$'s knowledge after the question is asked. All of this is captured by DEL.
 
 \begin {center}
 \begin {tikzpicture}[-latex ,auto ,node distance =3 cm and 4cm ,on grid ,
@@ -192,8 +192,7 @@ Next we turn to completeness.
 	\end{theorem}
 \end{tcolorbox}
 
-$\mathbf{Proof\ Sketch}.$ Completeness states that if a formula $\varphi$ is valid, then it is deducible. The sketch for this proceeds proceeds by contraposition. \\
-$\mathbf{Proof\ Goal}.$ For every formula $\varphi$ in the language $\mathcal{L}_{DASL}$, $\not\vdash\varphi \timplies \not\models\varphi.$\\
+$\mathbf{Proof}.$ Completeness states that if a formula $\varphi$ is valid, then it is deducible. The sketch for this proceeds proceeds by contraposition. So we must show that for every formula $\varphi$ in the language $\mathcal{L}_{DASL}$, $\not\vdash\varphi \timplies \not\models\varphi.$\\
 We define the notions of a \emph{Maximal Consistent Set}, and a \emph{Canonical Model} for the logic. \\
 \\
 $\mathbf{Definition}$. Maximal Consistent Set.\\
@@ -206,9 +205,14 @@ $\mathbf{Definition}$. Canonical Model. A canonical model $M^C = \langle W^C,\ \
 3. $\Gamma \Rel{b,i}^C \Delta$ iff $\{\Bels{i}\varphi | \Bels{i}\varphi \in \Gamma\} = \{\Bels{i}\varphi | \Bels{i}\varphi \in \Delta\}$\\
 4. $V^C = \{\Gamma \in W^C| \Gamma \subseteq V(p)\}$\\
 
-The proof appeals to the following lemmas, proven in~\cite{DEL}:\\
-$\mathbf{Lindenbaum}$: Every consistent set of formulas is a subset of a maximal consistent set of formulas.\\
-$\mathbf{Properties}$: If $\Gamma$ and $\Delta$ are maximal consistent sets, then:
+The proof appeals to the following lemmas, proven in~\cite{DEL}:
+\begin{lemma}[Lindenbaum]
+Every consistent set of formulas is a subset of a maximal consistent set of formulas.
+\end{lemma}
+%{Lindenbaum}$: Every consistent set of formulas is a subset of a maximal consistent set of formulas.\\
+\begin{lemma}[Properties]
+
+If $\Gamma$ and $\Delta$ are maximal consistent sets, then:
 \begin{itemize}
 	\item 1. $\Gamma$ and $\Delta$ are deductively closed.
 	\item 2. $\varphi \in \Gamma$ iff $\tlnot \varphi \not\in \Gamma$.
@@ -217,15 +221,23 @@ $\mathbf{Properties}$: If $\Gamma$ and $\Delta$ are maximal consistent sets, the
 	\item 5. $\Gamma \Rel{b,i}^C\Delta$ iff $\{\Bels{i}\varphi | \Bels{i}\varphi \in \Gamma\} \subseteq \Delta$.
 	\item 6. $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma \} \vdash \psi$ iff $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma\} \vdash \Kns{i}\psi$.
 \end{itemize}
-$\mathbf{Truth}$: For every $\varphi \in \mathcal{L}_{DASL}$, and every maximal consistent set $\Gamma$:\\
+\end{lemma}
 
+\begin{lemma}[Truth]
+For every $\varphi \in \mathcal{L}_{DASL}$, and every maximal consistent set $\Gamma$:
 \begin{eqnarray*}
 	\varphi \in \Gamma \iiff (M^C,\Gamma)\models\varphi
 \end{eqnarray*}
-$\mathbf{Canonicity}$: The canonical model satisfies the above frame conditions.\\
+\end{lemma}
+
+\begin{lemma}[Canonicity]
+
+The canonical model satisfies the above frame conditions.\\
+\end{lemma}
+
 With these lemmas, we assume $\not\vdash\varphi$, and show that $\not\models\varphi$. Since $\not\vdash\varphi$, the set $\{\tlnot\varphi\}$ is consistent. From Lindenbaum, $\{\tlnot\varphi\}$ is part of a maximal consistent set, call it $\Gamma$. From the Truth Lemma, $(M^C,\Gamma)\models\tlnot\varphi$. Therefore, $\not\models\varphi$.$\Box$
 
-Because the static logic is complete and we have translation axioms that convert the dynamic formulas to equivalent static ones, we can conclude that the entirety of DASL is complete. Next we examine case studies and a mechanization of the logic.
+Because the static logic is complete and we have translation axioms that convert the dynamic formulas to equivalent static ones, we can conclude that the entirety of DASL is complete. In the next chapter we examine case studies and a mechanization of the logic.
 %We can proceed by case analysis on the frame conditions and axioms in conjunction with the rules of Modus Ponens and Necessitation. For brevity, we appeal to the well-known theorems establishing that the axioms of the static fragment of DASL are complete for system T and KD45. It remains to show that EP1, EP2, EP3, SP, and PR are complete for the frame conditions. For each frame condition, we assume that there exists a valid formula that is not deducible, and derive a contradiction. 
 %
 %For $(3)$, assume $\varphi$ is valid for all frames with partially-ordered relations $\Rel{b}^i \subseteq \Rel{k}^i$, but that $\varphi$ is not deducible. The relation states that for all $w,v$, if $w\Rel{k}^iv$ then $w\Rel{b}^iv$. Since $\varphi$ is valid for such frames, for all $v$, if $w\Rel{k}^iv$, $v\models\varphi$, in which case $w\models\Kns{i}\varphi$. But since the knowledge relation implies the belief relation, it follows that for all $v$, $w\Rel{b}^iv$ implies $v\models \varphi$, and therefore that $w\models\Bels{i}\varphi$. Thus, the axiom EP1 is valid for such frames. Since $\varphi$ is not deducible, and the axiom EP1 is valid for all such frames, it must be that EP1 and $\tlnot \varphi$ are consistent.

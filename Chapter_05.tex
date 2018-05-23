@@ -1,66 +1,66 @@
-\chapter{Application: Runtime Monitor}
+\chapter{Ensuring Delivery of Safety-Critical Information}
 	\label{CH_05}
-\section{Formal Analysis of Pilot Error}~\label{formal}
+%\section{Formal Analysis of Pilot Error}~\label{formal}
 
-In~\cite{AhrenbachNFM}, the author develops a Dynamic Agent Safety Logic (DASL) for analyzing safety-critical information flow during aviation mishaps. It is a modal logic based on Dynamic Epistemic Logic (DEL), a dynamic modal logic for reasoning about how knowledge and actions are related~\cite{DEL}. The Dynamic Agent Safety Logic (DASL) used in this paper has the following syntax.
+%In~\cite{AhrenbachNFM}, the author develops a Dynamic Agent Safety Logic (DASL) for analyzing safety-critical information flow during aviation mishaps. It is a modal logic based on Dynamic Epistemic Logic (DEL), a dynamic modal logic for reasoning about how knowledge and actions are related~\cite{DEL}. The Dynamic Agent Safety Logic (DASL) used in this paper has the following syntax.
 
 %, combining elements of Dynamic Epistemic Logic (DEL) and Agent Safety Logic (ASL).
 %\begin{tcolorbox}
-	$$ \varphi \ ::=\   \lpp  \bnf \tlnot \varphi \bnf \varphi \tland \varphi  \bnf \Kns{i} \varphi \bnf \Bels{i}\varphi \bnf \Pal{i, \laa}\varphi \bnf \Pal{i,\laa,S}\varphi,$$
+%	$$ \varphi \ ::=\   \lpp  \bnf \tlnot \varphi \bnf \varphi \tland \varphi  \bnf \Kns{i} \varphi \bnf \Bels{i}\varphi \bnf \Pal{i, \laa}\varphi \bnf \Pal{i,\laa,S}\varphi,$$
 %\end{tcolorbox}
-where $\lpp \in AtProp$ is an atomic proposition, $\mathbf{i}$ refers
-to $i \in Agents$, and $\mathbf{\laa} \in Actions$. The knowledge operator
-$\Kns{i}$ indicates that ``agent \emph{i} knows that ..." Similarly,
-the operator for belief, $\Bels{i}$ can be read, ``agent \emph{i}
-believes that..." The operators $\Pal{i,\laa}$ and
-$\Pal{i,\laa,S}$ are the dynamic operators for agent $i$ executing
-action $\laa$ in the former case, and
-doing so safely in the latter case. Note that the $\mathbf{S}$ in
-$\Pal{i,\laa,S}$ is a constant in the syntax of the logic denoting
-`safety', and is not a variable, whereas the $\mathbf{i,\laa}$ are
-variables for agents and actions,
-respectively. One can read the action operators as ``after $i$
-executes $\laa$, $\varphi$ is true.'  We define the dual modal
-operators $\Poss{i}$, $\BPoss{i}$, $\PalPos{i}{\laa}$, and
-$\SPalPos{i}{\laa}$ in the usual way:
-\begin{align*}
-\Poss{i}\varphi &\equiv \tlnot \Kns{i} \tlnot \varphi \\
-\BPoss{i} \varphi &\equiv \tlnot \Bels{i} \tlnot \varphi \\
-\PalPos{i}{\laa}\varphi &\equiv \tlnot \Pal{i, \laa} \tlnot \varphi \\
-\SPalPos{i}{\laa}\varphi &\equiv \tlnot \Pal{i,\laa,S}\tlnot \varphi
-\end{align*} 
-DASL is axiomatized by the following Hilbert system.\\
-
-\begin{tcolorbox}{\normalsize}
-	All propositional tautologies are axioms.\\
-		$\Kns{i}$ is T (knowledge relation is reflexive)\\
-	$\Bels{i}$ is KD45 (belief relation is serial, transitive, and Euclidean)\\
-	EP1: $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ \\
-	EP2: $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$\\
-	EP3: $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$\\
-	SP: $\Pal{i,\laa}\varphi \iimplies \Pal{i,\laa,S}\varphi$\\
-	%\SPalPos{i}{\laa}\varphi \iimplies \PalPos{i}{\laa}\varphi$\\
-	PR: $\PalPos{i}{\laa}\varphi \iimplies \Bels{i}\SPalPos{i}{\laa}\varphi$,\\
-\end{tcolorbox}
-\noindent plus the inference rules Modus Ponens and Necessitation for $\Kns{i}$ and $\Bels{i}$.
-
-DASL allows for formal representation of and reasoning about a pilot's knowledge, belief, actions, and \emph{safe} or \emph{unsafe} actions, and how they all relate to each other logically. In particular, the following theorem is proven:
-\begin{theorem}[Unawareness of Safety-Critical Information]
-	\label{unawareness}
-	A rational pilot executes an unsafe action only if she is unaware that the action is unsafe.
-\end{theorem}
-
-The work has its foundations in economics, computer science, and philosophy, where the construction of formal models of reasoning and agent knowledge is of primary concern. DASL improves on the work in those domains for the purposes of practical application to aviation safety by developing a more realistic model of human agents who can be mistaken in their beliefs. The notion of a \emph{rational pilot} in DASL is one who executes an action only if she believes that it is safe, although she may be wrong about this. Merely believing something does not entail knowledge of it. This is critical for our purposes, because we must be able to model agents who are mistaken, but still rational\footnote{This approach to rationality has been taken up recently in the literature with attempts to model agents whose rationality is \emph{bounded}, but by and large, most of the literature treats agents as being perfectly rational.}. 
-
-In DASL, an action is safe or unsafe depending on the conditions under which it is executed. If the conditions for acting are safe, then its \emph{safety precondition} has been met. In the aforementioned work the authors envision the safety precondition of an aviation action as the set of instrument configurations that would permit the action, according to a flight safety manual of the aircraft. Formally, a conjunction of propositions capturing each instrument's value constitutes a \emph{configuration} of the flight deck, \emph{e.g.} ``the left airspeed indicator is VERY FAST \emph{and} the right airspeed indicator is SLOW \emph{and} ...", where `very fast' and `slow' refer to ranges of the instrument's potential values. The safety precondition function $(pre_s)$ is defined as a mapping from flight control inputs (actions) to the set of configurations under which that input is considered safe according to a flight safety manual.
-
-
-When the actual configuration of the flight deck conflicts with the safety precondition of an action, executing that action is unsafe. DASL establishes a logical connection between a pilot's actions and her epistemic state, or state of knowledge, through Theorem \ref{unawareness}. The mental state of being \emph{unaware} of $\varphi$ has the following formal definition:
-\begin{equation*}
-\label{formal_unawareness}
-\tlnot \Kns{i} \varphi \tland \tlnot \Kns{i} \tlnot \Kns{i} \varphi,
-\end{equation*}
-read as ``the pilot \boldmath{i} does not know $\varphi$, and \boldmath{i} does not know that \boldmath{i} does not know $\varphi$," where $\varphi$ is a proposition~\cite{unawareness}. In epistemic logic, this is identical to a failure of negative introspection~\cite{Hintikka,FHMV}. Theorem \ref{unawareness} establishes that unsafe action from a rational pilot implies a failure of negative introspection about the action's safety precondition. A key upshot from this formal analysis is that by providing negative introspection about the safety precondition, the rational pilot will cease to execute the unsafe action. We prove this in the following corollary.
+%where $\lpp \in AtProp$ is an atomic proposition, $\mathbf{i}$ refers
+%to $i \in Agents$, and $\mathbf{\laa} \in Actions$. The knowledge operator
+%$\Kns{i}$ indicates that ``agent \emph{i} knows that ..." Similarly,
+%%the operator for belief, $\Bels{i}$ can be read, ``agent \emph{i}
+%believes that..." The operators $\Pal{i,\laa}$ and
+%$\Pal{i,\laa,S}$ are the dynamic operators for agent $i$ executing
+%action $\laa$ in the former case, and
+%doing so safely in the latter case. Note that the $\mathbf{S}$ in
+%$\Pal{i,\laa,S}$ is a constant in the syntax of the logic denoting
+%`safety', and is not a variable, whereas the $\mathbf{i,\laa}$ are
+%variables for agents and actions,
+%respectively. One can read the action operators as ``after $i$
+%executes $\laa$, $\varphi$ is true.'  We define the dual modal
+%operators $\Poss{i}$, $\BPoss{i}$, $\PalPos{i}{\laa}$, and
+%$\SPalPos{i}{\laa}$ in the usual way:
+%\begin{align*}
+%\Poss{i}\varphi &\equiv \tlnot \Kns{i} \tlnot \varphi \\
+%\BPoss{i} \varphi &\equiv \tlnot \Bels{i} \tlnot \varphi \\
+%\PalPos{i}{\laa}\varphi &\equiv \tlnot \Pal{i, \laa} \tlnot \varphi \\
+%\SPalPos{i}{\laa}\varphi &\equiv \tlnot \Pal{i,\laa,S}\tlnot \varphi
+%\end{align*} 
+%DASL is axiomatized by the following Hilbert system.\\
+%
+%\begin{tcolorbox}{\normalsize}
+%	All propositional tautologies are axioms.\\
+%		$\Kns{i}$ is T (knowledge relation is reflexive)\\
+%	$\Bels{i}$ is KD45 (belief relation is serial, transitive, and Euclidean)\\
+%	EP1: $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ \\
+%	EP2: $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$\\
+%	EP3: $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$\\
+%	SP: $\Pal{i,\laa}\varphi \iimplies \Pal{i,\laa,S}\varphi$\\
+%	%\SPalPos{i}{\laa}\varphi \iimplies \PalPos{i}{\laa}\varphi$\\
+%	PR: $\PalPos{i}{\laa}\varphi \iimplies \Bels{i}\SPalPos{i}{\laa}\varphi$,\\
+%\end{tcolorbox}
+%\noindent plus the inference rules Modus Ponens and Necessitation for $\Kns{i}$ and $\Bels{i}$.
+%
+%DASL allows for formal representation of and reasoning about a pilot's knowledge, belief, actions, and \emph{safe} or \emph{unsafe} actions, and how they all relate to each other logically. In particular, the following theorem is proven:
+%\begin{theorem}[Unawareness of Safety-Critical Information]
+%	\label{unawareness}
+%	A rational pilot executes an unsafe action only if she is unaware that the action is unsafe.
+%\end{theorem}
+%
+%The work has its foundations in economics, computer science, and philosophy, where the construction of formal models of reasoning and agent knowledge is of primary concern. DASL improves on the work in those domains for the purposes of practical application to aviation safety by developing a more realistic model of human agents who can be mistaken in their beliefs. The notion of a \emph{rational pilot} in DASL is one who executes an action only if she believes that it is safe, although she may be wrong about this. Merely believing something does not entail knowledge of it. This is critical for our purposes, because we must be able to model agents who are mistaken, but still rational\footnote{This approach to rationality has been taken up recently in the literature with attempts to model agents whose rationality is \emph{bounded}, but by and large, most of the literature treats agents as being perfectly rational.}. 
+%
+%In DASL, an action is safe or unsafe depending on the conditions under which it is executed. If the conditions for acting are safe, then its \emph{safety precondition} has been met. In the aforementioned work the authors envision the safety precondition of an aviation action as the set of instrument configurations that would permit the action, according to a flight safety manual of the aircraft. Formally, a conjunction of propositions capturing each instrument's value constitutes a \emph{configuration} of the flight deck, \emph{e.g.} ``the left airspeed indicator is VERY FAST \emph{and} the right airspeed indicator is SLOW \emph{and} ...", where `very fast' and `slow' refer to ranges of the instrument's potential values. The safety precondition function $(pre_s)$ is defined as a mapping from flight control inputs (actions) to the set of configurations under which that input is considered safe according to a flight safety manual.
+%
+%
+%When the actual configuration of the flight deck conflicts with the safety precondition of an action, executing that action is unsafe. DASL establishes a logical connection between a pilot's actions and her epistemic state, or state of knowledge, through Theorem \ref{unawareness}. The mental state of being \emph{unaware} of $\varphi$ has the following formal definition:
+%\begin{equation*}
+%\label{formal_unawareness}
+%\tlnot \Kns{i} \varphi \tland \tlnot \Kns{i} \tlnot \Kns{i} \varphi,
+%\end{equation*}
+%read as ``the pilot \boldmath{i} does not know $\varphi$, and \boldmath{i} does not know that \boldmath{i} does not know $\varphi$," where $\varphi$ is a proposition~\cite{unawareness}. In epistemic logic, this is identical to a failure of negative introspection~\cite{Hintikka,FHMV}. Theorem \ref{unawareness} establishes that unsafe action from a rational pilot implies a failure of negative introspection about the action's safety precondition. A key upshot from this formal analysis is that by providing negative introspection about the safety precondition, the rational pilot will cease to execute the unsafe action. We prove this in the following corollary.
 
 %
 %\begin{lemma}
@@ -135,9 +135,9 @@ This work does so by leveraging the logical connection between a pilot's action,
 
 We develop an encoding of the instruments and the safety preconditions of actions so that they can be fed into the Z3 SMT solver and, if the actual instrument readings conflict with the constraining safety precondition, their unsatisfiable core may be extracted~\cite{z3}. The case studies we present as examples in this section are meant to illustrate the encoding and the usefulness of the approach. With length limitations, we include three case studies in order to show the versatility of the approach, but sacrifice the complexity of the representations. The actual values of the case studies have been simplified for presentation, and the encodings themselves have been abridged to include only enough of the instrumentation and safety preconditions so as to illustrate the approach.
 
-%%The value of representing the safety precondition as a first order formula, rather than as a propositional formula, is that it is both more succinct and a more accurate representation of the way aviation safety experts reason about the relationship between instrument readings and actions. Because instruments have values drawn from the real number space, it is natural to represent them as variables over numbers, as is possible in first order logic. The previous approach using propositional logic that ``chunks'' the instruments into distinct predicates of values, like \emph{airspeedlow}, \emph{airspeedmedium}, and \emph{airspeedhigh}, is a clunky way of achieving a less accurate goal.
-%%
-%%The propositional approach unnecessarily imposes a trade-off between the space complexity of the encoding and its precision. For example, if each instrument is ``chunked'' into three predicates, that means there are three propositions for each instrument, a subformula specifying that their truth values are mutually exclusive (because a single instrument cannot have two different readings at the same time), and the safety precondition must explicitly encode each distinct combination of instrument readings that allow the action to be safely executed. Imagine a very precise ``chunking" of the instrument space, say each natural number value gets its own proposition. Then there would have to be an explosion of clauses enumerating every permitting configuration of instrument readings. The files would be huge, and the computation would be less efficient. 
+The value of representing the safety precondition as a first order formula, rather than as a propositional formula, is that it is both more succinct and a more accurate representation of the way aviation safety experts reason about the relationship between instrument readings and actions. Because instruments have values drawn from the real number space, it is natural to represent them as variables over numbers, as is possible in first order logic. The previous approach using propositional logic that ``chunks'' the instruments into distinct predicates of values, like \emph{airspeedlow}, \emph{airspeedmedium}, and \emph{airspeedhigh}, is a clunky way of achieving a less accurate goal.
+
+The propositional approach unnecessarily imposes a trade-off between the space complexity of the encoding and its precision. For example, if each instrument is ``chunked'' into three predicates, that means there are three propositions for each instrument, a subformula specifying that their truth values are mutually exclusive (because a single instrument cannot have two different readings at the same time), and the safety precondition must explicitly encode each distinct combination of instrument readings that allow the action to be safely executed. Imagine a very precise ``chunking" of the instrument space, say each natural number value gets its own proposition. Then there would have to be an explosion of clauses enumerating every permitting configuration of instrument readings. The files would be huge, and the computation would be less efficient. 
 
 In this section we describe the first order logic encoding of actions and their safety preconditions, and present case studies as examples. We begin with Air France 447\footnote{The source code for the case studies can be found here: https://github.com/sethahrenbach/UnsatCore}.
 %\noindent
