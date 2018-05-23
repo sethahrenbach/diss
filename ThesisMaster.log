@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2015.2.2)  22 MAY 2018 18:07
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2015.2.2)  23 MAY 2018 12:19
 entering extended mode
 **ThesisMaster.tex
-(C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\ThesisMaster.tex
+(C:\Users\Seth\Documents\diss\ThesisMaster.tex
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -779,7 +779,7 @@ Package: makeidx 2000/03/29 v1.0m Standard LaTeX package
 Package: mathrsfs 1996/01/01 Math RSFS package v1.0 (jk)
 \symrsfs=\mathgroup6
 )
-(C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\nd3.sty
+(C:\Users\Seth\Documents\diss\nd3.sty
 
 LaTeX Warning: You have requested package `nd3',
                but the package provides `ND'.
@@ -848,7 +848,7 @@ Package: array 2008/09/09 v2.4c Tabular extension package (FMi)
 \extratabsurround=\skip105
 \backup@length=\skip106
 )
-(C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\mathpartir.sty
+(C:\Users\Seth\Documents\diss\mathpartir.sty
 Package: mathpartir 2015/11/06 version 1.3.1 Math Paragraph for Typesetting Inf
 erence Rules
 \mpr@andskip=\skip107
@@ -1005,25 +1005,26 @@ File: listings.cfg 2015/06/04 1.6 listings configuration
 ))
 Package: listings 2015/06/04 1.6 (Carsten Heinz)
 \c@theorem=\count160
+\c@corollary=\count161
 
-(C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\Command_Mods.tex)
-(C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\ThesisMaster.aux
+(C:\Users\Seth\Documents\diss\Command_Mods.tex)
+(C:\Users\Seth\Documents\diss\ThesisMaster.aux
 
 LaTeX Warning: Label `DEL' multiply defined.
 
 )
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 295.
-LaTeX Font Info:    ... okay on input line 295.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 295.
-LaTeX Font Info:    ... okay on input line 295.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 295.
-LaTeX Font Info:    ... okay on input line 295.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 295.
-LaTeX Font Info:    ... okay on input line 295.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 295.
-LaTeX Font Info:    ... okay on input line 295.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 295.
-LaTeX Font Info:    ... okay on input line 295.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 299.
+LaTeX Font Info:    ... okay on input line 299.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 299.
+LaTeX Font Info:    ... okay on input line 299.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 299.
+LaTeX Font Info:    ... okay on input line 299.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 299.
+LaTeX Font Info:    ... okay on input line 299.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 299.
+LaTeX Font Info:    ... okay on input line 299.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 299.
+LaTeX Font Info:    ... okay on input line 299.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1061,38 +1062,38 @@ LaTeX Font Info:    ... okay on input line 295.
 
 (C:\Users\Seth\AppData\Roaming\MiKTeX\2.9\tex\context\base\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count161
+\scratchcounter=\count162
 \scratchdimen=\dimen178
 \scratchbox=\box75
-\nofMPsegments=\count162
-\nofMParguments=\count163
+\nofMPsegments=\count163
+\nofMParguments=\count164
 \everyMPshowfont=\toks54
-\MPscratchCnt=\count164
+\MPscratchCnt=\count165
 \MPscratchDim=\dimen179
-\MPnumerator=\count165
-\makeMPintoPDFobject=\count166
+\MPnumerator=\count166
+\makeMPintoPDFobject=\count167
 \everyMPtoPDFconversion=\toks55
 ) ABD: EveryShipout initializing macros
-LaTeX Info: Redefining \celsius on input line 295.
-Package gensymb Info: Faking symbols for \degree and \celsius on input line 295
+LaTeX Info: Redefining \celsius on input line 299.
+Package gensymb Info: Faking symbols for \degree and \celsius on input line 299
 .
 
 
 Package gensymb Warning: Not defining \perthousand.
 
-LaTeX Info: Redefining \ohm on input line 295.
-Package gensymb Info: Using \Omega for \ohm on input line 295.
+LaTeX Info: Redefining \ohm on input line 299.
+Package gensymb Info: Using \Omega for \ohm on input line 299.
 
 Package gensymb Warning: Not defining \micro.
 
-\c@lstlisting=\count167
-(C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\TitlePage.tex)
-(C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\Approval.tex [1
+\c@lstlisting=\count168
+(C:\Users\Seth\Documents\diss\TitlePage.tex)
+(C:\Users\Seth\Documents\diss\Approval.tex [1
 
-{C:/Users/Seth/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}])
-(C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\Acknowledge.tex [2])
-(C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\Contents.tex [2]
-(C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\ThesisMaster.toc
+{C:/Users/Seth/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]) (C:\Users\S
+eth\Documents\diss\Acknowledge.tex [2]) (C:\Users\Seth\Documents\diss\Contents.
+tex [2]
+(C:\Users\Seth\Documents\diss\ThesisMaster.toc
 LaTeX Font Info:    Try loading font information for U+msa on input line 1.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
@@ -1113,54 +1114,39 @@ LaTeX Font Info:    Try loading font information for U+stmry on input line 1.
 (C:\Users\Seth\AppData\Roaming\MiKTeX\2.9\tex\latex\stmaryrd\ustmry.fd)
 [3])
 \tf@toc=\write7
- [4] (C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\ThesisMaster.lot)
+ [4] (C:\Users\Seth\Documents\diss\ThesisMaster.lot)
 \tf@lot=\write8
-
-[5] (C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\ThesisMaster.lof)
+ [5]
+(C:\Users\Seth\Documents\diss\ThesisMaster.lof)
 \tf@lof=\write9
 )
-(C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\Abstract.tex [6]) [7]
-(C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\Introduction.tex
+(C:\Users\Seth\Documents\diss\Abstract.tex [6]) [7]
+(C:\Users\Seth\Documents\diss\Introduction.tex
 Chapter 1.
 [1
 
-] [2]
-
-LaTeX Warning: Reference `background' on page 3 undefined on input line 35.
-
-
-LaTeX Warning: Reference `DASL' on page 3 undefined on input line 35.
-
-
-LaTeX Warning: Reference `mech' on page 3 undefined on input line 35.
-
-
-LaTeX Warning: Reference `futurework' on page 3 undefined on input line 35.
-
-) (C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\Chapter_02.tex [3]
-[4]
+] [2]) (C:\Users\Seth\Documents\diss\Chapter_02.tex [3]
 Chapter 2.
-[5
+[4
 
-] [6] [7] [8] [9] [10]
+] [5] [6] [7]
 
-LaTeX Font Warning: Command \boldmath invalid in math mode on input line 143.
+LaTeX Font Warning: Command \boldmath invalid in math mode on input line 120.
 
 
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 143
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 120
 .
 
-[11] [12]) (C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\Chapter_03.tex
-[13]
+[8] [9] [10] [11]) (C:\Users\Seth\Documents\diss\Chapter_03.tex [12]
 Chapter 3.
-[14
+[13
 
-] [15] [16]
+] [14] [15]
 Underfull \hbox (badness 10000) in paragraph at lines 73--75
 
  []
 
-[17] [18]
+[16] [17]
 Underfull \hbox (badness 10000) in paragraph at lines 118--119
 
  []
@@ -1170,7 +1156,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 120--128
 
  []
 
-[19]
+[18]
 Underfull \hbox (badness 10000) in paragraph at lines 135--145
 
  []
@@ -1180,7 +1166,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 133--145
 
  []
 
-[20] [21]
+[19] [20]
 Overfull \hbox (16.4558pt too wide) in paragraph at lines 160--162
 $\OML/cmm/m/it/12 R[]\OT1/cmr/m/n/12 )(\OML/cmm/m/it/12 M[]; v[]\OT1/cmr/m/n/12
  )$ im-plies $(\OML/cmm/m/it/12 M; w\OT1/cmr/m/n/12 )\U/stmry/m/n/12 J\OML/cmm/
@@ -1244,81 +1230,99 @@ M[]; w[] \OMS/cmsy/m/n/12 j[]\OT1/cmr/m/n/12 = \OMS/cmsy/m/n/12 :\OML/cmm/m/it/
 /n/12 K$
  []
 
-[22]
+[21]
 Overfull \hbox (5.72942pt too wide) in paragraph at lines 174--175
 []$[]$\OT1/cmr/m/n/12 . For this proof, as-sume for sim-plic-ity, with-out loss
  of gen-er-al-ity, that $\OML/cmm/m/it/12 Actions \OT1/cmr/m/n/12 =$
  []
 
+[22]
+Underfull \hbox (badness 10000) in paragraph at lines 195--207
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 195--207
+
+ []
+
 [23]
-Underfull \hbox (badness 10000) in paragraph at lines 195--208
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 195--208
-
- []
-
-[24]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 213.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 217.
 
  ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 213.
+LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 217.
 
-Underfull \hbox (badness 10000) in paragraph at lines 220--221
+
+LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <12> not available
+(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 229.
+
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 235--236
 
  []
 
-) (C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\Chapter_04.tex [25]
+) (C:\Users\Seth\Documents\diss\Chapter_04.tex [24]
 Chapter 4.
-[26
+[25
 
-] [27] [28]
+] [26] [27]
+Underfull \hbox (badness 2426) in paragraph at lines 34--35
+[]$\OMS/cmsy/m/n/12 :\OT1/cmr/bx/n/12 K[] \OT1/cmr/m/n/12 ([])[]\OMS/cmsy/m/n/1
+2 :\OT1/cmr/bx/n/12 K[] \OMS/cmsy/m/n/12 :\OT1/cmr/bx/n/12 K[] \OT1/cmr/m/n/12 
+([])$------ from
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 35--36
+[]$\OMS/cmsy/m/n/12 :\OT1/cmr/m/n/12 (\OMS/cmsy/m/n/12 :\OT1/cmr/bx/n/12 K[] \O
+T1/cmr/m/n/12 ([])[]\OT1/cmr/bx/n/12 K[] \OMS/cmsy/m/n/12 :\OT1/cmr/bx/n/12 K[]
+ \OT1/cmr/m/n/12 ([]))$ -----
+ []
+
+[28] [29]
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 45.
- [29] [30] [31] [32] [33] [34] [35] [36] [37] [38]
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 59.
+ [30] [31] [32] [33] [34] [35] [36] [37] [38]
+Underfull \hbox (badness 10000) in paragraph at lines 296--297
+[]$\OMS/cmsy/m/n/12 :\OT1/cmr/bx/n/12 K[] \OT1/cmr/m/n/12 ([])[]\OMS/cmsy/m/n/1
+2 :\OT1/cmr/bx/n/12 K[] \OMS/cmsy/m/n/12 :\OT1/cmr/bx/n/12 K[] \OT1/cmr/m/n/12 
+([])$-----
+ []
 
-LaTeX Warning: Reference `background' on page 39 undefined on input line 309.
+[39] [40] [41]
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 335.
+ [42] [43]
+Overfull \hbox (50.19963pt too wide) in paragraph at lines 387--388
+\OT1/cmr/m/n/12 fig-u-ra-tion $\OML/cmm/m/it/12 C$\OT1/cmr/m/n/12 . Note that $
+[](\OT1/cmr/m/it/12 a\OT1/cmr/m/n/12 )$ has the form $(\OML/cmm/m/it/12 c[][]c[
+][] [] []c[]\OT1/cmr/m/n/12 )[](\OML/cmm/m/it/12 c[][]c[][] [] []c[]\OT1/cmr/m/
+n/12 )[] [] $
+ []
 
-) (C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\Chapter_05.tex [39]
+
+Overfull \hbox (28.67783pt too wide) in paragraph at lines 387--388
+\OT1/cmr/m/n/12 The nega-tion of this has the form $(\OMS/cmsy/m/n/12 :\OML/cmm
+/m/it/12 c[][]\OMS/cmsy/m/n/12 :\OML/cmm/m/it/12 c[][] [] []\OMS/cmsy/m/n/12 :\
+OML/cmm/m/it/12 c[]\OT1/cmr/m/n/12 )[](\OMS/cmsy/m/n/12 :\OML/cmm/m/it/12 c[][]
+\OMS/cmsy/m/n/12 :\OML/cmm/m/it/12 c[][] [] \OMS/cmsy/m/n/12 :\OML/cmm/m/it/12 
+c[]\OT1/cmr/m/n/12 )[] [] $,
+ []
+
+) (C:\Users\Seth\Documents\diss\Chapter_05.tex [44]
 Chapter 5.
+[45
 
-LaTeX Warning: Citation `AhrenbachNFM' on page 40 undefined on input line 5.
-
-[40
-
-]
-Underfull \hbox (badness 10000) in paragraph at lines 31--33
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 35--44
-
- []
-
-[41] [42]
-
-LaTeX Font Warning: Font shape `U/stmry/b/n' undefined
-(Font)              using `U/stmry/m/n' instead on input line 63.
-
-
-LaTeX Warning: Citation `unawareness' on page 43 undefined on input line 63.
-
-[43] [44] [45]
-
-LaTeX Warning: Citation `z3' on page 46 undefined on input line 136.
-
-[46]
+] [46] [47] [48]
 Underfull \hbox (badness 10000) in paragraph at lines 142--142
 [][]\OT1/cmr/m/n/10 The source code for the case stud-ies can be found here:
  []
 
-[47] [48]
+[49] [50] [51]
 LaTeX Font Info:    Try loading font information for OML+cmr on input line 202.
 
  ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omlcmr.fd"
@@ -1327,34 +1331,28 @@ File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <12> not available
 (Font)              Font shape `OML/cmm/m/it' tried instead on input line 202.
 
-[49] [50]
+[52] [53]
 
-LaTeX Warning: Citation `copa' on page 51 undefined on input line 233.
+LaTeX Warning: Citation `copa' on page 54 undefined on input line 233.
 
-[51] [52] [53] [54] [55] [56]
-Underfull \hbox (badness 10000) in paragraph at lines 359--360
-[]$[] [] [] [] [] [] [] [] [] [] [] [] [] $\OT1/cmr/m/n/12 ..
+[54] [55] [56] [57] [58] [59]
+Underfull \hbox (badness 10000) in paragraph at lines 360--361
+[]$\OMS/cmsy/m/n/12 :\OT1/cmr/bx/n/12 K[] \OT1/cmr/m/n/12 ([][][])[]$
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 360--361
-[]$\OMS/cmsy/b/n/12 :\OT1/cmr/bx/n/12 K[] ([][][])[]$
+$\OMS/cmsy/m/n/12 :\OT1/cmr/bx/n/12 K[] \OMS/cmsy/m/n/12 :\OT1/cmr/bx/n/12 K[] 
+\OT1/cmr/m/n/12 ([][][]) [] [] $1,2,Th
  []
 
-
-Overfull \hbox (15.02681pt too wide) in paragraph at lines 360--361
-$\OMS/cmsy/b/n/12 :\OT1/cmr/bx/n/12 K[] \OMS/cmsy/b/n/12 :\OT1/cmr/bx/n/12 K[] 
-([][][]) [] [] $\OT1/cmr/m/n/12 1,2,Th
- []
-
-[57] [58] [59]) (C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\Summary.tex
-[60]
+[60] [61] [62]) (C:\Users\Seth\Documents\diss\Summary.tex [63]
 Chapter 6.
-) (C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\Appendix.tex [61
+) (C:\Users\Seth\Documents\diss\Appendix.tex [64
 
 ]
 Appendix A.
-) (C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\Bibliography.tex [62
+) (C:\Users\Seth\Documents\diss\Bibliography.tex [65
 
 ]
 Overfull \hbox (42.4853pt too wide) in paragraph at lines 9--11
@@ -1362,14 +1360,10 @@ Overfull \hbox (42.4853pt too wide) in paragraph at lines 9--11
 7/aero[]q207[]article3.pdf,
  []
 
-[63
+[66
 
-] [64] [65] [66] [67])
-(C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\Vita.tex [68]) [69]
-(C:\Users\Seth\Documents\GitHub\latex-thesis-mizzou\ThesisMaster.aux)
-
-LaTeX Font Warning: Some font shapes were not available, defaults substituted.
-
+] [67] [68] [69] [70]) (C:\Users\Seth\Documents\diss\Vita.tex [71]) [72]
+(C:\Users\Seth\Documents\diss\ThesisMaster.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -1378,41 +1372,37 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 20534 strings out of 493921
- 396267 string characters out of 3144880
- 475122 words of memory out of 3000000
- 23358 multiletter control sequences out of 15000+200000
- 27432 words of font info for 102 fonts, out of 3000000 for 9000
+ 20512 strings out of 493921
+ 394982 string characters out of 3144880
+ 475116 words of memory out of 3000000
+ 23345 multiletter control sequences out of 15000+200000
+ 22668 words of font info for 87 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 54i,14n,74p,1441b,1401s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbsy10.pfb
-><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><
-C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx8.pfb><C:/
-Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbxti10.pfb><C:/
-Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Pr
-ogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Prog
-ram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Progra
-m Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program F
-iles (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program File
-s (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmib10.pfb><C:/Program Files
- (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cmextra/cmmib8.pfb><C:/Program Fi
-les (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files
- (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files (x
-86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files (x86)/
-MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86)/MiKT
-eX 2.9/fonts/type1/public/amsfonts/cm/cmss12.pfb><C:/Program Files (x86)/MiKTeX
- 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2
-.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Program Files (x86)/MiKTeX 2.9/
-fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fon
-ts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts
+ 54i,14n,74p,2043b,1401s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
+<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx8.pfb><C:
+/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/P
+rogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Pro
+gram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Progr
+am Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program 
+Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Fil
+es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files 
+(x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files (x8
+6)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files (x86)/M
+iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86)/MiKTe
+X 2.9/fonts/type1/public/amsfonts/cm/cmss12.pfb><C:/Program Files (x86)/MiKTeX 
+2.9/fonts/type1/public/amsfonts/cm/cmssi12.pfb><C:/Program Files (x86)/MiKTeX 2
+.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9
+/fonts/type1/public/amsfonts/cm/cmsy6.pfb><C:/Program Files (x86)/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts
 /type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/t
 ype1/public/amsfonts/cm/cmti8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type
 1/public/amsfonts/cm/cmtt10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/
 public/amsfonts/symbols/msam10.pfb><C:/Users/Seth/AppData/Roaming/MiKTeX/2.9/fo
 nts/type1/public/hoekwater/stmary10.pfb>
-Output written on ThesisMaster.pdf (77 pages, 448019 bytes).
+Output written on ThesisMaster.pdf (80 pages, 414036 bytes).
 PDF statistics:
- 355 PDF objects out of 1000 (max. 8388607)
+ 349 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  19 words of extra memory for PDF output out of 10000 (max. 10000000)
 
