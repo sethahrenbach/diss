@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2015.2.2)  23 MAY 2018 12:19
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2015.2.2)  25 MAY 2018 05:18
 entering extended mode
 **ThesisMaster.tex
 (C:\Users\Seth\Documents\diss\ThesisMaster.tex
@@ -1374,7 +1374,7 @@ LaTeX Warning: There were multiply-defined labels.
 Here is how much of TeX's memory you used:
  20512 strings out of 493921
  394982 string characters out of 3144880
- 475116 words of memory out of 3000000
+ 476115 words of memory out of 3000000
  23345 multiletter control sequences out of 15000+200000
  22668 words of font info for 87 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
@@ -1400,7 +1400,7 @@ ype1/public/amsfonts/cm/cmti8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type
 1/public/amsfonts/cm/cmtt10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/
 public/amsfonts/symbols/msam10.pfb><C:/Users/Seth/AppData/Roaming/MiKTeX/2.9/fo
 nts/type1/public/hoekwater/stmary10.pfb>
-Output written on ThesisMaster.pdf (80 pages, 414036 bytes).
+Output written on ThesisMaster.pdf (80 pages, 414120 bytes).
 PDF statistics:
  349 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
