@@ -103,6 +103,44 @@ This forms an idealized model of the knowledge component of classical game theor
 
 Recent work at the intersection of game theory and logic focuses on the information flow that occurs during games. Van Ditmarsch identifies a class of games called \emph{knowledge games}, in which players have diverging information~\cite{ditmarsch}. This slightly relaxes the assumption of classical game theory that players have common knowledge about each other's perfect information. Similarly, it invites logicians to study the information conveyed by the fact that an action is executed. For example, if the action is that agent $1$ asks agent $2$ the question, ``$p$?", the information conveyed is that $1$ does not know whether $p$, believes that $2$ knows whether $p$, and after the action occurs, this information becomes publicly known. The logic modeling games of this kind is of particular interest to us, as we are concerned with identifying the knowledge and belief state of human pilots based on their actions. 
 
+The proceeding sections introduce the various logical systems that form a foundation for the work of this thesis, starting with modal logic in its traditional philosophical interpretation, and expanding to epistemic and doxastic logic. Then, we introduce dynamic logic, and its expansion into Dynamic Epistemic Logic and Public Announcement Logic.
+
+\section{Modal Logic}
+Philosophers seek to study not just empirical facts of the actual world, but also necessary truths that hold both in the actual world and in all worlds that might exist. Examples of necessary truths are those of mathematics, which do not depend on any contingent facts of the world in order to be true. The definitions of natural numbers and the the addition function guarantee that in all possible worlds, \emph{2 + 2 = 4}. Modal logic allows us to reason about necessary, possible, and actual truths, through the use of modal operators.
+
+Suppose $p$ is the aforementioned arithmetic expression. Obviously, $p$ is true in the actual world. We can make the stronger claim that $p$ is necessarily true, that is, true in all possible worlds, with the modal operator for necessity: $\Box p$. We can explore our first modal inference with these two components: $\Box p \iimplies p$. If $p$ is necessarily true, is it true? Intuitively, the answer is `yes', and indeed a modal logic of metaphysical necessity includes this axiom for all formulas $\varphi$: $\Box \varphi \iimplies \varphi$. 
+
+What other inferences can we make, based on our intuitive notion of necessity and possibility? What about ``if $p$ is true, then $p$ is possibly true"? To formalize this, we need the modal operator for possibility: $\Diamond$. So, the modal formula would be $p \iimplies \Diamond p$. This seems true as well, and indeed it is an axiom: $\varphi \iimplies \Diamond \varphi$. In fact, those two axioms are equivalent. The definition of $\Diamond \varphi \equiv \tlnot \Box \tlnot \varphi$, for any arbitrary formula $\varphi$. This states that something is possible if and only if it is not necessarily false. It can also be said that something is necessary if and only if it is not possibly false: $\Box \varphi \equiv \tlnot \Diamond \tlnot \varphi$. We can now prove that the two axioms are equivalent.
+
+\begin{proof}
+	We first prove $\Box \varphi \iimplies \varphi$ implies $\varphi \iimplies \Diamond \varphi$, for any arbitrary $\varphi$ so long as it is the same on each side of the $\iimplies$. We begin by assuming $Box \varphi \iimplies \varphi$. By the definition of $\Box$, we can substitute the equivalent formula $\tlnot \Diamond \tlnot \varphi \iimplies \varphi$. By contraposition, it holds that $\tlnot \varphi \iimplies \Diamond \tlnot \varphi$. But $\varphi$ is any arbitrary formula, including $\tlnot \varphi$. So we can substitute arbitrary formulas and get $\varphi \iimplies \Diamond \varphi$. What matters is that the $\varphi$ on the left and right of the $\iimplies$ are the same, not that they are the same in each axiom.
+	
+	Next we prove that $\varphi \iimplies \Diamond \varphi$ implies $\Box \varphi \iimplies \varphi$, for arbitrary $\varphi$'s in each axiom. Assume $\varphi \iimplies \Diamond \varphi$. We can substitute in the equivalent formula using the definition of $\Diamond$ and get $\varphi \iimplies \tlnot \Box \tlnot \varphi$. By contraposition, it follows that $\Box \tlnot \varphi \iimplies \tlnot \varphi$. We substitute in $\varphi$ for $\tlnot \varphi$ as the arbitrary formula, and have $\Box \varphi \iimplies \varphi$.
+\end{proof}
+
+It is obvious then that $\Box \varphi \iimplies \Diamond \varphi$ is a theorem. This states that if something is necessarily true then it is possibly true. What about the other direction: $\Diamond \varphi \iimplies \Box \varphi$? It turns out this is not a theorem under the typical notions of necessity and possibility. But this raises a question about how we would present a counterexample that disproves it. To do this, we need a semantics for the logic. The semantics we use are called \emph{possible world semantics}, and they are due to Saul Kripke~\cite{Kripke}. One would be hard-pressed to find a species of modal logic, whether in economics, computer science, or philosophy, that does not use possible world semantics in some form or another. Sometimes they are referred to as \emph{Kripke semantics}.
+
+In possible world semantics, a graph structure is created with worlds as nodes and accessibility relations among worlds as the edges in the graph. Propositional formulas are true or false at each world. These graph structures are typically called Kripke structures. We can define the following Kripke structure, $\mathcal{M} = \{W, R, V\}$, where $W$ is a finite set of worlds, $\{w, v\}$, $R$ is a binary accessibility relation defined on those worlds $\{(w,v), (v,w)\}$, meaning $w$ has access to $v$ and $v$ has access to $w$, and $V$ is a \emph{valuation} function that assigns $True$ or $False$ to every atomic proposition at every world. In our model we only care about the proposition $p$, and $V(p, w)=False$ while $V(p,v)=True$. The following figure illustrates $\mathcal{M}$:
+
+\begin{figure}[H]
+	\begin{center}
+	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
+	thick,base node/.style={circle,draw,minimum size=35pt}]
+	
+	\node[base node] (w) {$w: \tlnot p$};
+	\node[base node] (v) [right of=w] {$v: p$};
+	\path[]
+	(w) edge node[above] {$R$} (v)
+	\path (w) edge node[bend left] {$R$} (w)
+%	\path (w) edge [out=170,in=180,looseness=8] node[right] {$R$} (w)
+	(v) edge node[below] {} (w);
+	\end{tikzpicture}
+	\end{center}
+	\caption{$\mathcal{M}$: A simple counterexample using possible world semantics.}
+\end{figure}
+
+According to possible world semantics, $\Box \varphi$ is true at a world, written $w \models \Box \varphi$ for world $w$, if and only if for all worlds $v$ such that $R(w,v)$ ($v$ is accessible to $w$ by the $R$ relation), $v \models \varphi$. This says a formula is necessarily true at a world if and only if it is true at all worlds accessible by that world. If a formula is true at all worlds in a model, then it is valid for that model, written $\mathcal{M} \models \varphi$. Clearly, if a formula is valid for a model, then it is necessarily true for each world in that model: $\mathcal{M} \models \varphi$ implies $w \models \Box \varphi$ for all worlds $w\in W$. In our model, $p$ is not valid: it is false at world $w$. So a
+
 %\subsection{Avionics and Formal Methods}
 \section{Logical Framework}~\label{logic_foundation}
 %This section introduces the logic used as a tool to formally model and reason about pilots in emergency situations. For most readers the logic to be used will be sufficiently complex and unfamiliar that a gradual approach is warranted, beginning with the basics of familiar Boolean logic, and advancing to the final logic specially developed for reasoning about pilot error.
