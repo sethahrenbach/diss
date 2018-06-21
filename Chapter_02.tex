@@ -131,8 +131,7 @@ In possible world semantics, a graph structure is created with worlds as nodes a
 	\node[base node] (v) [right of=w] {$v: p$};
 	\path[]
 	(w) edge node[above] {$R$} (v)
-	\path (w) edge node[bend left] {$R$} (w)
-%	\path (w) edge [out=170,in=180,looseness=8] node[right] {$R$} (w)
+	(w) edge node[bend left] {$R$} (w)
 	(v) edge node[below] {} (w);
 	\end{tikzpicture}
 	\end{center}
