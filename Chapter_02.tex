@@ -120,7 +120,7 @@ What other inferences can we make, based on our intuitive notion of necessity an
 
 It is obvious then that $\Box \varphi \iimplies \Diamond \varphi$ is a theorem. This states that if something is necessarily true then it is possibly true. What about the other direction: $\Diamond \varphi \iimplies \Box \varphi$? It turns out this is not a theorem under the typical notions of necessity and possibility. But this raises a question about how we would present a counterexample that disproves it. To do this, we need a semantics for the logic. The semantics we use are called \emph{possible world semantics}, and they are due to Saul Kripke~\cite{Kripke}. One would be hard-pressed to find a species of modal logic, whether in economics, computer science, or philosophy, that does not use possible world semantics in some form or another. Sometimes they are referred to as \emph{Kripke semantics}.
 
-In possible world semantics, a graph structure is created with worlds as nodes and accessibility relations among worlds as the edges in the graph. Propositional formulas are true or false at each world. These graph structures are typically called Kripke structures. We can define the following Kripke structure, $\mathcal{M} = \{W, R, V\}$, where $W$ is a finite set of worlds, $\{w, v\}$, $R$ is a binary accessibility relation defined on those worlds $\{(w,v), (v,w)\}$, meaning $w$ has access to $v$ and $v$ has access to $w$, and $V$ is a \emph{valuation} function that assigns $True$ or $False$ to every atomic proposition at every world. In our model we only care about the proposition $p$, which now stands for some contingent proposition, like ``all swans are white". Formally, we say and $V(p, w)=False$ if not all swans are white, denoted by $\tlnot p$, while $V(p,v)=True$ if they are, denoted by $p$. The following figure illustrates $\mathcal{M}$:
+In possible world semantics, a graph structure is created with worlds as nodes and accessibility relations among worlds as the edges in the graph. Propositional formulas are true or false at each world. These graph structures are typically called Kripke structures. We can define the following Kripke structure, $\mathcal{M} = \{W, R, V\}$, where $W$ is a finite set of worlds, $\{w, v\}$, $R$ is a binary accessibility relation defined on those worlds $\{(w,v), (v,w)\}$, meaning $w$ has access to $v$ and $v$ has access to $w$, and $V$ is a \emph{valuation} function, which maps propositions to sets of worlds at which they are true. For example, if $p$ is true at $w$, then $w \in V(p)$. In our model we only care about the proposition $p$, which now stands for some contingent proposition, like ``all swans are white". Formally, we say $w \not\in V(p)$ if not all swans are white in world $w$, denoted by $\tlnot p$, while $w \in V(p)$ if they are, denoted by $p$. The following figure illustrates $\mathcal{M}$:
 
 \begin{figure}[H]
 	\begin{center}
@@ -143,6 +143,63 @@ In possible world semantics, a graph structure is created with worlds as nodes a
 According to possible world semantics, $\Box \varphi$ is true at a world, written $w \models \Box \varphi$ for world $w$, if and only if for all worlds $v$ such that $R(w,v)$ ($v$ is accessible to $w$ by the $R$ relation), $v \models \varphi$. This says a formula is necessarily true at a world if and only if it is true at all worlds accessible by that world. Similarly, $w \models \Diamond \varphi$ if and only if there is some world $v$ such that $R(w,v)$ and $v \models \varphi$. In $\mathcal{M}$, $w$ is $R$-accessible to itself, so there is a world accessible to $w$ where $p$ is false, and thus $w \models \tlnot \Box p$. However, since $v$ is $R$-accessible to $w$, and $v \models p$, it is true that $w \models \Diamond p$. Thus, we have $w \models \Diamond p$ and $w \models \tlnot \Box p$, a negation of $\Diamond p \iimplies \Box p$, so it cannot be the case that $\Diamond \varphi \iimplies \Box \varphi$ is a theorem, for arbitrary formula $\varphi$.
 
 While introducing the concepts and what proofs look like in modal logic, syntax and semantics have been alluded to sporadically, but I have not yet formally defined them. I do that here, having properly motivated them.
+
+\section{Modal Logic Syntax and Semantics}~\label{molo_syn_sem}
+This section formally defines the syntax, what the logic looks like, and the semantics, what the truth conditions are for the logic. Before looking at the syntax for modal logic, we examine that of Boolean propositional logic.
+
+Recall that Boolean logic is a simple logic for reasoning about basic propositions using the logical connectives `and', `or', `not', and `if...then'. It forms the foundation of most logics and has applications ranging from philosophy to circuit design. Propositions are represented as constants {\emph p,\ \emph q} and well-formed formulas of the language are constants and any proper combination of constants using the above logical connectives, represented symbolically as,
+$$\varphi \stackrel{def}{=} p\  |\  \varphi \wedge \varphi\  |\  \varphi \vee \varphi\  |\ \neg \varphi \ |\   \varphi \rightarrow \varphi. 
+$$
+
+As illustrated in the previous section, modal logic adds to propositional logic with modal operators for necessary and possible truths. The syntax for propositional logic is extended in the following way:
+$$\varphi \stackrel{def}{=} p\  |\  \varphi \wedge \varphi\  |\  \varphi \vee \varphi\  |\ \neg \varphi \ |\   \varphi \rightarrow \varphi\ |\ \Box \varphi \ |\ \Diamond \varphi. 
+$$
+
+The semantics for Boolean logic are simply truth tables for each connectives, which I will not reproduce here. Because the connectives are truth-functional, truth tables suffice. However, the operators in modal logic are not truth functional, and require more complex semantics, which we earlier mentioned are called possible world semantics. They are as follows.
+
+For a Kripke model $\mathcal{M} = \{W, R, V\}$ such that $W$ is a set of possible worlds, $R$ is a binary relation on those worlds, and $V$ is a valuation function mapping truth values to propositions at worlds,  
+
+\begin{align*}
+w \models p\  &\mathbf{iff}\ w \in V(p) \\
+w \models \neg \varphi\  &\mathbf{iff}\  w\not\models \varphi  \\
+w \models \varphi \wedge \psi\ &\mathbf{iff}\ w\models \varphi\ \mathnormal{and}\ w\models \psi \\
+w \models \Box \varphi\  &\mathbf{iff}\ \forall v,\ R(w,v)\  \mathnormal{implies}\ v \models \varphi. \\
+w \models \Diamond \varphi\ &\mathbf{iff}\ \exists v,\ R(w,v)\ \mathnormal{and}\ v\models \varphi.
+\end{align*}
+
+The character of a modal logic is determined by the binary relation on worlds underlying the modal operators. The logic we have thus far examined is one at which every world is accessible to itself by the binary relation. This condition is called a \emph{frame} condition, and the models that satisfy this condition belong to said frame. This frame is called the \emph{reflexive} frame, because its defining condition is that the accessibility relation is a reflexive predicate:
+\begin{equation}
+\forall x,\ R(x,x)
+\end{equation}
+
+Relaxing this condition changes the frame, and in doing so changes the logic. If we remove the reflexivity condition, the above axioms are no longer axioms, and the above theorem no longer holds. This means that we can specify the axioms we want by specifying the frame condition on the accessibility relation. Each frame condition corresponds to a modal logic axiom. In addition to reflexivity, the other common frame conditions are as follows, with their corresponding modal logic axiom:
+\begin{itemize}
+	\item Transitivity
+	\begin{eqnarray}
+	\forall x,y,z\ R(x,y) \tland R(y,z) \iimplies R(x,z)\\
+	\Box \varphi \iimplies \Box \Box \varphi
+	\end{eqnarray}
+	\item Symmetry
+	\begin{eqnarray}
+	\forall x,y\ R(x,y) \iimplies R(y,x)\\
+	\varphi \iimplies \Box \Diamond \varphi
+	\end{eqnarray}
+	\item Euclidean
+	\begin{eqnarray}
+	\forall x,y,z\ R(x,y) \tland R(y,z) \iimplies R(x,z)\\
+	\Diamond \varphi \iimplies \Box \Diamond \varphi
+	\end{eqnarray}
+	\item Seriality
+	\begin{eqnarray}
+	\forall x \exists y, R(x,y) \\
+	\Box \varphi \iimplies \Diamond \varphi
+	\end{eqnarray}
+\end{itemize}
+
+We saw earlier that reflexive frames are also serial frames, because we proved that we could derive the axiom for serial frames as a theorem from just the axiom for reflexive frames.
+%This is formalized in a couple different ways in the literature, sometimes as we did before mapping a proposition-world pair to a Boolean, sometimes defining propositions as sets of worlds, where $V(w)\in p$ if and only if $p$ is true at world $w$. The former convention will be followed here.
+
+
 
 %\subsection{Avionics and Formal Methods}
 \section{Logical Framework}~\label{logic_foundation}
