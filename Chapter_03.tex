@@ -185,25 +185,27 @@ Next we turn to completeness.
 
 \subsection{Completeness}
 
+We define the notions of a \emph{Maximal Consistent Set}, and a \emph{Canonical Model} for the logic. Informally, a maximal consistent set of formulas is one that is a subset of the well-formed formulas of the language $\mathcal{L}_{DASL}$ according to the syntax presented earlier, whose members are consistent with each other, such that adding even a single formula to the set would ruin consistency. Another way to phrase this last part is to say that our maximal consistent set is not a proper subset of any other consistent subset of $\mathcal{L}_{DASL}$. \\
+$\mathbf{Definition}$. Maximal Consistent Set.\\
+For a set of formulas $\Gamma \subseteq \mathcal{L}_{DASL}$, $\Gamma$ is maximal consistent iff\\
+1. $\Gamma$ is consistent: $\Gamma \not \vdash \bot$.\\
+2. $\Gamma$ is maximal: there is no $\Gamma'\subseteq\mathcal{L}_{DASL}$ such that $\Gamma \subset \Gamma'$ and $\Gamma'\vdash\bot$.\\
+
+A canonical model is a Kripke model of $\mathcal{L}_{DASL}$ with a set of worlds $W^C$ that collectively satisfy all formulas from a maximally consistent set. For our formalism here, we treat worlds as identical to sets of formulas.
+$\mathbf{Definition}$. Canonical Model. A canonical model $M^C = \langle W^C,\ \Rel{k,i}^C,\ \Rel{b,i}^C,\ w,\ V^C\rangle$ is defined:\\
+1. $W^C = \{\Gamma | \Gamma$ is maximal consistent$ \}$\\
+2. $\Gamma \Rel{k,i}^C \Delta$ iff $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma\} = \{\Kns{i}\varphi | \Kns{i}\varphi \in \Delta\}$\\
+3. $\Gamma \Rel{b,i}^C \Delta$ iff $\{\Bels{i}\varphi | \Bels{i}\varphi \in \Gamma\} = \{\Bels{i}\varphi | \Bels{i}\varphi \in \Delta\}$\\
+4. $V^C = \{\Gamma \in W^C| \Gamma \subseteq V(p)\}$\\
+
+$\mathbf{Proof}.$ Completeness states that if a formula $\varphi$ is valid, then it is deducible. The sketch for this proceeds proceeds by contraposition. So we must show that for every formula $\varphi$ in the language $\mathcal{L}_{DASL}$, $\not\vdash\varphi \timplies \not\models\varphi.$\\
+
 \begin{tcolorbox}
 	\begin{theorem}[Completeness]
 		The language of Dynamic Agent Safety Logic, $\mathcal{L}_{DASL}$, is complete for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, transitive, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, \\(4) $\llbracket i,(A,\laa),S\rrbracket \subseteq \llbracket i,(A,\laa)\rrbracket$%for all $\laa,\  V^s(\laa) \subseteq V^p(\laa),$ [Questionable]
 		and\\ (5) $(\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i) \subseteq \llbracket i, (A,\laa)\rrbracket$.
 	\end{theorem}
 \end{tcolorbox}
-
-$\mathbf{Proof}.$ Completeness states that if a formula $\varphi$ is valid, then it is deducible. The sketch for this proceeds proceeds by contraposition. So we must show that for every formula $\varphi$ in the language $\mathcal{L}_{DASL}$, $\not\vdash\varphi \timplies \not\models\varphi.$\\
-We define the notions of a \emph{Maximal Consistent Set}, and a \emph{Canonical Model} for the logic. \\
-\\
-$\mathbf{Definition}$. Maximal Consistent Set.\\
-For a set of formulas $\Gamma \subseteq \mathcal{L}_{DASL}$, $\Gamma$ is maximal consistent iff\\
-1. $\Gamma$ is consistent: $\Gamma \not \vdash \bot$.\\
-2. $\Gamma$ is maximal: there is no $\Gamma'\subseteq\mathcal{L}_{DASL}$ such that $\Gamma \subset \Gamma'$ and $\Gamma'\vdash\bot$.\\
-$\mathbf{Definition}$. Canonical Model. A canonical model $M^C = \langle W^C,\ \Rel{k,i}^C,\ \Rel{b,i}^C,\ w,\ V^C\rangle$ is defined:\\
-1. $W^C = \{\Gamma | \Gamma$ is maximal consistent$ \}$\\
-2. $\Gamma \Rel{k,i}^C \Delta$ iff $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma\} = \{\Kns{i}\varphi | \Kns{i}\varphi \in \Delta\}$\\
-3. $\Gamma \Rel{b,i}^C \Delta$ iff $\{\Bels{i}\varphi | \Bels{i}\varphi \in \Gamma\} = \{\Bels{i}\varphi | \Bels{i}\varphi \in \Delta\}$\\
-4. $V^C = \{\Gamma \in W^C| \Gamma \subseteq V(p)\}$\\
 
 The proof appeals to the following lemmas, proven in~\cite{DEL}:
 \begin{lemma}[Lindenbaum]
