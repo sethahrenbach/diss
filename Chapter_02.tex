@@ -204,10 +204,20 @@ Relaxing a frame condition changes the $R$ relation, and in doing so changes the
 
 We saw earlier that reflexive frames are also serial frames, because we proved that we could derive the axiom for serial frames as a theorem from just the axiom for reflexive frames.
 
-These conditions are not exhaustive, but they represent some of the commonly combined conditions used to define axioms of different modal logics. By combining frame conditions, a modal operator is defined with the properties desired. For example, if we wish to define a modal operator for reasoning about the knowledge of ideally rational agents, as is done in Fagin \emph{et. al}~\cite{FHMV} and Hintikka~\cite{Hintikka}, impose the frame conditions of transitivity, reflexivity, and Euclidean. However, if we wish to develop a logic for belief, as the previously cited works also do, we must impose transitivity, Euclidean, and seriality. The reasons for this are explored in the following sections.
+These conditions are not exhaustive, but they represent some of the commonly combined conditions used to define axioms of different modal logics. By combining frame conditions, a modal operator is defined with the properties desired. For example, if we wish to define a modal operator for reasoning about the knowledge of ideally rational agents, as is done in Fagin \emph{et. al}~\cite{FHMV} and Hintikka~\cite{Hintikka}, we impose the frame conditions of transitivity, reflexivity, and Euclidean. However, if we wish to develop a logic for belief, as the previously cited works also do, we must impose transitivity, Euclidean, and seriality. The reasons for this are explored in the following sections.
 
 \section{Epistemic Logic}
-This section presents epistemic logic, the logic for reasoning about the knowledge of ideally rational agents.
+This section presents epistemic logic, the logic for reasoning about the knowledge of ideally rational agents. They are ideally rational in the sense that there is no bound on how much they can be said to know, nor on what propositions they are aware of at any one time. Thus, they have no problem conceiving of every possible sequence of moves a game may consist of, evaluating all possible outcomes, and deducing the optimal sequence of moves in order to maximize their own utilities. They are even stronger than contemporary computers in this way, which are bounded by time and space, and so are unable to actually compute the ideal strategy for an otherwise solvable game like Go. An ideally rational agent can solve Go and compute the game tree all the way to its end.
+
+The axioms that specify this level of knowledge are those introduced in Section~\ref{gametheory}, and recounted here without reference to common knowledge, which complicates things too much for our purposes:
+
+$\mathbf{Agency\  Model\  in\  Classical\  Game\  Theory}$.\\
+(1) $\Kns{i}(\varphi \iimplies \psi) \iimplies (\Kns{i}\varphi \iimplies \Kns{i}\psi)$\\
+(2) $\Kns{i}\varphi \iimplies \varphi$\\
+(3) $\Kns{i}\varphi \iimplies \Kns{i}\Kns{i}\varphi$\\
+(4) $\tlnot \Kns{i}\varphi \iimplies \Kns{i}\tlnot\Kns{i}\varphi$.
+
+These are the axioms of $\mathit{S5}$ modal logic, and from a certain perspective they make sense. The first axiom holds for all \emph{normal} modal logics, and under the epistemic interpretation, it states that if an agent knows that $\varphi$ implies $\psi$, and she knows $\varphi$, then she knows $\psi$. This is intuitive enough on the first pass. The second axiom states that a known proposition must be true, and finds ample support from philosophers devoted to studying the nature of knowledge. The third axiom, \emph{positive introspection}, states that an agent knows something only if she knows \emph{that} she knows it. Finally, \emph{negative introspection} states that an agent does not know something only if she knows that she does not know it. Axioms (3) and (4) are clearly very strong notions of knowledge, and axiom (1) implies that agents are logically omniscient. Because these axioms are firmly rooted in the literature of formal epistemology, relaxing them in order to model more realistic agents requires a word or two. I spend this section introducing and defending my relaxation of the classical axiomatization. 
 
 \section{Doxastic Logic}
 This section presents doxastic logic, the logic for reasoning about belief.
