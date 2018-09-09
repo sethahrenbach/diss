@@ -185,20 +185,23 @@ Next we turn to completeness.
 
 \subsection{Completeness}
 
-Completeness proofs in contemporary modal logic research follow the following format. First, a \emph{canonical model} is defined such that it belongs to the Kripke frames for which the logic under investigation is sound, and where the set of worlds, relations, and valuation function are formally tied to the logical closure of the same logic. Thus, the model combines the deducibility relation of the proof theory and the satisfaction relation of the model theory in order to show that valid formulas are deducible, which proves completeness of the logic.
+Completeness proofs in contemporary modal logic research follow the following format. First, a \emph{canonical model} is defined such that it belongs to the Kripke frames for which the logic under investigation is sound. The worlds of the canonical model are maximal consistent sets of formulas from the language. The valuation function is defined by membership to the worlds as maximal consistent sets. We define this formally below. The objective is to show that all formulas valid for the relevant Kripke frames are likewise deducible in the logic. Thus, the model combines the deducibility relation of the proof theory and the satisfaction relation of the model theory in order to show that valid formulas are deducible, which proves completeness of the logic.
 
-We define the notions of a \emph{Maximal Consistent Set}, and a \emph{Canonical Model} for the logic. Informally, a maximal consistent set of formulas is one that is a subset of the well-formed formulas of the language $\mathcal{L}_{DASL}$ according to the syntax presented earlier, whose members are consistent with each other, such that adding even a single formula to the set would ruin consistency. Another way to phrase this last part is to say that our maximal consistent set is not a proper subset of any other consistent subset of $\mathcal{L}_{DASL}$. \\
+The previous section proved soundness of DASL for frames with a reflexive $\Rel{k}^i$ relation, a serial, transitive, Euclidean $\Rel{b}^i$ relation, which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, and with action relations  $\llbracket i,(A,\laa),S\rrbracket \subseteq \llbracket i,(A,\laa)\rrbracket$, and $(\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i) \subseteq \llbracket i, (A,\laa)\rrbracket$. The canonical model we proceed to define will belong to this frame. Because it belongs to this frame, the logical closure of a set of formulas will consist of valid DASL inferences. This allows us to infer deducibility from validity. First we must define the notion of a maximal consistent set.
+ 
+Informally, a maximal consistent set of formulas is one that is a subset of the well-formed formulas of the language $\mathcal{L}_{DASL}$ according to the syntax presented earlier, whose members are consistent with each other, such that adding even a single formula to the set would render the set consistency. Another way to phrase this last part is to say that our maximal consistent set is not a proper subset of any other consistent subset of $\mathcal{L}_{DASL}$. \\
 $\mathbf{Definition}$. Maximal Consistent Set.\\
 For a set of formulas $\Gamma \subseteq \mathcal{L}_{DASL}$, $\Gamma$ is maximal consistent iff\\
 1. $\Gamma$ is consistent: $\Gamma \not \vdash \bot$.\\
 2. $\Gamma$ is maximal: there is no $\Gamma'\subseteq\mathcal{L}_{DASL}$ such that $\Gamma \subset \Gamma'$ and $\Gamma'\vdash\bot$.\\
 
-A canonical model is a Kripke model of $\mathcal{L}_{DASL}$ with a set of worlds $W^C$ that collectively satisfy all formulas from a maximally consistent set. For our formalism here, we treat worlds as identical to sets of formulas.
+A canonical model is a Kripke model of $\mathcal{L}_{DASL}$ with a set of worlds $W^C$ that collectively satisfy all formulas from a maximal consistent set. For our formalism here, we treat worlds as identical to sets of formulas.
+\\
 $\mathbf{Definition}$. Canonical Model. A canonical model $M^C = \langle W^C,\ \Rel{k,i}^C,\ \Rel{b,i}^C,\ w,\ V^C\rangle$ is defined:\\
-1. $W^C = \{\Gamma | \Gamma$ is maximal consistent$ \}$\\
-2. $\Gamma \Rel{k,i}^C \Delta$ iff $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma\} = \{\Kns{i}\varphi | \Kns{i}\varphi \in \Delta\}$\\
-3. $\Gamma \Rel{b,i}^C \Delta$ iff $\{\Bels{i}\varphi | \Bels{i}\varphi \in \Gamma\} = \{\Bels{i}\varphi | \Bels{i}\varphi \in \Delta\}$\\
-4. $V^C = \{\Gamma \in W^C| \Gamma \subseteq V(p)\}$\\
+1. $W^C = \{\Gamma | \Gamma$ is maximal consistent relative to $\mathcal{L}_{DASL} \}$\\
+2. $\Gamma \Rel{k,i}^C \Delta$ iff $\Kns{i}\varphi \in \Gamma$ implies $\varphi \in \Delta$\\
+3. $\Gamma \Rel{b,i}^C \Delta$ iff $\Bels{i}\varphi \in \Gamma$ implies $\varphi \in \Delta$\\
+4. $V^C(p) = \{\Gamma \in W^C\ |\ p \in \Gamma\}$\\
 
 $\mathbf{Proof}.$ Completeness states that if a formula $\varphi$ is valid, then it is deducible. The sketch for this proceeds proceeds by contraposition. So we must show that for every formula $\varphi$ in the language $\mathcal{L}_{DASL}$, $\not\vdash\varphi \timplies \not\models\varphi.$\\
 
