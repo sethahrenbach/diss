@@ -216,29 +216,36 @@ The proof appeals to the following lemmas, proven in~\cite{DEL}:
 \begin{lemma}[Lindenbaum]
 Every consistent set of formulas is a subset of a maximal consistent set of formulas.
 \end{lemma}
+If we begin with a consistent set of DASL formulas $\beta$, we construct a maximal consistent set $\Gamma$ as follows:
+\begin{enumerate}
+	\item enumerate the formulas of DASL $\varphi_0$, $\dots \varphi_n$, $\dots$
+	\item $\Gamma_0 \equiv \beta$
+	\item $\Gamma_{n+1} \equiv \{\varphi_n\}$ if $\Gamma_{n} \vdash \varphi_n$ 
+	\item $\Gamma_{n+1} \equiv \{\tlnot \varphi_n\}$ otherwise
+\end{enumerate}
+
 %{Lindenbaum}$: Every consistent set of formulas is a subset of a maximal consistent set of formulas.\\
 \begin{lemma}[Properties]
 
-If $\Gamma$ and $\Delta$ are maximal consistent sets, then:
-\begin{itemize}
-	\item 1. $\Gamma$ and $\Delta$ are deductively closed.
-	\item 2. $\varphi \in \Gamma$ iff $\tlnot \varphi \not\in \Gamma$.
-	\item 3. $(\varphi \tland \psi) \in \Gamma$ iff $\varphi \in \Gamma$ and $\psi \in Gamma$.
-	\item 4. $\Gamma \Rel{k,i}^C\Delta$ iff $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma\} \subseteq \Delta$.
-	\item 5. $\Gamma \Rel{b,i}^C\Delta$ iff $\{\Bels{i}\varphi | \Bels{i}\varphi \in \Gamma\} \subseteq \Delta$.
-	\item 6. $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma \} \vdash \psi$ iff $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma\} \vdash \Kns{i}\psi$.
-\end{itemize}
+If $\Gamma$ and $\Delta$ are maximal consistent sets and $\beta$ a consistent set, then:
+\begin{enumerate}
+	\item $\Gamma$ and $\Delta$ are deductively closed.
+	\item $\varphi \in \Gamma$ iff $\tlnot \varphi \not\in \Gamma$.
+%	\item $(\varphi \tland \psi) \in \Gamma$ iff $\varphi \in \Gamma$ and $\psi \in \Gamma$.
+%	\item $\Gamma \Rel{k,i}^C\Delta$ iff $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma\} \subseteq \Delta$.
+%	\item $\Gamma \Rel{b,i}^C\Delta$ iff $\{\Bels{i}\varphi | \Bels{i}\varphi \in \Gamma\} \subseteq \Delta$.
+%	\item $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma \} \vdash \psi$ iff $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma\} \vdash \Kns{i}\psi$.
+    \item If $\beta \not \vdash \varphi$, then there exists a maximal consistent set $\Gamma$ such that $\beta \subset \Gamma$ but $\varphi \not \in \Gamma$
+\end{enumerate}
 \end{lemma}
 
 \begin{lemma}[Truth]
 For every $\varphi \in \mathcal{L}_{DASL}$, and every maximal consistent set $\Gamma$:
 \begin{eqnarray*}
-	\varphi \in \Gamma \iiff (M^C,\Gamma)\models\varphi
+	\varphi \in \Gamma \ \mathit{iff}\ (M^C,\Gamma)\models\varphi
 \end{eqnarray*}
 \end{lemma}
-
 \begin{lemma}[Canonicity]
-
 The canonical model satisfies the above frame conditions.\\
 \end{lemma}
 
