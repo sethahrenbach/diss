@@ -216,6 +216,8 @@ The proof appeals to the following lemmas, proven in~\cite{DEL}:
 \begin{lemma}[Lindenbaum]
 Every consistent set of formulas is a subset of a maximal consistent set of formulas.
 \end{lemma}
+\begin{proof}
+	
 If we begin with a consistent set of DASL formulas $\beta$, we construct a maximal consistent set $\Gamma$ as follows:
 \begin{enumerate}
 	\item enumerate the formulas of DASL $\varphi_0$, $\dots \varphi_n$, $\dots$
@@ -223,6 +225,7 @@ If we begin with a consistent set of DASL formulas $\beta$, we construct a maxim
 	\item $\Gamma_{n+1} \equiv \{\varphi_n\}$ if $\Gamma_{n} \vdash \varphi_n$ 
 	\item $\Gamma_{n+1} \equiv \{\tlnot \varphi_n\}$ otherwise
 \end{enumerate}
+\end{proof}
 
 %{Lindenbaum}$: Every consistent set of formulas is a subset of a maximal consistent set of formulas.\\
 \begin{lemma}[Properties]
@@ -238,16 +241,24 @@ If $\Gamma$ and $\Delta$ are maximal consistent sets and $\beta$ a consistent se
     \item If $\beta \not \vdash \varphi$, then there exists a maximal consistent set $\Gamma$ such that $\beta \subset \Gamma$ but $\varphi \not \in \Gamma$
 \end{enumerate}
 \end{lemma}
-
+\begin{proof}
+	$(1)$ clearly follows from the construction of the maximal consistent sets as seen in the proof of Lindenbaum, specifically step (3) of the process. $(2)$ follows from the definition of consistency and steps (3) and (4) of the Lindenbaum proof. $(3)$ follows from step (4) of the construction process of maximal consistent sets in the Lindenbaum proof.  
+\end{proof}
 \begin{lemma}[Truth]
 For every $\varphi \in \mathcal{L}_{DASL}$, and every maximal consistent set $\Gamma$:
 \begin{eqnarray*}
 	\varphi \in \Gamma \ \mathit{iff}\ (M^C,\Gamma)\models\varphi
 \end{eqnarray*}
 \end{lemma}
-\begin{lemma}[Canonicity]
-The canonical model satisfies the above frame conditions.\\
-\end{lemma}
+\begin{proof}
+	By induction on $\varphi$, all the non-modal formulas follow straight-forwardly from the definition of $V^C(p) = \{\Gamma \in W^C\ |\ p \in \Gamma\}$. The modal formulas require some explanation. Assume we have a formula $\Kns{i}\varphi \in \Gamma$. We must show that $(M^C, \Gamma) \models \Kns{i}\varphi$ for the left to right direction. The definition of $\Gamma\Rel{k,i}^C\Delta$ is that $\Kns{i}\varphi \in \Gamma$ implies $\varphi \in \Delta$. Thus, for all $\Delta \in W^C$, if $\Gamma \Rel{k,i}^C \Delta$, then $\varphi \in \Delta$. Therefore, by the semantics of $\Kns{i}$, $(M^C, \Gamma) \models \Kns{i}\varphi$.
+	
+	In the right to left direction, we assume $(M^C, \Gamma) \models \Kns{i}\varphi$, and must show $\Kns{i}\varphi \in \Gamma$. From the reflexivity of $\Rel{k,i}^C$, and the semantics of $\Kns{i}$, it follows that $(M^C,\Gamma)\models \varphi$, and for all $\Delta\in W^C$, if $\Gamma\Rel{k,i}^C\Delta$, then $(M^C,\Delta)\models\varphi$. By the induction hypothesis, $\varphi \in \Gamma$. Let us assume for proof by contradiction that $\Kns{i}\varphi \not \in \Gamma$. Then $\tlnot\Kns{i}\varphi\in\Gamma$, because $\Gamma$ is maximal. TODO
+\end{proof}
+
+%\begin{lemma}[Canonicity]
+%The canonical model satisfies the above frame conditions.\\
+%\end{lemma}
 
 With these lemmas, we assume $\not\vdash\varphi$, and show that $\not\models\varphi$. Since $\not\vdash\varphi$, the set $\{\tlnot\varphi\}$ is consistent. From Lindenbaum, $\{\tlnot\varphi\}$ is part of a maximal consistent set, call it $\Gamma$. From the Truth Lemma, $(M^C,\Gamma)\models\tlnot\varphi$. Therefore, $\not\models\varphi$.$\Box$
 
