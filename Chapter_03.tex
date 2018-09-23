@@ -185,11 +185,11 @@ Next we turn to completeness.
 
 \subsection{Completeness}
 
-Completeness proofs in contemporary modal logic research follow the following format. First, a \emph{canonical model} is defined such that it belongs to the Kripke frames for which the logic under investigation is sound. The worlds of the canonical model are maximal consistent sets of formulas from the language. The valuation function is defined by membership to the worlds as maximal consistent sets. We define this formally below. The objective is to show that all formulas valid for the relevant Kripke frames are likewise deducible in the logic. Thus, the model combines the deducibility relation of the proof theory and the satisfaction relation of the model theory in order to show that valid formulas are deducible, which proves completeness of the logic.
+Completeness proofs in contemporary modal logic research follow the following format. First, a \emph{canonical model} is defined such that it belongs to the Kripke frames for which the logic under investigation is sound. The model combines validity and deducibility so that the former entails the latter. The worlds of the canonical model are sets of formulas from the language. If a formula is a member of a such a set, then it is true at the world. We define this formally below. The objective is to show that all formulas valid for the relevant Kripke frames are likewise deducible in the logic. The key is to construct the sets in a particular way, to be discussed below.
 
-The previous section proved soundness of DASL for frames with a reflexive $\Rel{k}^i$ relation, a serial, transitive, Euclidean $\Rel{b}^i$ relation, which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, and with action relations  $\llbracket i,(A,\laa),S\rrbracket \subseteq \llbracket i,(A,\laa)\rrbracket$, and $(\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i) \subseteq \llbracket i, (A,\laa)\rrbracket$. The canonical model we proceed to define will belong to this frame. Because it belongs to this frame, the logical closure of a set of formulas will consist of valid DASL inferences. This allows us to infer deducibility from validity. First we must define the notion of a maximal consistent set.
+The previous section proved soundness of DASL with respect to frames with a reflexive $\Rel{k}^i$ relation, a serial, transitive, Euclidean $\Rel{b}^i$ relation, which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, and with action relations  $\llbracket i,(A,\laa),S\rrbracket \subseteq \llbracket i,(A,\laa)\rrbracket$, and $(\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i) \subseteq \llbracket i, (A,\laa)\rrbracket$. The canonical model we proceed to define will belong to this frame. Because it belongs to this frame, the logical closure of a set of formulas will consist of valid DASL deductions. This allows us to infer deducibility from validity. First we must define the notion of a maximal consistent set.
  
-Informally, a maximal consistent set of formulas is one that is a subset of the well-formed formulas of the language $\mathcal{L}_{DASL}$ according to the syntax presented earlier, whose members are consistent with each other, such that adding even a single formula to the set would render the set consistency. Another way to phrase this last part is to say that our maximal consistent set is not a proper subset of any other consistent subset of $\mathcal{L}_{DASL}$. \\
+Informally, a maximal consistent set of formulas is one that is a subset of the well-formed formulas of the language $\mathcal{L}_{DASL}$ according to the syntax presented earlier, whose members are consistent with each other, such that the set has no consistent extension. \\
 $\mathbf{Definition}$. Maximal Consistent Set.\\
 For a set of formulas $\Gamma \subseteq \mathcal{L}_{DASL}$, $\Gamma$ is maximal consistent iff\\
 1. $\Gamma$ is consistent: $\Gamma \not \vdash \bot$.\\
@@ -203,7 +203,6 @@ $\mathbf{Definition}$. Canonical Model. A canonical model $M^C = \langle W^C,\ \
 3. $\Gamma \Rel{b,i}^C \Delta$ iff $\Bels{i}\varphi \in \Gamma$ implies $\varphi \in \Delta$\\
 4. $V^C(p) = \{\Gamma \in W^C\ |\ p \in \Gamma\}$\\
 
-$\mathbf{Proof}.$ Completeness states that if a formula $\varphi$ is valid, then it is deducible. The sketch for this proceeds proceeds by contraposition. So we must show that for every formula $\varphi$ in the language $\mathcal{L}_{DASL}$, $\not\vdash\varphi \timplies \not\models\varphi.$\\
 
 \begin{tcolorbox}
 	\begin{theorem}[Completeness]
@@ -212,7 +211,8 @@ $\mathbf{Proof}.$ Completeness states that if a formula $\varphi$ is valid, then
 	\end{theorem}
 \end{tcolorbox}
 
-The proof appeals to the following lemmas, proven in~\cite{DEL}:
+$\mathbf{Proof}.$ Completeness states that if a formula $\varphi$ is valid, then it is deducible. The sketch for this proceeds proceeds by contraposition. So we must show that for every formula $\varphi$ in the language $\mathcal{L}_{DASL}$, $\not\vdash\varphi \timplies \not\models\varphi.$\\
+The proof appeals to the following lemmas, proven also in~\cite{DEL,negri}:
 \begin{lemma}[Lindenbaum]
 Every consistent set of formulas is a subset of a maximal consistent set of formulas.
 \end{lemma}
@@ -225,6 +225,10 @@ If we begin with a consistent set of DASL formulas $\beta$, we construct a maxim
 	\item $\Gamma_{n+1} \equiv \{\varphi_n\}$ if $\Gamma_{n} \vdash \varphi_n$ 
 	\item $\Gamma_{n+1} \equiv \{\tlnot \varphi_n\}$ otherwise
 \end{enumerate}
+
+We now show that $\Gamma$ is consistent. $\Gamma$ is consistent if and only if $\forall \Gamma_n \subset \Gamma$, $\Gamma_n \not\vdash \bot$. The base set $\Gamma_0$ is consistent because it is equivalent to $\beta$, which is consistent by assumption. The induction hypothesis is if $\Gamma_{n1+}$ is consistent then so is $\Gamma_{n}$. There are two ways to construct $\Gamma_{n+1}$: via step (3), or via step (4). If via (3), then the added formula $\varphi_n$ logically follows from $\Gamma_n$, and $\mathcal{DASL}$ is sound, so $\Gamma_{n+1}$ is consistent. Otherwise, if via (4), then $\varphi_n$ does not logically follow from $\Gamma_n$. Because the formulas are enumerated, there is no way $\varphi_n$ is already in $\Gamma_n$. Thus, $\Gamma_n \cup \{\tlnot\varphi_n\} \not\vdash \bot$. Therefore, by induction on $\Gamma_n$, $\Gamma$ is consistent.
+
+We show gamma is maximal by... TODO
 \end{proof}
 
 %{Lindenbaum}$: Every consistent set of formulas is a subset of a maximal consistent set of formulas.\\
