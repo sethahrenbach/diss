@@ -193,7 +193,7 @@ Informally, a maximal consistent set of formulas is one that is a subset of the 
 $\mathbf{Definition}$. Maximal Consistent Set.\\
 For a set of formulas $\Gamma \subseteq \mathcal{L}_{DASL}$, $\Gamma$ is maximal consistent iff\\
 1. $\Gamma$ is consistent: $\Gamma \not \vdash \bot$.\\
-2. $\Gamma$ is maximal: there is no $\Gamma'\subseteq\mathcal{L}_{DASL}$ such that $\Gamma \subset \Gamma'$ and $\Gamma'\vdash\bot$.\\
+2. $\Gamma$ is maximal: there is no $\Gamma'\subseteq\mathcal{L}_{DASL}$ such that $\Gamma \subset \Gamma'$ and $\Gamma'\not\vdash\bot$.\\
 
 A canonical model is a Kripke model of $\mathcal{L}_{DASL}$ with a set of worlds $W^C$ that collectively satisfy all formulas from a maximal consistent set. For our formalism here, we treat worlds as identical to sets of formulas.
 \\
@@ -218,17 +218,18 @@ Every consistent set of formulas is a subset of a maximal consistent set of form
 \end{lemma}
 \begin{proof}
 	
-If we begin with a consistent set of DASL formulas $\beta$, we construct a maximal consistent set $\Gamma$ as follows:
+If we begin with a consistent set of $\mathcal{L}_{DASL}$ formulas $\beta$, we construct a maximal consistent set $\Gamma$ as follows:
 \begin{enumerate}
-	\item enumerate the formulas of DASL $\varphi_0$, $\dots \varphi_n$, $\dots$
+	\item enumerate the formulas of $\mathcal{L}_{DASL}$ $\varphi_0$, $\dots \varphi_n$, $\dots$
 	\item $\Gamma_0 \equiv \beta$
 	\item $\Gamma_{n+1} \equiv \{\varphi_n\}$ if $\Gamma_{n} \vdash \varphi_n$ 
 	\item $\Gamma_{n+1} \equiv \{\tlnot \varphi_n\}$ otherwise
+	\item $\Gamma \equiv \bigcup_{n\geq0}\Gamma_n$
 \end{enumerate}
 
-We now show that $\Gamma$ is consistent. $\Gamma$ is consistent if and only if $\forall \Gamma_n \subset \Gamma$, $\Gamma_n \not\vdash \bot$. The base set $\Gamma_0$ is consistent because it is equivalent to $\beta$, which is consistent by assumption. The induction hypothesis is if $\Gamma_{n1+}$ is consistent then so is $\Gamma_{n}$. There are two ways to construct $\Gamma_{n+1}$: via step (3), or via step (4). If via (3), then the added formula $\varphi_n$ logically follows from $\Gamma_n$, and $\mathcal{DASL}$ is sound, so $\Gamma_{n+1}$ is consistent. Otherwise, if via (4), then $\varphi_n$ does not logically follow from $\Gamma_n$. Because the formulas are enumerated, there is no way $\varphi_n$ is already in $\Gamma_n$. Thus, $\Gamma_n \cup \{\tlnot\varphi_n\} \not\vdash \bot$. Therefore, by induction on $\Gamma_n$, $\Gamma$ is consistent.
+We now show that $\Gamma$ is consistent. $\Gamma$ is consistent if and only if $\forall \Gamma_n \subset \Gamma$, $\Gamma_n \not\vdash \bot$. The base set $\Gamma_0$ is consistent because it is equivalent to $\beta$, which is consistent by assumption. The induction hypothesis is if $\Gamma_{n+1}$ is consistent then so is $\Gamma_{n}$. There are two ways to construct $\Gamma_{n+1}$: via step (3), or via step (4). If via (3), then the added formula $\varphi_n$ logically follows from $\Gamma_n$, and $\mathcal{L}_{DASL}$ is sound, so $\Gamma_{n+1}$ is consistent. Otherwise, if via (4), then $\varphi_n$ does not logically follow from $\Gamma_n$. Because the formulas are enumerated and examined in order, $\varphi_n$ is not in $\Gamma_n$. Thus, $\Gamma_n \cup \{\tlnot\varphi_n\} \not\vdash \bot$. Therefore, $\Gamma$ is consistent.
 
-We show gamma is maximal by... TODO
+We show $\Gamma$ is maximal by contradiction, assuming there is a $\Gamma' \subset \mathcal{L}_{DASL}$ such that $\Gamma \subset \Gamma'$ and $\Gamma'\not\vdash\bot$. Let $\varphi_n\in\Gamma'$ and $\varphi_n\not\in\Gamma$ be an arbitrary extension of $\Gamma$. We show $\Gamma' \cup \{\varphi_n\} \vdash \bot$. When constructing $\Gamma$, the procedure examined $\varphi_n$ because it is a formula of $\mathcal{L}_{DASL}$. Since $\varphi_n\not\in\Gamma$, it must be the case that $\Gamma_n\not\vdash\varphi_n$. In step (4) we set $\Gamma_{n+1}\equiv\Gamma_n\cup\tlnot\varphi_n$. Since $\tlnot\varphi_n \in \Gamma$, we would have $\Gamma\cup\varphi_n\vdash\bot$, and so $\Gamma'\vdash\bot$, contradicting the assumption. Therefore, $\Gamma$ is maximal.  
 \end{proof}
 
 %{Lindenbaum}$: Every consistent set of formulas is a subset of a maximal consistent set of formulas.\\
@@ -246,7 +247,7 @@ If $\Gamma$ and $\Delta$ are maximal consistent sets and $\beta$ a consistent se
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-	$(1)$ clearly follows from the construction of the maximal consistent sets as seen in the proof of Lindenbaum, specifically step (3) of the process. $(2)$ follows from the definition of consistency and steps (3) and (4) of the Lindenbaum proof. $(3)$ follows from step (4) of the construction process of maximal consistent sets in the Lindenbaum proof.  
+	$(1)$ clearly follows from the construction of the maximal consistent sets as seen in the proof of Lindenbaum, specifically step (3) of the process. $(2)$ holds because each formula of $\mathcal{L}_{DASL}$ was enumerated and considered, and either it or its negation is added to the growing set at steps (3) and (4). $(3)$ follows from step (4) of the construction process of maximal consistent sets in the Lindenbaum proof.  
 \end{proof}
 \begin{lemma}[Truth]
 For every $\varphi \in \mathcal{L}_{DASL}$, and every maximal consistent set $\Gamma$:
