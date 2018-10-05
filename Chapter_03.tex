@@ -233,7 +233,7 @@ We show $\Gamma$ is maximal by contradiction, assuming there is a $\Gamma' \subs
 \end{proof}
 
 %{Lindenbaum}$: Every consistent set of formulas is a subset of a maximal consistent set of formulas.\\
-\begin{lemma}[Properties]
+\begin{lemma}[Properties]~\label{properties}
 
 If $\Gamma$ and $\Delta$ are maximal consistent sets and $\beta$ a consistent set, then:
 \begin{enumerate}
@@ -249,22 +249,40 @@ If $\Gamma$ and $\Delta$ are maximal consistent sets and $\beta$ a consistent se
 \begin{proof}
 	$(1)$ clearly follows from the construction of the maximal consistent sets as seen in the proof of Lindenbaum, specifically step (3) of the process. $(2)$ holds because each formula of $\mathcal{L}_{DASL}$ was enumerated and considered, and either it or its negation is added to the growing set at steps (3) and (4). $(3)$ follows from step (4) of the construction process of maximal consistent sets in the Lindenbaum proof.  
 \end{proof}
-\begin{lemma}[Truth]
+\begin{lemma}[Truth]~\label{truth}
 For every $\varphi \in \mathcal{L}_{DASL}$, and every maximal consistent set $\Gamma$:
 \begin{eqnarray*}
 	\varphi \in \Gamma \ \mathit{iff}\ (M^C,\Gamma)\models\varphi
 \end{eqnarray*}
 \end{lemma}
 \begin{proof}
-	By induction on $\varphi$, all the non-modal formulas follow straight-forwardly from the definition of $V^C(p) = \{\Gamma \in W^C\ |\ p \in \Gamma\}$. The modal formulas require some explanation. Assume we have a formula $\Kns{i}\varphi \in \Gamma$. We must show that $(M^C, \Gamma) \models \Kns{i}\varphi$ for the left to right direction. The definition of $\Gamma\Rel{k,i}^C\Delta$ is that $\Kns{i}\varphi \in \Gamma$ implies $\varphi \in \Delta$. Thus, for all $\Delta \in W^C$, if $\Gamma \Rel{k,i}^C \Delta$, then $\varphi \in \Delta$. Therefore, by the semantics of $\Kns{i}$, $(M^C, \Gamma) \models \Kns{i}\varphi$.
+	By induction on $\varphi$, all the non-modal formulas follow straight-forwardly from the definition of $V^C(p) = \{\Gamma \in W^C\ |\ p \in \Gamma\}$. The modal formulas require some explanation. For the left to right direction, assume we have a formula $\Kns{i}\varphi \in \Gamma$. We must show that $(M^C, \Gamma) \models \Kns{i}\varphi$. The definition of $\Gamma\Rel{k,i}^C\Delta$ is that $\Kns{i}\varphi \in \Gamma$ implies $\varphi \in \Delta$. Thus, for all $\Delta \in W^C$, if $\Gamma \Rel{k,i}^C \Delta$, then $\varphi \in \Delta$. Therefore, by the semantics of $\Kns{i}$, $(M^C, \Gamma) \models \Kns{i}\varphi$.
 	
-	In the right to left direction, we assume $(M^C, \Gamma) \models \Kns{i}\varphi$, and must show $\Kns{i}\varphi \in \Gamma$. From the reflexivity of $\Rel{k,i}^C$, and the semantics of $\Kns{i}$, it follows that $(M^C,\Gamma)\models \varphi$, and for all $\Delta\in W^C$, if $\Gamma\Rel{k,i}^C\Delta$, then $(M^C,\Delta)\models\varphi$. By the induction hypothesis, $\varphi \in \Gamma$. Let us assume for proof by contradiction that $\Kns{i}\varphi \not \in \Gamma$. Then $\tlnot\Kns{i}\varphi\in\Gamma$, because $\Gamma$ is maximal. TODO
+	We prove the right to left direction by its contrapositive, and assume $\Kns{i}\varphi\not\in\Gamma$. We show $(M^C,\Gamma)\not\models\Kns{i}\varphi$. Since $\Kns{i}\varphi\not\in\Gamma$, from property (2) of Lemma~\ref{properties} it follows that $\tlnot\Kns{i}\varphi\in\Gamma$. From the semantics of $\Kns{i}$, there is some $\Delta\in W^C$ such that $\Gamma\Rel{k,i}^C\Delta$ and $(M^C,\Delta)\models\tlnot\varphi$. Therefore, $(M^C,\Gamma)\models\tlnot\Kns{i}\varphi$, and equivalently, $(M^C,\Gamma)\not\models\Kns{i}\varphi$. 	
+	
+	
+	A similar proof shows the $\Bels{i}\varphi \in \Gamma$ case, and the dynamic modalities follow from the reduction axioms.
+	%In the right to left direction, we assume $(M^C, \Gamma) \models \Kns{i}\varphi$, and must show $\Kns{i}\varphi \in \Gamma$. From the reflexivity of $\Rel{k,i}^C$, and the semantics of $\Kns{i}$, it follows that $(M^C,\Gamma)\models \varphi$, and for all $\Delta\in W^C$, if $\Gamma\Rel{k,i}^C\Delta$, then $(M^C,\Delta)\models\varphi$. By the induction hypothesis, $\varphi \in \Gamma$. Let us assume for proof by contradiction that $\Kns{i}\varphi \not \in \Gamma$. Then $\tlnot\Kns{i}\varphi\in\Gamma$, from (2) in Lemma~\ref{properties}. By the semantics of $\Kns{i}$, there is some maximal consistent set $\Delta\in W^C$ such that $\Gamma\Rel{k,i}^C\Delta$ and $(M^C,\Delta)\models\tlnot\varphi$. Thus, $(M^C,\Gamma)\models\tlnot\Kns{i}\varphi$, contradicting the assumption. 
 \end{proof}
 
-%\begin{lemma}[Canonicity]
-%The canonical model satisfies the above frame conditions.\\
-%\end{lemma}
-
+\begin{lemma}[Canonicity]~\label{canon}
+The canonical model satisfies the frame conditions of the $\mathcal{L}_{DASL}$ semantics.\\
+\end{lemma}
+\begin{proof}
+	We must show that
+	\begin{enumerate}
+	\item $\Rel{k,i}^C$ relation is reflexive,
+	\item $\Rel{b,i}^C$ relation is serial, transitive, and Euclidean,
+	\item $\Rel{b,i}^C \subseteq \Rel{k,i}^C$,
+	\item $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, 
+	\item $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$,
+	\item $\llbracket i,(A,\laa),S\rrbracket \subseteq \llbracket i,(A,\laa)\rrbracket$, and 	
+	\item  $(\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i) \subseteq \llbracket i, (A,\laa)\rrbracket$.
+	\end{enumerate}
+	
+	TODO.
+\end{proof}
+%With these lemmas, we assume $(M^C,\Gamma)\models\varphi$ and show that $\Gamma\vdash\varphi$. From Lemma~\ref{truth}, it follows from the assumption that $\varphi\in\Gamma$. 
 With these lemmas, we assume $\not\vdash\varphi$, and show that $\not\models\varphi$. Since $\not\vdash\varphi$, the set $\{\tlnot\varphi\}$ is consistent. From Lindenbaum, $\{\tlnot\varphi\}$ is part of a maximal consistent set, call it $\Gamma$. From the Truth Lemma, $(M^C,\Gamma)\models\tlnot\varphi$. Therefore, $\not\models\varphi$.$\Box$
 
 Because the static logic is complete and we have translation axioms that convert the dynamic formulas to equivalent static ones, we can conclude that the entirety of DASL is complete. In the next chapter we examine case studies and a mechanization of the logic.
