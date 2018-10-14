@@ -280,7 +280,27 @@ The canonical model satisfies the frame conditions of the $\mathcal{L}_{DASL}$ s
 	\item  $(\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i) \subseteq \llbracket i, (A,\laa)\rrbracket$.
 	\end{enumerate}
 	
-	TODO.
+	We prove these by appealing to the fact that the worlds in the canonical model $M^C$ are maximal consistent sets that each contains all of the theorems of $\mathcal{L}_{DASL}$. Therefore, each of the axiom schemas of the DASL Hilbert system is true at each world. We use this to prove that the doxastic, belief, and dynamic relations on $M^C$ satisfy the above properties, thereby placing $M^C$ in the appropriate class of Kripke frames.
+	
+	For (1), we appeal to the fact that all instances of the axiom schema $\Kns{i}\varphi \iimplies \varphi$ are elements of each world in $W^C$, the set of maximal consistent sets in $M^C$. Assume an arbitrary world $(M^C, \Gamma)\models \Kns{i}\varphi$. By the axiom schema just noted, it follows that $(M^C, \Gamma)\models \varphi$. Thus, $(M^C, \Gamma)\models\Kns{i}\varphi$ implies $(M^C, \Gamma)\models\varphi$. From the definition of the canonical model above, it follows that $\Gamma\Rel{ki,}^C\Gamma$. This holds for all $\Gamma$, and so $\Rel{k,i}^C$ is reflexive.
+	
+	Condition (2) depends on the axiom schemas of the doxastic operator. 
+	
+	The schema $\Bels{i}\varphi\iimplies \BPoss{i}\varphi$ establishes that $\Rel{b,i}^C$ is serial. We assume an arbitrary world $(M^C, \Gamma)\models\BPoss{i}\varphi$. By the schema, it follows that $(M^C,\Gamma)\models\BPoss{i}\varphi$. By the semantics of $\BPoss{i}$, there exists a world $(M^C,\Delta)\models\varphi$ such that $\Gamma\Rel{b,i}^C\Delta$. Thus, for all $\Gamma\in W^C$, $\exists \Delta \in W^C$ such that $\Gamma\Rel{b,i}^C\Delta$, which is what it means to be serial.
+	
+	The schema $\Bels{i}\varphi\iimplies\Bels{i}\Bels{i}\varphi$ establishes transitivity of $\Rel{b,i}^C$.
+	
+	The schema $\BPoss{i}\varphi\iimplies\Bels{i}\BPoss{i}\varphi$.
+	
+	Condition (3) follows from the axiom schema $\Kns{i}\varphi \iimplies \Bels{i}\varphi$.
+	
+	Condition (4) follows from the axiom schema $\Bels{i}\varphi\iimplies\Bels{i}\Kns{i}\varphi$.
+	
+	Condition (5) follows from the axiom schema $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$.
+	
+	Condition (6) follows from the axiom schema $\Pal{i, (A,\laa)}\varphi\iimplies\Pal{i,(A,\laa,S)}\varphi$.
+	
+	Condition (7) follows from the axiom schema $\PalPos{i}{A,\laa}\varphi\iimplies\Bels{i}\SPalPos{i}{A,\laa}\varphi$. Assume an arbitrary world $(M^C,\Gamma)\models\PalPos{i}{A,\laa}\varphi$. By the axiom schema, it follows that $(M^C,\Gamma)\models\Bels{i}\SPalPos{i}{A,\laa}\varphi$. By the semantics of $\Bels{i}$, it follows that $\forall \Delta\in W^C$, if $\Gamma\Rel{b,i}^C\Delta$, then $(M^C,\Delta)\models\SPalPos{i}{A,\laa}\varphi$.
 \end{proof}
 %With these lemmas, we assume $(M^C,\Gamma)\models\varphi$ and show that $\Gamma\vdash\varphi$. From Lemma~\ref{truth}, it follows from the assumption that $\varphi\in\Gamma$. 
 With these lemmas, we assume $\not\vdash\varphi$, and show that $\not\models\varphi$. Since $\not\vdash\varphi$, the set $\{\tlnot\varphi\}$ is consistent. From Lindenbaum, $\{\tlnot\varphi\}$ is part of a maximal consistent set, call it $\Gamma$. From the Truth Lemma, $(M^C,\Gamma)\models\tlnot\varphi$. Therefore, $\not\models\varphi$.$\Box$
