@@ -300,7 +300,10 @@ The canonical model satisfies the frame conditions of the $\mathcal{L}_{DASL}$ s
 	
 	Condition (6) follows from the axiom schema $\Pal{i, (A,\laa)}\varphi\iimplies\Pal{i,(A,\laa,S)}\varphi$.
 	
-	Condition (7) follows from the axiom schema $\PalPos{i}{A,\laa}\varphi\iimplies\Bels{i}\SPalPos{i}{A,\laa}\varphi$. Assume an arbitrary world $(M^C,\Gamma)\models\PalPos{i}{A,\laa}\varphi$. By the axiom schema, it follows that $(M^C,\Gamma)\models\Bels{i}\SPalPos{i}{A,\laa}\varphi$. By the semantics of $\Bels{i}$, it follows that $\forall \Delta\in W^C$, if $\Gamma\Rel{b,i}^C\Delta$, then $(M^C,\Delta)\models\SPalPos{i}{A,\laa}\varphi$.
+	Condition (7) follows from the axiom schema $\PalPos{i}{A,\laa}\varphi\iimplies\Bels{i}\SPalPos{i}{A,\laa}\varphi$. Assume an arbitrary world $(M^C,\Gamma)\models\PalPos{i}{A,\laa}\varphi$. By the axiom schema, it follows that $(M^C,\Gamma)\models\Bels{i}\SPalPos{i}{A,\laa}\varphi$. By the semantics of $\Bels{i}$, it follows that $\forall \Delta\in W^C$, if $\Gamma\Rel{b,i}^C\Delta$, then $(M^C,\Delta)\models\SPalPos{i}{A,\laa}\varphi$. We use the reduction law $SN$: $\Pal{i,(A,\laa),s}\tlnot\varphi \Leftrightarrow (pre_s(\laa) \iimplies \tlnot \Pal{i(A,\laa),S}\varphi)$ to deduce the equivalent if $\Gamma\Rel{b,i}^C\Delta$, then $(M^C,\Delta)\models pre_s(\laa)$ and $(M^C,\Delta)\models\Pal{i, (A,\laa),S}\varphi)$.
+	
+	
+	The semantics of $\Pal{i,(A,\laa),S}$ yield $update(M^C, A, \Delta,\laa, i)=(M'^C,\Delta')$. From the assumption that $(M^C,\Gamma)\models\PalPos{i}{A,\laa}\varphi$ and the semantics of $\PalPos{i}{A,\laa}$, it is true that $(M^C,\Gamma) \llbracket i,(A,\laa) \rrbracket (M'^C,\Gamma')$ and $(M'^C,\Gamma') \models \varphi$. 
 \end{proof}
 %With these lemmas, we assume $(M^C,\Gamma)\models\varphi$ and show that $\Gamma\vdash\varphi$. From Lemma~\ref{truth}, it follows from the assumption that $\varphi\in\Gamma$. 
 With these lemmas, we assume $\not\vdash\varphi$, and show that $\not\models\varphi$. Since $\not\vdash\varphi$, the set $\{\tlnot\varphi\}$ is consistent. From Lindenbaum, $\{\tlnot\varphi\}$ is part of a maximal consistent set, call it $\Gamma$. From the Truth Lemma, $(M^C,\Gamma)\models\tlnot\varphi$. Therefore, $\not\models\varphi$.$\Box$
