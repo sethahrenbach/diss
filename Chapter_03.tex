@@ -294,13 +294,24 @@ The canonical model satisfies the frame conditions of the $\mathcal{L}_{DASL}$ s
 	
 	Condition (3) follows from the axiom schema $\Kns{i}\varphi \iimplies \Bels{i}\varphi$.
 	
+Recall the defintion of two relations $S$ and $R$ \emph{composing}:
+	\begin{eqnarray*}
+	 S \circ R \equiv \{(x,z)\in X\times Z\ |\ \exists y \in Y \colon (x,y)\in R \tland (y,z) \in S\}
+	\end{eqnarray*}
+	
 	Condition (4) follows from the axiom schema $\Bels{i}\varphi\iimplies\Bels{i}\Kns{i}\varphi$.
 	
 	Condition (5) follows from the axiom schema $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$.
 	
 	Condition (6) follows from the axiom schema $\Pal{i, (A,\laa)}\varphi\iimplies\Pal{i,(A,\laa,S)}\varphi$.
 	
-	Condition (7) follows from the axiom schema $\PalPos{i}{A,\laa}\varphi\iimplies\Bels{i}\SPalPos{i}{A,\laa}\varphi$. Assume an arbitrary world $(M^C,\Gamma)\models\PalPos{i}{A,\laa}\varphi$. By the axiom schema, it follows that $(M^C,\Gamma)\models\Bels{i}\SPalPos{i}{A,\laa}\varphi$. By the semantics of $\Bels{i}$, it follows that $\forall \Delta\in W^C$, if $\Gamma\Rel{b,i}^C\Delta$, then $(M^C,\Delta)\models\SPalPos{i}{A,\laa}\varphi$. We use the reduction law $SN$: $\Pal{i,(A,\laa),s}\tlnot\varphi \Leftrightarrow (pre_s(\laa) \iimplies \tlnot \Pal{i(A,\laa),S}\varphi)$ to deduce the equivalent if $\Gamma\Rel{b,i}^C\Delta$, then $(M^C,\Delta)\models pre_s(\laa)$ and $(M^C,\Delta)\models\Pal{i, (A,\laa),S}\varphi)$.
+	Condition (7) follows from the axiom schema \\
+	$\llbracket i,(A,\laa),S \rrbracket \circ \Rel{b,i}^C \equiv \{(\Gamma,\Delta')\in W^C\times W^C\ |\ \exists \Delta \in W^C \colon (\Gamma,\Delta)\in \Rel{b,i}^C \tland (\Delta,\Delta') \in \llbracket i,(A,\laa),S \rrbracket\}$
+	
+	
+	Must show: $\{(\Gamma,\Delta')\}\subset \llbracket i,(A,\laa) \rrbracket$.
+	
+	$\PalPos{i}{A,\laa}\varphi\iimplies\Bels{i}\SPalPos{i}{A,\laa}\varphi$. Assume an arbitrary world $(M^C,\Gamma)\models\PalPos{i}{A,\laa}\varphi$. By the axiom schema, it follows that $(M^C,\Gamma)\models\Bels{i}\SPalPos{i}{A,\laa}\varphi$. By the semantics of $\Bels{i}$, it follows that $\forall \Delta\in W^C$, if $\Gamma\Rel{b,i}^C\Delta$, then $(M^C,\Delta)\models\SPalPos{i}{A,\laa}\varphi$. We use the reduction law $SN$: $\Pal{i,(A,\laa),s}\tlnot\varphi \Leftrightarrow (pre_s(\laa) \iimplies \tlnot \Pal{i(A,\laa),S}\varphi)$ to deduce the equivalent if $\Gamma\Rel{b,i}^C\Delta$, then $(M^C,\Delta)\models pre_s(\laa)$ and $(M^C,\Delta) \llbracket i,(A,\laa),S \rrbracket (M^C,\Delta')$ implies $(M^C,\Delta'\models\varphi)$, which implies $update(M^C,A,\Delta,a,i)=(M^C,\Delta')$.
 	
 	
 	The semantics of $\Pal{i,(A,\laa),S}$ yield $update(M^C, A, \Delta,\laa, i)=(M'^C,\Delta')$. From the assumption that $(M^C,\Gamma)\models\PalPos{i}{A,\laa}\varphi$ and the semantics of $\PalPos{i}{A,\laa}$, it is true that $(M^C,\Gamma) \llbracket i,(A,\laa) \rrbracket (M'^C,\Gamma')$ and $(M'^C,\Gamma') \models \varphi$. 
