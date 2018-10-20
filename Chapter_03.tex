@@ -119,6 +119,7 @@ DASL is axiomatized by the following Hilbert system.\\
 
 \begin{tcolorbox}All propositional tautologies are axioms.\\$\Kns{i}$ is T (knowledge relation is reflexive)\\
 	$\Bels{i}$ is KD45 (belief relation is serial, transitive, and Euclidean)\\
+	$\Pal{i,(A,\laa)}$
 	EP1: $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ \\
 	EP2: $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$\\
 	EP3: $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$\\
@@ -127,6 +128,32 @@ DASL is axiomatized by the following Hilbert system.\\
 	PR: $\PalPos{i}{(A,\laa)}\varphi \iimplies \Bels{i}\SPalPos{i}{(A,\laa)}\varphi$,\\
 \end{tcolorbox}
 \noindent plus the inference rules Modus Ponens and Necessitation for $\Kns{i}$ and $\Bels{i}$.
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{| l r |}
+	\hline
+    $\Kns{i}(\varphi \iimplies \psi) \iimplies (\Kns{i}\varphi \iimplies \Kns{i}\psi)$ & Distribution of $\Kns{i}$ \\
+    $\Kns{i}\varphi \iimplies \varphi$ & Truth Axiom \\
+    $\Bels{i}(\varphi \iimplies \psi) \iimplies (\Bels{i}\varphi \iimplies \Bels{i}\psi)$ & Distribution of $\Bels{i}$\\
+    $\Bels{i}\varphi \iimplies \BPoss{i}\varphi$ & Belief Consistency Axiom\\
+    $\Bels{i}\varphi \iimplies \Bels{i}\Bels{i}\varphi$ & Positive Belief Introspection \\
+    $\tlnot\Bels{i}\varphi \iimplies \Bels{i}\tlnot\Bels{i}\varphi$ & Negative Belief Introspection\\
+    $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ & Knowledge implies Belief \\
+    $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ & Confidence in Belief\\
+    $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$ & Beliefs are Known\\
+    $\Pal{i, (A,\laa)}p \iiff (post(\laa) \iimplies p)$ & Atomic Consequence\\
+    $\Pal{i, (A,\laa)}\tlnot \varphi \iiff (pre(\laa) \iimplies \tlnot \Pal{i, (A,\laa)}\varphi)$ & Action and Negation\\
+    $\Pal{i, (A,\laa)}(\varphi \tland \psi) \iiff (\Pal{i, (A,\laa)}\varphi \tland \Pal{i, (A,\laa)}\psi)$ & Action and Conjunction\\
+    $\Pal{i, (A,\laa)}\Kns{i}\varphi \iiff (pre(\laa)\iimplies \bigwedge_{\laa\chi_{k}^i\beta}\Kns{i}\Pal{i, (A,\beta)}\varphi)$ & Action and Knowledge\\
+    $\Pal{i, (A,\laa)}\Pal{i, (A',\laa')}\varphi \iiff [(i, (A,\laa));(i,(A',\laa'))]\varphi$ & Action Composition \\
+    $$ & \\  
+	c & d \\ 
+	\hline
+\end{tabular}
+\caption{Caption here}
+\end{center}
+\end{table}
 
 Above are the axioms characterizing the logic. Knowledge is weaker here than in most epistemic logics, and belief is standard~\cite{FHMV}. They are related logically by EP(1-3), which hold that knowledge entails belief, belief entails that one believes that one knows, and belief entails than one knows that one believes. Finally, actions and safe actions are logically related by SP and PR, which hold that necessary consequences of \emph{mere} action are also necessary consequences of \emph{safe} actions, and that a pilot can execute an action only if he believes that he is executing a safe action. 
 
