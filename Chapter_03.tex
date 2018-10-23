@@ -117,17 +117,17 @@ The definitions of the dynamic modalities make use of a relation between two mod
 \subsection{Hilbert System}
 DASL is axiomatized by the following Hilbert system.\\
 
-\begin{tcolorbox}All propositional tautologies are axioms.\\$\Kns{i}$ is T (knowledge relation is reflexive)\\
-	$\Bels{i}$ is KD45 (belief relation is serial, transitive, and Euclidean)\\
-	$\Pal{i,(A,\laa)}$
-	EP1: $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ \\
-	EP2: $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$\\
-	EP3: $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$\\
-	SP: $\Pal{i,(A,\laa)}\varphi \iimplies \Pal{i,(A,\laa),S}\varphi$\\
-	%\SPalPos{i}{\laa}\varphi \iimplies \PalPos{i}{\laa}\varphi$\\
-	PR: $\PalPos{i}{(A,\laa)}\varphi \iimplies \Bels{i}\SPalPos{i}{(A,\laa)}\varphi$,\\
-\end{tcolorbox}
-\noindent plus the inference rules Modus Ponens and Necessitation for $\Kns{i}$ and $\Bels{i}$.
+%\begin{tcolorbox}All propositional tautologies are axioms.\\$\Kns{i}$ is T (knowledge relation is reflexive)\\
+%	$\Bels{i}$ is KD45 (belief relation is serial, transitive, and Euclidean)\\
+%	$\Pal{i,(A,\laa)}$
+%	EP1: $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ \\
+%	EP2: $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$\\
+%	EP3: $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$\\
+%	SP: $\Pal{i,(A,\laa)}\varphi \iimplies \Pal{i,(A,\laa),S}\varphi$\\
+%	%\SPalPos{i}{\laa}\varphi \iimplies \PalPos{i}{\laa}\varphi$\\
+%	PR: $\PalPos{i}{(A,\laa)}\varphi \iimplies \Bels{i}\SPalPos{i}{(A,\laa)}\varphi$,\\
+%\end{tcolorbox}
+%\noindent plus the inference rules Modus Ponens and Necessitation for $\Kns{i}$ and $\Bels{i}$.
 
 \begin{table}[H]
 \begin{center}
@@ -143,12 +143,20 @@ DASL is axiomatized by the following Hilbert system.\\
     $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ & Confidence in Belief\\
     $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$ & Beliefs are Known\\
     $\Pal{i, (A,\laa)}p \iiff (post(\laa) \iimplies p)$ & Atomic Consequence\\
-    $\Pal{i, (A,\laa)}\tlnot \varphi \iiff (pre(\laa) \iimplies \tlnot \Pal{i, (A,\laa)}\varphi)$ & Action and Negation\\
-    $\Pal{i, (A,\laa)}(\varphi \tland \psi) \iiff (\Pal{i, (A,\laa)}\varphi \tland \Pal{i, (A,\laa)}\psi)$ & Action and Conjunction\\
+    $\Pal{i, (A,\laa)}\tlnot \varphi \iiff (pre(\laa) \iimplies \tlnot \Pal{i, (A,\laa)}\varphi)$ & Action Negation\\
+    $\Pal{i, (A,\laa)}(\varphi \tland \psi) \iiff (\Pal{i, (A,\laa)}\varphi \tland \Pal{i, (A,\laa)}\psi)$ & Action Conjunction\\
     $\Pal{i, (A,\laa)}\Kns{i}\varphi \iiff (pre(\laa)\iimplies \bigwedge_{\laa\chi_{k}^i\beta}\Kns{i}\Pal{i, (A,\beta)}\varphi)$ & Action and Knowledge\\
     $\Pal{i, (A,\laa)}\Pal{i, (A',\laa')}\varphi \iiff [(i, (A,\laa));(i,(A',\laa'))]\varphi$ & Action Composition \\
-    $$ & \\  
-	c & d \\ 
+    $\Pal{i, (A,\laa),S}p \iiff (post_s(\laa) \iimplies p)$ & Safe Atomic Consequence\\
+    $\Pal{i, (A,\laa),S}\tlnot \varphi \iiff (pre_s(\laa) \iimplies \tlnot \Pal{i, (A,\laa),S}\varphi)$ & Safe Action Negation\\
+    $\Pal{i, (A,\laa),S}(\varphi \tland \psi) \iiff (\Pal{i, (A,\laa),S}\varphi \tland \Pal{i, (A,\laa),S}\psi)$ & Safe Action Conjunction\\
+    $\Pal{i, (A,\laa),S}\Kns{i}\varphi \iiff (pre_s(\laa)\iimplies \bigwedge_{\laa\chi_{k}^i\beta}\Kns{i}\Pal{i, (A,\beta),S}\varphi)$ & Safe Action and Knowledge\\
+    $\Pal{i, (A,\laa),S}\Pal{i, (A',\laa'),S}\varphi \iiff [(i, (A,\laa),S);(i,(A',\laa'),S)]\varphi$ & Safe Action Composition \\
+    $\Pal{i, (A,\laa,S}\varphi \iimplies \Pal{i, (A,\laa)}\varphi$ & Inevitability\\
+    $\PalPos{i}{(A,\laa)}\varphi \iimplies \Bels{i}\SPalPos{i}{(A,\laa)}\varphi$ & Minimum Rationality\\
+    From $\vdash \varphi$ and $\vdash \varphi \iimplies \psi$, infer $\vdash\psi$ & Modus Ponens\\
+    From $\vdash \varphi$, infer $\vdash \Kns{i}\varphi$ & Necessitation of $\Kns{i}$\\
+    From $\vdash \varphi$, infer $\vdash \Pal{i, (A,\laa)}\varphi$ & Necessitation of $\Pal{i, (A,\laa)}$\\
 	\hline
 \end{tabular}
 \caption{Caption here}
@@ -178,7 +186,7 @@ Below are the axioms characterizing the reduction laws from the dynamic logic to
 \section{Soundness}
 \begin{tcolorbox}
 	\begin{theorem}[Soundness]
-		Dynamic Agent Safety Logic is sound for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, transitive, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, \\(4) $\llbracket i,(A,\laa),S\rrbracket \subseteq \llbracket i,(A,\laa)\rrbracket$%for all $\laa,\  V^s(\laa) \subseteq V^p(\laa),$ [Questionable]
+		Dynamic Agent Safety Logic is sound for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, transitive, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, \\(4) $\llbracket i,(A,\laa)\rrbracket \subseteq \llbracket i,(A,\laa),S\rrbracket$%for all $\laa,\  V^s(\laa) \subseteq V^p(\laa),$ [Questionable]
 		and\\ (5) $(\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i) \subseteq \llbracket i, (A,\laa)\rrbracket$.
 	\end{theorem}
 \end{tcolorbox}
@@ -214,7 +222,7 @@ Next we turn to completeness.
 
 Completeness proofs in contemporary modal logic research follow the following format. First, a \emph{canonical model} is defined such that it belongs to the Kripke frames for which the logic under investigation is sound. The model combines validity and deducibility so that the former entails the latter. The worlds of the canonical model are sets of formulas from the language. If a formula is a member of a such a set, then it is true at the world. We define this formally below. The objective is to show that all formulas valid for the relevant Kripke frames are likewise deducible in the logic. The key is to construct the sets in a particular way, to be discussed below.
 
-The previous section proved soundness of DASL with respect to frames with a reflexive $\Rel{k}^i$ relation, a serial, transitive, Euclidean $\Rel{b}^i$ relation, which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, and with action relations  $\llbracket i,(A,\laa),S\rrbracket \subseteq \llbracket i,(A,\laa)\rrbracket$, and $(\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i) \subseteq \llbracket i, (A,\laa)\rrbracket$. The canonical model we proceed to define will belong to this frame. Because it belongs to this frame, the logical closure of a set of formulas will consist of valid DASL deductions. This allows us to infer deducibility from validity. First we must define the notion of a maximal consistent set.
+The previous section proved soundness of DASL with respect to frames with a reflexive $\Rel{k}^i$ relation, a serial, transitive, Euclidean $\Rel{b}^i$ relation, which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, and with action relations  $\llbracket i,(A,\laa)\rrbracket \subseteq \llbracket i,(A,\laa),S\rrbracket$, and $(\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i) \subseteq \llbracket i, (A,\laa)\rrbracket$. The canonical model we proceed to define will belong to this frame. Because it belongs to this frame, the logical closure of a set of formulas will consist of valid DASL deductions. This allows us to infer deducibility from validity. First we must define the notion of a maximal consistent set.
  
 Informally, a maximal consistent set of formulas is one that is a subset of the well-formed formulas of the language $\mathcal{L}_{DASL}$ according to the syntax presented earlier, whose members are consistent with each other, such that the set has no consistent extension. \\
 $\mathbf{Definition}$. Maximal Consistent Set.\\
@@ -233,7 +241,7 @@ $\mathbf{Definition}$. Canonical Model. A canonical model $M^C = \langle W^C,\ \
 
 \begin{tcolorbox}
 	\begin{theorem}[Completeness]
-		The language of Dynamic Agent Safety Logic, $\mathcal{L}_{DASL}$, is complete for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, transitive, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, \\(4) $\llbracket i,(A,\laa),S\rrbracket \subseteq \llbracket i,(A,\laa)\rrbracket$%for all $\laa,\  V^s(\laa) \subseteq V^p(\laa),$ [Questionable]
+		The language of Dynamic Agent Safety Logic, $\mathcal{L}_{DASL}$, is complete for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, transitive, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, \\(4) $\llbracket i,(A,\laa)\rrbracket \subseteq \llbracket i,(A,\laa),S\rrbracket$%for all $\laa,\  V^s(\laa) \subseteq V^p(\laa),$ [Questionable]
 		and\\ (5) $(\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i) \subseteq \llbracket i, (A,\laa)\rrbracket$.
 	\end{theorem}
 \end{tcolorbox}
