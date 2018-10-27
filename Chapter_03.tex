@@ -31,22 +31,65 @@ We are concerned with an additional element: the \emph{safety} status of an acti
 The Dynamic Agent Safety Logic (DASL) used in this paper has the following syntax.
 %, combining elements of Dynamic Epistemic Logic (DEL) and Agent Safety Logic (ASL).
 \begin{tcolorbox}
-	$$ \varphi \ ::=\   \lpp  \bnf \tlnot \varphi \bnf \varphi \tland \varphi  \bnf \Kns{i} \varphi \bnf \Bels{i}\varphi \bnf \Pal{i, (A,\laa)}\varphi \bnf \Pal{i, (A,\laa),S}\varphi,$$
+	$$ \varphi \ ::=\   \lpp  \bnf \tlnot \varphi \bnf \varphi \tland \varphi  \bnf \Kns{i} \varphi \bnf \Bels{i}\varphi \bnf \Pal{A,\laa}\varphi \bnf\SPal{A,\laa}\varphi,$$
 \end{tcolorbox}
-where $\lpp \in AtProp$ is an atomic proposition, $\mathbf{i}$ refers to $i \in Agents$, $\mathbf{\laa}$ is the name of an action, called an action token, belong to a set of such tokens, $Actions$, and $\mathbf{A}$ refers to an action structure. The knowledge operator $\Kns{i}$ indicates that ``agent \emph{i} knows that ..." Similarly, the operator for belief, $\Bels{i}$ can be read, ``agent \emph{i} believes that..." The notion of action tokens and structures will be defined in the semantics. The operators $\Pal{i,(A,\laa)}$ and $\Pal{i,(A,\laa),S}$ are the dynamic operators for agent $i$ executing action token $\laa$ from action structure $A$ in the former case, and doing so safely in the latter case. Note that the $\mathbf{S}$ in $\Pal{i,(A,\laa),S}$ stands for `safety', and is not a variable, whereas the $\mathbf{i,(A,\laa)}$ are variables for agents, action structures, and action tokens, respectively. One can read the action operators as ``after $i$ executes $\laa$ from $A$, $\varphi$ holds.' We define the dual modal operators $\Poss{i}$, $\BPoss{i}$, $\PalPos{i}{(A,\laa)}$, and $\SPalPos{i}{(A,\laa)}$ in the usual way. 
-%The bold font of agents, action structures, and action tokens is used to distinguish labels in the object language for the entities versus referring to them in italic font directly in the metalanguage.
+where $\lpp \in AtProp$ is an atomic proposition, $\mathbf{i}$ refers to $i \in Agents$, $\mathbf{\laa}$ is the name of an action, called an action token, belong to a set of such tokens, $Actions$, and $\mathbf{A}$ refers to an action model. The knowledge operator $\Kns{i}$ indicates that ``agent \emph{i} knows that ..." Similarly, the operator for belief, $\Bels{i}$ can be read, ``agent \emph{i} believes that..." The notion of action tokens and structures will be defined in the semantics. The operators $\Pal{A,\laa}$ and $\SPal{A,\laa}$ are the dynamic operators for action $\laa$ from action structure $A$ occurring in the former case, and happening safely in the latter case. One can read the action operators as ``after $\laa$ from $A$ occurs (\emph{safely}), $\varphi$ holds in all resulting worlds.' We define the dual modal operators $\Poss{i}$, $\BPoss{i}$, $\PalPos{A,\laa}$, and $\SPalPos{A,\laa}$ in the usual way. 
 
 The semantics of DASL involve two structures that are defined simultaneously, one for epistemic models, and one for action structures capturing the transition relation among epistemic models. Additionally, we define numerous helper functions that straddle the division between metalanguage and object language. 
 
 \subsection{Metalanguage}
-\subsubsection{Kripke Model}%$\mathbf{Definition}$. Kripke Model.\\ 
-A Kripke model $M\in Model$ is a tuple $\langle W, \{\Rel{k}^i\}, \{\Rel{b}^i\}, w, V \rangle$. It is a set of worlds, sets of epistemic and doxastic relations on worlds for agents, a world denoting the actual world, and a valuation function \emph{V} mapping atomic propositions to the set of worlds satisfying them. Most readers will be somewhat familiar with epistemic logic, the logic for reasoning about knowledge. Doxastic logic is a similar logic for reasoning about belief\cite{Hintikka}.
 
-\subsubsection{Action Structure}
+The metalanguage defining DASL consists of traditional Kripke structures, called models, and action models, with functions for action pre- and post-conditions and the product update of Kripke and action models~\cite{DEL}.
+
+\subsubsection{Kripke Structure}%$\mathbf{Definition}$. Kripke Model.\\ 
+A Kripke structure, called model $M$, is a tuple $\langle W, \Rel{k}^i, \Rel{b}^i, w, V \rangle$. It is a set of worlds $W$, epistemic and doxastic relations on worlds for agents, a world denoting the actual world, and a valuation function \emph{V} mapping atomic propositions to the set of worlds satisfying them.
+
+\subsubsection{Action Model}
 %$\mathbf{Definition}$. Action Structure.\\ 
-An action structure $A\in ActionStruct$ is a tuple $\langle Actions,\\\{\chi_{k}^i\}, \{\chi_{b}^i\}, \laa \rangle$. It is a set of action tokens, sets of epistemic and doxastic relations on action tokens for agents, and an action token, $\laa$, denoting an actual action token executed. 
+An action structure $\mathbf{A}$ is a tuple $\langle Actions,\chi_{k}^i, \chi_{b}^i, pre, pre_s, post, post_s \rangle$. It is a set of action tokens, sets of epistemic and doxastic relations on action tokens for agents, action pre- and post-conditions, and safe action pre- and post-conditions. 
 
-An action structure captures the associated subjective events of an action occurring, including how it is observed by various agents, incorporating their uncertainty. The action tokens are the actual objective events that might occur. For example, if I am handed a piece of paper telling me who won the Oscar for Best Actress, and I read it, and you see me read it, then the action structure will include possible tokens in which I read that each nominee has won, and you will consider each of these tokens to be possible. When I read the paper, I consider only one action token to be the one executed. This action structure represents that transition from one epistemic model, in which both of us considers all nominees the potential winner, to an epistemic model in which I know the winner and you still do not know the winner. We can think of the action structure $A$ as the general action ``Agent 1 reads the piece of paper" and the tokens as the specific actions ``Agent 1 reads that nominee \emph{n} has won the award."
+An action model captures the agents' subjective perspectives of an event's occurrence. For example, consider a situation in which Alice flips a coin and Bob calls whether it is \emph{heads} or \emph{tails}. Before Alice peeks to see what it is, the Action Model $\mathbf{A}$ looks like:
+\begin{figure}[H]
+\begin{center}
+\begin {tikzpicture}[auto ,node distance =3 cm and 4cm ,on grid ,
+semithick ,
+state/.style ={ rectangle ,top color =white , bottom color = white ,
+	draw, text=black }]
+\node[state] (A) {\emph{heads}};
+\node[state] (B) [right =of A] {\emph{tails}};
+\path[]
+(A) edge [bend right] node {\emph{Alice, Bob}} (B)
+    edge [bend left, style=dashed] node {\emph{Alice, Bob}} (B)
+    edge [loop left, style=dashed] node {\emph{Alice, Bob}} (A)
+    (B) edge [loop right, style=dashed] node {\emph{Alice, Bob}} (B);
+\end{tikzpicture}
+\end{center}
+\caption{Action Model for ``Alice flips a coin"}
+\end{figure}
+We use rectangles for action tokens to distinguish them from possible worlds in Kripke Structures. The labels \emph{Alice, Bob} indicate the agents' epistemic (------) and doxastic ($---$) relations. When the relations lack direction, it indicates bi-directionality, and every action token has a looping epistemic relation to itself that we omit in order to keep the pictures simple. The action model for ``Alice peeks" is:
+
+\begin{figure}[H]
+\begin{center}
+\begin {tikzpicture}[auto ,node distance =3 cm and 4cm ,on grid ,
+	semithick ,
+	state/.style ={ rectangle ,top color =white , bottom color = white ,
+		draw, text=black }]
+	\node[state] (A) {\emph{heads}};
+	\node[state] (B) [right =of A] {\emph{tails}};
+	\path[]
+	(A) edge [bend right] node {\emph{Bob}} (B)
+	edge [bend left, style=dashed] node {\emph{Bob}} (B)
+	edge [loop left, style=dashed] node {\emph{Bob}} (A)
+	(B) edge [loop right, style=dashed] node {\emph{Bob}} (B);
+\end{tikzpicture}
+\end{center}
+\caption{Action Model for ``Alice peeks"}
+\label{fig: peek}
+\end{figure}
+
+In Figure~\ref{fig: peek}, the epistemic and doxastic relations for Alice have vanished. In the event that Alice peeks and sees \emph{heads}, she knows and believes that the coin landed \emph{heads}, and similarly for \emph{tails}. Bob, however, still considers it possible that the Alice peeked and saw \emph{heads} or that she peeked and saw \emph{tails}. However, Bob knows that Alice knows the coin's state.
+ 
+%include an action token for each possible scenario: in which Alice reads that each nominee has won, and u will consider each of these tokens to be possible. When I read the paper, I consider only one action token to be the one executed. This action structure represents that transition from one epistemic model, in which both of us considers all nominees the potential winner, to an epistemic model in which I know the winner and you still do not know the winner. We can think of the action structure $A$ as the general action ``Agent 1 reads the piece of paper" and the tokens as the specific actions ``Agent 1 reads that nominee \emph{n} has won the award."
 
 
 \subsubsection{Model Relation}
@@ -152,7 +195,7 @@ DASL is axiomatized by the following Hilbert system.\\
     $\Pal{i, (A,\laa),S}(\varphi \tland \psi) \iiff (\Pal{i, (A,\laa),S}\varphi \tland \Pal{i, (A,\laa),S}\psi)$ & Safe Action Conjunction\\
     $\Pal{i, (A,\laa),S}\Kns{i}\varphi \iiff (pre_s(\laa)\iimplies \bigwedge_{\laa\chi_{k}^i\beta}\Kns{i}\Pal{i, (A,\beta),S}\varphi)$ & Safe Action and Knowledge\\
     $\Pal{i, (A,\laa),S}\Pal{i, (A',\laa'),S}\varphi \iiff [(i, (A,\laa),S);(i,(A',\laa'),S)]\varphi$ & Safe Action Composition \\
-    $\Pal{i, (A,\laa,S}\varphi \iimplies \Pal{i, (A,\laa)}\varphi$ & Inevitability\\
+    $\Pal{i, (A,\laa)}\varphi \iimplies \Pal{i, (A,\laa), S}\varphi$ & Inevitability\\
     $\PalPos{i}{(A,\laa)}\varphi \iimplies \Bels{i}\SPalPos{i}{(A,\laa)}\varphi$ & Minimum Rationality\\
     From $\vdash \varphi$ and $\vdash \varphi \iimplies \psi$, infer $\vdash\psi$ & Modus Ponens\\
     From $\vdash \varphi$, infer $\vdash \Kns{i}\varphi$ & Necessitation of $\Kns{i}$\\
@@ -186,7 +229,7 @@ Below are the axioms characterizing the reduction laws from the dynamic logic to
 \section{Soundness}
 \begin{tcolorbox}
 	\begin{theorem}[Soundness]
-		Dynamic Agent Safety Logic is sound for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, transitive, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, \\(4) $\llbracket i,(A,\laa)\rrbracket \subseteq \llbracket i,(A,\laa),S\rrbracket$%for all $\laa,\  V^s(\laa) \subseteq V^p(\laa),$ [Questionable]
+		Dynamic Agent Safety Logic is sound for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, transitive, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, \\(4) $\llbracket i,(A,\laa),S\rrbracket \subseteq \llbracket i,(A,\laa)\rrbracket$%for all $\laa,\  V^s(\laa) \subseteq V^p(\laa),$ [Questionable]
 		and\\ (5) $(\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i) \subseteq \llbracket i, (A,\laa)\rrbracket$.
 	\end{theorem}
 \end{tcolorbox}
