@@ -48,10 +48,10 @@ A Kripke structure, called model $M$, is a tuple $\langle W, \Rel{k}^i, \Rel{b}^
 %$\mathbf{Definition}$. Action Structure.\\ 
 An action structure $\mathbf{A}$ is a tuple $\langle Actions,\chi_{k}^i, \chi_{b}^i, pre, pre_s, post, post_s \rangle$. It is a set of action tokens, sets of epistemic and doxastic relations on action tokens for agents, action pre- and post-conditions, and safe action pre- and post-conditions. 
 
-An action model captures the agents' subjective perspectives of an event's occurrence. For example, consider a situation in which Alice flips a coin and Bob calls whether it is \emph{heads} or \emph{tails}. The action model imposes no precondition for occurring, represented by the value $\top$, and each action token's post-condition maps $\top$ to \emph{heads} or \emph{tails} respectively. Before Alice peeks to see what it is, the Action Model $\mathbf{A}$ looks like (omitting the safety pre- and post-conditions for simplicity):
+An action model captures the agents' subjective perspectives of an event's occurrence. For example, consider a situation in which Alice flips a coin and Bob calls whether it is \emph{heads} or \emph{tails}. The action model imposes no precondition for occurring, represented by the value $\top$, and each action token's post-condition maps $\top$ to \emph{heads} or \emph{tails} respectively. Before Alice peeks to see what it is, the Action Model $\mathbf{A}$ looks like (omitting the safety pre- and post-conditions, and doxastic relations, for simplicity):
 \begin{figure}[H]
 \begin{center}
-\begin {tikzpicture}[auto ,node distance =5 cm and 5cm ,on grid ,
+\begin {tikzpicture}[auto ,node distance =7 cm and 7cm ,on grid ,
 semithick ,
 state/.style ={ rectangle ,top color =white , bottom color = white ,
 	draw, text=black }]
@@ -60,10 +60,7 @@ state/.style ={ rectangle ,top color =white , bottom color = white ,
 	\node[state] (B) [right =of A] {\begin{tabular}{l} $pre$: $\top$ \\ $post$: \{$\top \rightarrow$ \emph{tails}\}
 		\end{tabular}};
 \path[]
-(A) edge [bend right, below] node {\emph{Alice, Bob}} (B)
-    edge [bend left, style=dashed] node {\emph{Alice, Bob}} (B)
-    edge [loop left, style=dashed] node[right] {\emph{Alice, Bob}} (A)
-    (B) edge [loop right, style=dashed] node[left] {\emph{Alice, Bob}} (B);
+(A) edge node {\emph{Alice, Bob}} (B);
 \end{tikzpicture}
 \end{center}
 \caption{Action Model for ``Alice flips a coin"}
@@ -73,27 +70,57 @@ We use rectangles for action tokens to distinguish them from possible worlds in 
 
 \begin{figure}[H]
 \begin{center}
-\begin {tikzpicture}[auto ,node distance =5 cm and 5cm ,on grid ,
+\begin {tikzpicture}[auto ,node distance =7 cm and 7cm ,on grid ,
 	semithick , 
 	state/.style ={ rectangle ,top color =white , bottom color = white ,
 		draw, text=black}]
-	\node[state] (A) {\begin{tabular}{l} $pre$: $\top$ \\ $post$: \{$\top \rightarrow$ \emph{heads}\}
+	\node[state] (A) {\begin{tabular}{l} $pre$: \emph{heads} \\ $post$: $\emptyset$
 	\end{tabular}};
-	\node[state] (B) [right =of A] {\begin{tabular}{l} $pre$: $\top$ \\ $post$: \{$\top \rightarrow$ \emph{tails}\}
-		\end{tabular}};
+	\node[state] (B) [right =of A] {\begin{tabular}{l} $pre$: \emph{tails} \\ $post$: $\emptyset$
+	\end{tabular}};
 	\path[]
-	(A) edge [bend right, below] node {\emph{Bob}} (B)
-	edge [bend left, style=dashed] node {\emph{Bob}} (B)
-	edge [loop left, style=dashed] node {\emph{Bob}} (A)
-	(B) edge [loop right, style=dashed] node {\emph{Bob}} (B);
+	(A) edge node {\emph{Bob}} (B);
 \end{tikzpicture}
 \end{center}
 \caption{Action Model for ``Alice peeks"}
 \label{fig: peek}
 \end{figure}
 
-In Figure~\ref{fig: peek}, the epistemic and doxastic relations for Alice have vanished. In the event that Alice peeks and sees \emph{heads}, she knows and believes that the coin landed \emph{heads}, and similarly for \emph{tails}. Bob, however, still considers it possible that the Alice peeked and saw \emph{heads} or that she peeked and saw \emph{tails}. However, Bob knows that Alice knows the coin's state.
+In Figure~\ref{fig: peek}, the epistemic and doxastic relations for Alice have vanished. In the event that Alice peeks and sees \emph{heads}, she knows and believes that the coin landed \emph{heads}, and similarly for \emph{tails}. Bob, however, still considers it possible that Alice peeked and saw \emph{heads} or that she peeked and saw \emph{tails}. However, Bob knows that Alice knows the coin's state. To represent Alice surreptitiously peeking, we use the following action model:
  
+\begin{figure}[H]
+	\begin{center}
+		\begin {tikzpicture}[auto ,node distance =5 cm and 5cm ,on grid ,
+		semithick ,
+		state/.style ={ rectangle ,top color =white , bottom color = white ,
+			draw, text=black }]
+		\node[state] (A) 
+			{\begin{tabular}{l} 
+				$pre$: $\top$ \\ $post$: \{$\top \rightarrow$ \emph{heads}\}
+			\end{tabular}};
+		\node[state] (B) [right =of A] 
+			{\begin{tabular}{l} 
+				$pre$: $\top$ \\ $post$: \{$\top \rightarrow$ \emph{tails}\}
+			\end{tabular}};
+		\node[state] (C) [below right =of A]
+			{\begin{tabular}{l}
+				$pre$: \emph{tails} \\ $post$: $\emptyset$
+			\end{tabular}};
+		\node[state] (D) [below =of A]
+		{\begin{tabular}{l}
+				$pre$: \emph{heads} \\ $post$: $\emptyset$
+			\end{tabular}};
+		\path[]
+			(A) edge [bend left, above] node {\emph{Alice, Bob}} (B)
+			(C) edge [-latex] node {\emph{Bob}} (B)
+			(D) edge [-latex] node {\emph{Bob}} (A);
+		\end{tikzpicture}
+	\end{center}
+	\caption{Action Model for ``Alice secretly peeks"}
+	\label{fig: secret_peek}
+\end{figure} 
+
+In Figure~\ref{fig: secret_peek}, Alice knows the state of the coin, Bob has the false impression that Alice is, like him, totally ignorant about the coin's state, and Alice knows this about him.
 
 
 \subsubsection{Model Relation}
