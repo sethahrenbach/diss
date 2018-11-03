@@ -237,9 +237,25 @@ DASL is axiomatized by the following Hilbert system.\\
 \end{center}
 \end{table}
 
-Above are the axioms characterizing the logic. This system warrants defending, as John Rushby has recently challenged the decisions. We turn to that presently. 
+Above are the axioms characterizing the logic. This system warrants defending, as John Rushby has recently challenged the decisions. His concerns can be summarized as follows:
+\begin{enumerate}
+	\item Belief is sufficient for reasoning about pilots' actions
+	\item The axioms of Knowledge are nonstandard and seem contrived
+	\item The axioms relating Belief and Knowledge are nonstandard and the converse of Hintikka's axiom relating the two.
+\end{enumerate}
+We will now address each concern and defend the axioms presented above.
 
-\subsubsection*{Knowledge}
+\subsubsection*{Solely Belief?}
+Rushby makes the following argument against including operators for knowledge and belief in a multi-modal system for reasoning about pilot error, and relying instead solely on an operator for belief.
+\begin{enumerate}
+	\item A model treating a pilot's beliefs is simpler than a model treating a pilot's beliefs about her knowledge.
+	\item Models treating intelligence (both artificial and natural) show that beliefs alone, with knowledge, are sufficient.
+	\item Knowledge in the cockpit is so rare that its inclusion in the model is not necessary.
+	\item Implicitly, if model A is simpler than model B, and A is sufficient for the phenomenon under investigation, and B contains elements not necessary for modeling the phenomenon, then model A is superior to model B.
+	\item Therefore, the BDI model is superior to the DASL model.
+\end{enumerate}
+
+\subsubsection*{Knowledge Axioms}
 Knowledge is weaker here than in most epistemic logics~\cite{FHMV,DEL,Hintikka}. Knowledge is almost universally formalized as an S5 modal operator, including axiom schema for positive and negative introspection. Rushby suspects that because the analyses of aviation mishaps lays the blame on a failure of negative introspection in~\cite{AhrenbachGoodloe}, the decision to exclude the negative introspection axiom from the schema appears contrived. As Rushby proves and the authors already knew, to include the negative introspection axiom would cause a collapse of knowledge and belief into equivalence, due to the axiom \emph{Confidence in Belief}: $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$. \emph{Confidence in Belief}, additionally, is the converse of Hintikka's choice for relating the two: $\Bels{i}\Kns{i}\varphi \iimplies \Bels{i}\varphi$. Axiom \emph{Confidence in Belief} will be defended below. First, we defend the decision to exclude positive and negative introspection for knowledge. TODO
 
 
