@@ -41,7 +41,7 @@ The semantics of DASL involve two structures that are defined simultaneously, on
 
 The metalanguage defining DASL consists of traditional Kripke structures, called models, and action models, with functions for action pre- and post-conditions and the product update of Kripke and action models~\cite{DEL}.
 
-\subsubsection{Kripke Structure}%$\mathbf{Definition}$. Kripke Model.\\ 
+\subsubsection{Kripke (Relational) Structure}%$\mathbf{Definition}$. Kripke Model.\\ 
 A Kripke structure, called model $M$, is a tuple $\langle W, \Rel{k}^i, \Rel{b}^i, w, V \rangle$. It is a set of worlds $W$, epistemic and doxastic relations on worlds for agents, a world denoting the actual world, and a valuation function \emph{V} mapping atomic propositions to the set of worlds satisfying them.
 
 \subsubsection{Action Model}
@@ -55,9 +55,9 @@ An action model captures the agents' subjective perspectives of an event's occur
 semithick ,
 state/.style ={ rectangle ,top color =white , bottom color = white ,
 	draw, text=black }]
-\node[state] (A) {\begin{tabular}{l} $pre$: $\top$ \\ $post$: \{$\top \rightarrow$ \emph{heads}\}
+\node[state] (A) {\begin{tabular}{l} $\underline{\laa}$ \\ $pre$: $\top$ \\ $post$: \{$\tlnot \emph{heads} \mapsto$ \emph{heads}\}
 	\end{tabular}};
-	\node[state] (B) [right =of A] {\begin{tabular}{l} $pre$: $\top$ \\ $post$: \{$\top \rightarrow$ \emph{tails}\}
+	\node[state] (B) [right =of A] {\begin{tabular}{l} $\underline{\beta}$ \\ $pre$: $\top$ \\ $post$: \{$\tlnot \emph{tails} \mapsto$ \emph{tails}\}
 		\end{tabular}};
 \path[]
 (A) edge node {\emph{Alice, Bob}} (B);
@@ -66,7 +66,7 @@ state/.style ={ rectangle ,top color =white , bottom color = white ,
 \caption{Action Model for ``Alice flips a coin"}
 \label{fig: flip}
 \end{figure}
-We use rectangles for action tokens to distinguish them from possible worlds in Kripke Structures. The labels \emph{Alice, Bob} indicate the agents' epistemic (------) and doxastic ($---$) relations. When the relations lack direction, it indicates bi-directionality, and every action token has a looping epistemic relation to itself that we omit in order to keep the pictures simpler. In Figure~\ref{fig: flip}, neither Alice nor Bob knows whether the coin lands \emph{heads} or \emph{tails}, but the post-condition of the action is that the proposition expressing the state of the coin becomes \emph{heads} or \emph{tails}. The action model for ``Alice peeks" is:
+We use rectangles for action tokens to distinguish them from possible worlds in Kripke Structures. Each action token is marked by a token name, $\laa$, $\beta$, etc. The labels \emph{Alice, Bob} indicate the agents' epistemic (------) relations. When the relations lack direction, it indicates bi-directionality, and every action token has a looping epistemic relation to itself that we omit in order to keep the pictures simpler. In Figure~\ref{fig: flip}, neither Alice nor Bob sees whether the coin lands \emph{heads} or \emph{tails}, but the post-condition of the action is that the proposition expressing the state of the coin becomes \emph{heads} or \emph{tails}. Note that Action Models themselves do not have propositions true and false at them, but rather have pre-conditions and post-conditions for execution of their tokens, and modal relations over the token pairs. The action model for ``Alice peeks" is:
 
 \begin{figure}[H]
 \begin{center}
@@ -74,9 +74,9 @@ We use rectangles for action tokens to distinguish them from possible worlds in 
 	semithick , 
 	state/.style ={ rectangle ,top color =white , bottom color = white ,
 		draw, text=black}]
-	\node[state] (A) {\begin{tabular}{l} $pre$: \emph{heads} \\ $post$: $\emptyset$
+	\node[state] (A) {\begin{tabular}{l} $\underline{\laa}$ \\ $pre$: \emph{heads} \\ $post$: $\emptyset$
 	\end{tabular}};
-	\node[state] (B) [right =of A] {\begin{tabular}{l} $pre$: \emph{tails} \\ $post$: $\emptyset$
+	\node[state] (B) [right =of A] {\begin{tabular}{l} $\underline{\beta}$ \\ $pre$: \emph{tails} \\ $post$: $\emptyset$
 	\end{tabular}};
 	\path[]
 	(A) edge node {\emph{Bob}} (B);
@@ -86,7 +86,7 @@ We use rectangles for action tokens to distinguish them from possible worlds in 
 \label{fig: peek}
 \end{figure}
 
-In Figure~\ref{fig: peek}, the epistemic and doxastic relations for Alice have vanished. In the event that Alice peeks and sees \emph{heads}, she knows and believes that the coin landed \emph{heads}, and similarly for \emph{tails}. Bob, however, still considers it possible that Alice peeked and saw \emph{heads} or that she peeked and saw \emph{tails}. However, Bob knows that Alice knows the coin's state. To represent Alice surreptitiously peeking, we use the following action model:
+In Figure~\ref{fig: peek}, the epistemic and doxastic relations for Alice have vanished. In the event that Alice peeks and sees \emph{heads}, she sees that the coin landed \emph{heads}, and similarly for \emph{tails}. Bob, however, still considers it possible that Alice peeked and saw \emph{heads} or that she peeked and saw \emph{tails}. However, Bob knows that Alice knows the coin's state. To represent Alice surreptitiously peeking, we use the following action model:
  
 \begin{figure}[H]
 	\begin{center}
@@ -96,19 +96,19 @@ In Figure~\ref{fig: peek}, the epistemic and doxastic relations for Alice have v
 			draw, text=black }]
 		\node[state] (A) 
 			{\begin{tabular}{l} 
-				$pre$: $\top$ \\ $post$: \{$\top \rightarrow$ \emph{heads}\}
+				$\underline{\laa}$ \\ $pre$: \emph{heads} \\ $post$: $\emptyset$
 			\end{tabular}};
 		\node[state] (B) [right =of A] 
 			{\begin{tabular}{l} 
-				$pre$: $\top$ \\ $post$: \{$\top \rightarrow$ \emph{tails}\}
+				$\underline{\beta}$ \\ $pre$: \emph{tails} \\ $post$: $\emptyset$
 			\end{tabular}};
 		\node[state] (C) [below right =of A]
 			{\begin{tabular}{l}
-				$pre$: \emph{tails} \\ $post$: $\emptyset$
+				$\underline{\gamma}$ \\ $pre$: \emph{tails} \\ $post$: $\emptyset$
 			\end{tabular}};
 		\node[state] (D) [below =of A]
 		{\begin{tabular}{l}
-				$pre$: \emph{heads} \\ $post$: $\emptyset$
+				$\underline{\delta}$ \\ $pre$: \emph{heads} \\ $post$: $\emptyset$
 			\end{tabular}};
 		\path[]
 			(A) edge [bend left, above] node {\emph{Alice, Bob}} (B)
@@ -120,12 +120,12 @@ In Figure~\ref{fig: peek}, the epistemic and doxastic relations for Alice have v
 	\label{fig: secret_peek}
 \end{figure} 
 
-In Figure~\ref{fig: secret_peek}, Alice knows the state of the coin, Bob has the false impression that Alice is, like him, totally ignorant about the coin's state, and Alice knows this about him.
+In Figure~\ref{fig: secret_peek}, Alice knows the state of the coin, Bob has the false impression that Alice is, like him, totally ignorant about the coin's state, and Alice knows this about him. 
 
 
 \subsubsection{Model Relation}
 %$\mathbf{Definition}$. Model Relation.\\ 
-Just as $\Rel{k}^i$ denotes a relation on worlds, $\llbracket i,(A,\laa) \rrbracket$ denotes a relation on Kripke model-world pairs. It represents the relation that holds between $M,w$ and $M',w'$ when agent $i$ executes action $(A,\laa)$ at $M,w$ and causes the world to transition to $M',w'$.
+Just as $\Rel{k}^i$ denotes a relation on worlds, $\llbracket (A,\laa) \rrbracket$ denotes a relation on Kripke model-world pairs. It represents the relation that holds between $M,w$ and $M',w'$ when action $(A,\laa)$ at $M,w$ and causes the world to transition to $M',w'$.
 
 
 \subsubsection{Precondition Function}
