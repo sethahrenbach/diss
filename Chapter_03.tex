@@ -120,7 +120,7 @@ In Figure~\ref{fig: peek}, the epistemic and doxastic relations for Alice have v
 	\label{fig: secret_peek}
 \end{figure} 
 
-In Figure~\ref{fig: secret_peek}, Alice knows the state of the coin, Bob has the false impression that Alice is, like him, totally ignorant about the coin's state, and Alice knows this about him. 
+In Figure~\ref{fig: secret_peek}, Alice knows the state of the coin, Bob has the false impression that Alice is, like him, totally ignorant about the coin's state, and Alice knows this about him. But again, the propositions are not true or false in the Action Model itself; it just describes the pre- and post-conditions and the subjective perspectives of the action. Once the Action Model is used during the application of the \emph{Update Function} (described below), in conjunction with a Kripke Structure, it produces worlds with true and false propositions.
 
 
 \subsubsection{Model Relation}
@@ -175,15 +175,15 @@ The logic DASL has the following Kripke semantics.
 	M,w \models \varphi \tland \psi &\iiff M,w \models \varphi \aand M,w \models \psi \\
 	M,w \models \Kns{i}\varphi &\iiff \forall v,\ w\Rel{k}^i v\ \timplies\ M,v \models \varphi \\
 	M,w \models \Bels{i}\varphi &\iiff \forall v,\ w\Rel{b}^i v\ \timplies\ M,v \models \varphi \\
-	M,w \models \Pal{i,(A,\laa)}\varphi &\iiff \forall M',w',\  (M,w) \llbracket i,(A,\laa) \rrbracket (M',w')\ \\&\timplies\ M',w' \models \varphi \\
-	M,w \models \Pal{i,(A,\laa),S}\varphi &\iiff \forall M',w',\  (M,w) \llbracket i,(A,\laa),S \rrbracket (M',w')\ \\&\timplies\ M',w' \models \varphi 
+	M,w \models \Pal{A,\laa}\varphi &\iiff \forall M',w',\  (M,w) \llbracket (A,\laa) \rrbracket (M',w')\ \\&\timplies\ M',w' \models \varphi \\
+	M,w \models \SPal{A,\laa}\varphi &\iiff \forall M',w',\  (M,w) \llbracket (A,\laa) \rrbracket^S (M',w')\ \\&\timplies\ M',w' \models \varphi 
 	\end{align*}
 \end{tcolorbox}
 The definitions of the dynamic modalities make use of a relation between two model-world pairs, which we now define.
 \begin{tcolorbox}
 	\begin{align*}
-	(M,w)\llbracket i,(A,\laa)\rrbracket (M',w') &\iiff M,w \models \pre(\laa) \\&\aand update(M,A,w,\laa,i) = (M',w') \\
-	(M,w)\llbracket i, (A,\laa),S \rrbracket (M',w') &\iiff M,w \models pre_s(\laa) \\&\aand update(M,A,w,\laa, i) = (M',w') 
+	(M,w)\llbracket (A,\laa)\rrbracket (M',w') &\iiff M,w \models \pre(\laa) \\&\aand update(M,A,w,\laa,i) = (M',w') \\
+	(M,w)\llbracket (A,\laa) \rrbracket^S (M',w') &\iiff M,w \models pre_s(\laa) \\&\aand update(M,A,w,\laa, i) = (M',w') 
 	\end{align*}
 \end{tcolorbox}
 
@@ -216,28 +216,36 @@ DASL is axiomatized by the following Hilbert system.\\
     $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ & Knowledge implies Belief \\
     $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ & Confidence in Belief\\
     $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$ & Beliefs are Known\\
-    $\Pal{i, (A,\laa)}p \iiff (post(\laa) \iimplies p)$ & Atomic Consequence\\
-    $\Pal{i, (A,\laa)}\tlnot \varphi \iiff (pre(\laa) \iimplies \tlnot \Pal{i, (A,\laa)}\varphi)$ & Action Negation\\
-    $\Pal{i, (A,\laa)}(\varphi \tland \psi) \iiff (\Pal{i, (A,\laa)}\varphi \tland \Pal{i, (A,\laa)}\psi)$ & Action Conjunction\\
-    $\Pal{i, (A,\laa)}\Kns{i}\varphi \iiff (pre(\laa)\iimplies \bigwedge_{\laa\chi_{k}^i\beta}\Kns{i}\Pal{i, (A,\beta)}\varphi)$ & Action and Knowledge\\
-    $\Pal{i, (A,\laa)}\Pal{i, (A',\laa')}\varphi \iiff [(i, (A,\laa));(i,(A',\laa'))]\varphi$ & Action Composition \\
-    $\Pal{i, (A,\laa),S}p \iiff (post_s(\laa) \iimplies p)$ & Safe Atomic Consequence\\
-    $\Pal{i, (A,\laa),S}\tlnot \varphi \iiff (pre_s(\laa) \iimplies \tlnot \Pal{i, (A,\laa),S}\varphi)$ & Safe Action Negation\\
-    $\Pal{i, (A,\laa),S}(\varphi \tland \psi) \iiff (\Pal{i, (A,\laa),S}\varphi \tland \Pal{i, (A,\laa),S}\psi)$ & Safe Action Conjunction\\
-    $\Pal{i, (A,\laa),S}\Kns{i}\varphi \iiff (pre_s(\laa)\iimplies \bigwedge_{\laa\chi_{k}^i\beta}\Kns{i}\Pal{i, (A,\beta),S}\varphi)$ & Safe Action and Knowledge\\
-    $\Pal{i, (A,\laa),S}\Pal{i, (A',\laa'),S}\varphi \iiff [(i, (A,\laa),S);(i,(A',\laa'),S)]\varphi$ & Safe Action Composition \\
-    $\Pal{i, (A,\laa)}\varphi \iimplies \Pal{i, (A,\laa), S}\varphi$ & Inevitability\\
-    $\PalPos{i}{(A,\laa)}\varphi \iimplies \Bels{i}\SPalPos{i}{(A,\laa)}\varphi$ & Minimum Rationality\\
+    $\Pal{A,\laa}p \iiff (post(\laa) \iimplies p)$ & Atomic Consequence\\
+    $\Pal{A,\laa}\tlnot \varphi \iiff (pre(\laa) \iimplies \tlnot \Pal{A,\laa}\varphi)$ & Action Negation\\
+    $\Pal{A,\laa}(\varphi \tland \psi) \iiff (\Pal{A,\laa}\varphi \tland \Pal{A,\laa}\psi)$ & Action Conjunction\\
+    $\Pal{A,\laa}\Kns{i}\varphi \iiff (pre(\laa)\iimplies \bigwedge_{\laa\chi_{k}^i\beta}\Kns{i}\Pal{A,\beta}\varphi)$ & Action and Knowledge\\
+    $\Pal{A,\laa}\Pal{A',\laa'}\varphi \iiff [(A,\laa);(A',\laa')]\varphi$ & Action Composition \\
+    $\SPal{A,\laa}p \iiff (post_s(\laa) \iimplies p)$ & Safe Atomic Consequence\\
+    $\SPal{A,\laa}\tlnot \varphi \iiff (pre_s(\laa) \iimplies \tlnot \SPal{A,\laa}\varphi)$ & Safe Action Negation\\
+    $\SPal{A,\laa}(\varphi \tland \psi) \iiff (\SPal{A,\laa}\varphi \tland \SPal{A,\laa}\psi)$ & Safe Action Conjunction\\
+    $\SPal{A,\laa}\Kns{i}\varphi \iiff (pre_s(\laa)\iimplies \bigwedge_{\laa\chi_{k}^i\beta}\Kns{i}\SPal{A,\beta}\varphi)$ & Safe Action and Knowledge\\
+    $\SPal{A,\laa}\SPal{A',\laa'}\varphi \iiff [(A,\laa);(A',\laa')]\varphi$ & Safe Action Composition \\
+    $\Pal{A,\laa}\varphi \iimplies \SPal{A,\laa}\varphi$ & Inevitability\\
+    $\PalPos{A,\laa}\varphi \iimplies \Bels{i}\SPalPos{A,\laa}\varphi$ & Minimum Rationality\\
     From $\vdash \varphi$ and $\vdash \varphi \iimplies \psi$, infer $\vdash\psi$ & Modus Ponens\\
     From $\vdash \varphi$, infer $\vdash \Kns{i}\varphi$ & Necessitation of $\Kns{i}$\\
-    From $\vdash \varphi$, infer $\vdash \Pal{i, (A,\laa)}\varphi$ & Necessitation of $\Pal{i, (A,\laa)}$\\
+    From $\vdash \varphi$, infer $\vdash \Pal{A,\laa}\varphi$ & Necessitation of $\Pal{A,\laa}$\\
 	\hline
 \end{tabular}
-\caption{Caption here}
+\caption{Hilbert System of Dynamic Agent Safety Logic}
 \end{center}
 \end{table}
 
-Above are the axioms characterizing the logic. Knowledge is weaker here than in most epistemic logics, and belief is standard~\cite{FHMV}. They are related logically by EP(1-3), which hold that knowledge entails belief, belief entails that one believes that one knows, and belief entails than one knows that one believes. Finally, actions and safe actions are logically related by SP and PR, which hold that necessary consequences of \emph{mere} action are also necessary consequences of \emph{safe} actions, and that a pilot can execute an action only if he believes that he is executing a safe action. 
+Above are the axioms characterizing the logic. This system warrants defending, as John Rushby has recently challenged the decisions. We turn to that presently. 
+
+\subsubsection*{Knowledge}
+Knowledge is weaker here than in most epistemic logics~\cite{FHMV,DEL,Hintikka}. Knowledge is almost universally formalized as an S5 modal operator, including axiom schema for positive and negative introspection. Rushby suspects that because the analyses of aviation mishaps lays the blame on a failure of negative introspection in~\cite{AhrenbachGoodloe}, the decision to exclude the negative introspection axiom from the schema appears contrived. As Rushby proves and the authors already knew, to include the negative introspection axiom would cause a collapse of knowledge and belief into equivalence, due to the axiom \emph{Confidence in Belief}: $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$. \emph{Confidence in Belief}, additionally, is the converse of Hintikka's choice for relating the two: $\Bels{i}\Kns{i}\varphi \iimplies \Bels{i}\varphi$. Axiom \emph{Confidence in Belief} will be defended below. First, we defend the decision to exclude positive and negative introspection for knowledge. TODO
+
+
+
+\subsubsection*{Belief and Knowledge Related}
+TODO. Belief is standard~\cite{FHMV}. They are related logically by EP(1-3), which hold that knowledge entails belief, belief entails that one believes that one knows, and belief entails than one knows that one believes. Finally, actions and safe actions are logically related by SP and PR, which hold that necessary consequences of \emph{mere} action are also necessary consequences of \emph{safe} actions, and that a pilot can execute an action only if he believes that he is executing a safe action. 
 
 Below are the axioms characterizing the reduction laws from the dynamic logic to a purely static logic through recursive application.\\
 \begin{tcolorbox}
