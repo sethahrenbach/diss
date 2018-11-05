@@ -240,27 +240,41 @@ DASL is axiomatized by the following Hilbert system.\\
 Above are the axioms characterizing the logic. This system warrants defending, as John Rushby has recently challenged the decisions. His concerns can be summarized as follows:
 \begin{enumerate}
 	\item Belief is sufficient for reasoning about pilots' actions
-	\item The axioms of Knowledge are nonstandard and seem contrived
-	\item The axioms relating Belief and Knowledge are nonstandard and the converse of Hintikka's axiom relating the two.
+	\item The axioms of Knowledge and Belief are nonstandard and seem contrived
 \end{enumerate}
-We will now address each concern and defend the axioms presented above.
+We will now address each concern and defend the axioms presented above. We note that the arguments below are our best attempts at charitably representing Rushby's arguments.
 
 \subsubsection*{Solely Belief?}
 Rushby makes the following argument against including operators for knowledge and belief in a multi-modal system for reasoning about pilot error, and relying instead solely on an operator for belief.
 \begin{enumerate}
-	\item A model treating a pilot's beliefs is simpler than a model treating a pilot's beliefs about her knowledge.
-	\item Models treating intelligence (both artificial and natural) show that beliefs alone, with knowledge, are sufficient.
-	\item Knowledge in the cockpit is so rare that its inclusion in the model is not necessary.
-	\item Implicitly, if model A is simpler than model B, and A is sufficient for the phenomenon under investigation, and B contains elements not necessary for modeling the phenomenon, then model A is superior to model B.
-	\item Therefore, the BDI model is superior to the DASL model.
+	\item A model treating only a pilot's beliefs is simpler than a model treating a pilot's beliefs about her knowledge.
+	\item If model A is simpler than model B, and A accurately models the phenomenon under investigation, then model A is preferable to model B.
+	\item Rushby's model treats only pilot belief and accurately models the phenomenon under investigation.
+	\item Therefore, the Rushby's model is preferable to the DASL model.
 \end{enumerate}
 
-\subsubsection*{Knowledge Axioms}
-Knowledge is weaker here than in most epistemic logics~\cite{FHMV,DEL,Hintikka}. Knowledge is almost universally formalized as an S5 modal operator, including axiom schema for positive and negative introspection. Rushby suspects that because the analyses of aviation mishaps lays the blame on a failure of negative introspection in~\cite{AhrenbachGoodloe}, the decision to exclude the negative introspection axiom from the schema appears contrived. As Rushby proves and the authors already knew, to include the negative introspection axiom would cause a collapse of knowledge and belief into equivalence, due to the axiom \emph{Confidence in Belief}: $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$. \emph{Confidence in Belief}, additionally, is the converse of Hintikka's choice for relating the two: $\Bels{i}\Kns{i}\varphi \iimplies \Bels{i}\varphi$. Axiom \emph{Confidence in Belief} will be defended below. First, we defend the decision to exclude positive and negative introspection for knowledge. TODO
+We argue that premise 3 is false. Specifically, we argue that Rushby's model does not accurately capture the relationship between the pilot's beliefs and unsafe action.
+
+\subsubsection*{Knowledge and Belief Axioms}
+Knowledge is weaker here than in most epistemic logics~\cite{FHMV,DEL,Hintikka}. Knowledge is almost universally formalized as an S5 modal operator, including axiom schema for positive and negative introspection. Rushby suspects that because the analyses of aviation mishaps lays the blame on a failure of negative introspection in~\cite{AhrenbachGoodloe}, the decision to exclude the negative introspection axiom from the schema appears contrived. Rushby proves that to include the negative introspection axiom would cause a collapse of knowledge and belief into equivalence, due to the axiom \emph{Confidence in Belief}: $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$, which to our knowledge was first proved by Lenzen~\cite{Lenzen}. \emph{Confidence in Belief}, additionally, is the converse of Hintikka's choice for relating the two: $\Bels{i}\Kns{i}\varphi \iimplies \Bels{i}\varphi$. Axiom \emph{Confidence in Belief} will be defended below. Rushby's concern with the knowledge axioms, or lack thereof, can be summarized as follows.
+
+\begin{enumerate}
+	\item Negative introspection is a standard axiom for epistemic logic.
+	\item \emph{Confidence in Belief} is non-standard for multi-modal epistemic-doxastic logics.
+	\item Including negative introspection and excluding \emph{Confidence in Belief} preserves an analysis based on false beliefs that is analytically sufficient.
+	\item Standard axioms are preferable to non-standard axioms when standard axioms are analytically sufficient.
+	\item Therefore, including negative introspection and excluding \emph{Confidence in Belief} is preferable to excluding and including respectively.
+\end{enumerate}
+
+Our representation of the argument here is based directly on Rushby's claims in CITE for premises 1 through 3, but premise 4 is inferred from context and was not explicitly mentioned. However, in order for the argument to be deductively valid, the premise must be included. We take it to be an unstated assumption behind Rushby's reasoning.
+
+We shall argue that premise 4 is false. Rushby's preference for the standard axioms, based on their preservation of an analysis based on false beliefs, fails to account for a feature of the present axioms which we shall endeavor to establish, namely that they more accurately describe real human knowledge and belief relations, whereas the standard axioms do not. Thus, while it is true that the analytical strength of the standard axioms would be preserved based on a false belief analysis, it does not follow that these axioms are preferable, because they do not accurately model human agency.
+
+First, we defend the exclusion of negative introspection for the knowledge operator. Negative introspection, recall, holds that $\tlnot\Kns{i}\varphi\iimplies\Kns{i}\tlnot\Kns{i}\varphi$: If an agent, \emph{i} does not know $\varphi$, then \emph{i} knows that she does not know it. When it is phrased this way, it can seem at worst a bit confusing, but not obviously false. However, consider one's response when it is phrased the following equivalent way: An agent does not know $\varphi$ \emph{only if} she knows that she does not know $\varphi$. This deformalized version of the axiom makes it clear that knowledge of ignorance is being asserted as a \emph{necessary condition} for ignorance, or lack of knowledge. One would be hard pressed to find an epistemologist willing to defend this view, even if it would lead to fame and tenure. To further elaborate on the point, consider the contrapositive: $\tlnot\Kns{i}\tlnot\Kns{i}\varphi \iimplies \Kns{i}\varphi$: If \emph{i} does not know that she does not know $\varphi$, then she knows $\varphi$. The Pyrrhonian skeptics, famous for rejecting knowledge even of the claim ``I don't know anything", thereby know everything. Take that skeptics!
+
+In Rushby's alternative model, he discusses a pilot's discernment of the presence of instrument conflict, which he assumes for simplicity to be always accurate. Is this not an assumption of knowledge for simplicity? Similarly, when the pilot is aware of the autopilot status through observing an indicator on a display or through inference from the aircraft's behavior, it is not clear that this is not a case of knowing the autopilot's status. Rushby's description of the true belief seems to make it fit with any epistemologist's theory of knowledge.  
 
 
-
-\subsubsection*{Belief and Knowledge Related}
 TODO. Belief is standard~\cite{FHMV}. They are related logically by EP(1-3), which hold that knowledge entails belief, belief entails that one believes that one knows, and belief entails than one knows that one believes. Finally, actions and safe actions are logically related by SP and PR, which hold that necessary consequences of \emph{mere} action are also necessary consequences of \emph{safe} actions, and that a pilot can execute an action only if he believes that he is executing a safe action. 
 
 Below are the axioms characterizing the reduction laws from the dynamic logic to a purely static logic through recursive application.\\
