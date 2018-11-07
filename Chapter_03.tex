@@ -276,18 +276,62 @@ First, we defend the exclusion of negative introspection for the knowledge opera
 
 Many find it intuitive to speak of the epistemic relation as an equivalence or indistinguishability relation, which requires it be symmetric. Symmetry, combined with the reflexivity underlying the Truth Axiom and transitivity of positive introspection, yields such an equivalence relation. It makes sense to say that world $v$ is epistemically possible from world $w$ for agent $i$ if $i$ cannot tell the two worlds apart, \emph{i.e.} they are indistinguishable. The power of this intuitive appeal presents a challenge for us. We must show that our axiom schema can satisfy the intuition behind epistemic indistinguishability without imposing symmetry on the epistemic relation.
 
-The key to achieving this is through the composition of the doxastic relation with the epistemic relation. From a first person perspective, our model does collapse belief and knowledge together. That means that an agent cannot distinguish her mere beliefs from her genuine knowledge. 
+The key to achieving this is through the composition of the doxastic relation with the epistemic relation. From a first person perspective, our model does collapse belief and knowledge together. That means that an agent cannot distinguish her mere beliefs from her genuine knowledge. Let $\Rel{k/b}^i(w)$ denote the extension of the epistemic/doxastic relation of $w$. We also define the following mathematical notion on the relations.
 
-\begin{theorem}[Weak Knowledge-Belief Indistinguishability]
-	For all $w,v \in W$, if $w(\Rel{k}^i \circ \Rel{b}^i)v$ then for all $w' \in W$, $w\Rel{b}^iw'$ implies $\Rel{b}^i(w') = \Rel{k}^i(w') = \Rel{k}^i(v) = \Rel{b}^i(v)$.
+\begin{definition}[Doxastic Capture]
+	For all $w,v,u\in W$, the doxastic capture of $w$, $dc(w)$ is defined recursively as follows:
+	\begin{enumerate}
+		\item $v\in dc(w)$ iff $w\Rel{b}^iv$
+	\end{enumerate}
+\end{definition}
+
+We say world $w$ is \emph{path connected} to $v$ if there is some number of relational steps, $\Rel{b}^i$ and $\Rel{k}^i$ interchangeably, from $w$ to $v$. This yields the following theorem.
+
+\begin{theorem}[Doxastic Path Capture]~\label{dpc_theorem}
+For all $w,v,u\in W$, if $w\Rel{b}^iv$ and $v$ is path connected to $u$, then $v,u\in dc(w)$.
 \end{theorem}
+\begin{proof}
+	$v\in dc(w)$ trivially from the base case of the definition of $dc(w)$. For $u$, we iteratively simplify the path between $v$ and $u$ in the following way. Since $u$ is path connected to $v$, there is some number $n$ of relational steps from $v$ to $u$. If it is by $n$ $\Rel{b}^i$ steps, then immediately $v\Rel{b}^iu$, since $\Rel{b}^i$ is transitive. Then $w\Rel{b}^iu$ as well, by transitivity through $v$.
+	
+	If there are $n$ steps from $v$ to $u$ interchanging $\Rel{b}^i$ and $\Rel{k}^i$, then let $x\in W$ be the first world path connected to $v$ by a $\Rel{k}^i$ step, with $m<n$ $\Rel{b}^i$ steps between $v$ and $x$. If $m=1$, then $w(\Rel{k}^i \circ \Rel{b}^i)x$, and therefore $w\Rel{b}^ix$, yielding $x\in dc(w)$. Otherwise, there are $m-1$ $\Rel{b}^i$ steps between $v$ and $x$. Examine the world at step $m-1$, call it $v'$. We have that $v\Rel{b}^iv'$ by transitivity, and therefore $w\Rel{b}^iv'$. So $v'\in dc(w)$. Since $v'\Rel{k}^ix$, $w(\Rel{k}^i \circ \Rel{b}^i)x$, and so $w\Rel{b}^ix$ and $x \in dc(w)$. This process repeats, simplifying $\Rel{b}^i$ steps by transitivity, and simplifying $(\Rel{k}^i \circ \Rel{b}^i)$ steps by the subset relation to $\Rel{b}^i$, until reaching $u$. 
+\end{proof}
+
+We also have the following.
+
+\begin{theorem}[Doxastic Capture is Equivalence Relation]~\label{dc_equiv}
+	An equivalence relation is reflexive, transitive, and Euclidean. The doxastic capture of $w$ is such a relation for both $\Rel{b}^i$ and $\Rel{k}^i$.
+\end{theorem}
+\begin{proof}
+	It suffices to show that $\Rel{b}^i$ is reflexive and $\Rel{k}^i$ is transitive and Euclidean under $dc(w)$. Suppose $v\in dc(w)$.\\ 
+	$\Rel{b}^i$-\emph{Reflexivity}. From the supposition, $w\Rel{b}^iv$. Since $\Rel{b}^i$ is serial, there is some $u$ such that $v\Rel{b}^iu$. By transitivity, $w\Rel{b}^iu$. By Euclidean, $u\Rel{b}^iv$. Since $\Rel{k}^i$ is reflexive, $v\Rel{k}^iv$. So, through $u$, $v(\Rel{k}^i \circ \Rel{b}^i)v$, and therefore $v\Rel{b}^iv$.\\
+	$\Rel{k}^i$-\emph{Transitivity}. With $w\Rel{b}^iv$, let $x,y \in dc(w)$ be such that $v\Rel{k}^ix$ and $x\Rel{k}^iy$. From the definition of $dc(w)$, $w\Rel{b}^iy$. The Euclidean property yields $v\Rel{b}^iy$, and since $\Rel{b}^i\subseteq \Rel{k}^i$, it follows that $v\Rel{k}^iy$.\\
+	$\Rel{k}^i$-\emph{Euclidean}. We must show $v\Rel{k}^ix$ and $v\Rel{k}^iy$ implies $x\Rel{k}^iy$. Assume $v,x,y \in dc(w)$, $v\Rel{k}^ix$, and $v\Rel{k}^iy$. By the definition of $dc(w)$, $w\Rel{b}^iv$ and $w\Rel{b}^iy$, so $v\Rel{b}^iy$ by the Euclidean property of $\Rel{b}^i$, and by $\Rel{b}^i \subseteq \Rel{k}^i$, it follows that $v\Rel{k}^iy$.
+\end{proof}
+
+Since $\Rel{k}^i$ and $\Rel{b}^i$ are part of the same bimodal equivalence relation under $dc(w)$, for all $w\in W$, the following theorems follow in a straightforward manner, establishing notions of weak and strong indistinguishability.
+
+\begin{theorem}[Weak Knowledge-Belief Indistinguishability]~\label{weak_equiv}
+	For all $w,v,w' \in W$, $w(\Rel{k}^i \circ \Rel{b}^i)v$ and $w\Rel{b}^iw'$ implies $\Rel{b}^i(w') = \Rel{k}^i(w') = \Rel{k}^i(v) = \Rel{b}^i(v)$.
+\end{theorem}
+\begin{proof}
+	Suppose $w(\Rel{k}^i \circ \Rel{b}^i)v$ and $w\Rel{b}^iw'$ for some arbitrary $w,w',v\in W$. It suffices to show that $w',v \in dc(w)$. Since $w\Rel{b}^iw'$, $w'\in dc(w)$. Since $w(\Rel{k}^i \circ \Rel{b}^i)v$, the composed relation being a subset of $\Rel{b}^i$, it follows that $w\Rel{b}^iv$ and therefore $v \in dc(w)$.
+\end{proof}
+
+Theorem~\ref{weak_equiv} does not guarantee that the actual world $w$ is in this bimodal composed equivalence relation, because it may not be the case that $w\Rel{b}^iw$. This fails when $i$ has false beliefs, which is frequently the case with humans. However, the following is still the case: any branch departing $w$ via the $\Rel{b}^i$ relation will be a bimodal composed equivalence class of epistemic and doxastic possibility, and thus indistinguishable from each other. Any path that departs from $w$ solely by the $\Rel{k}^i$ relation will not partake in the equivalence class. The way to interpret this is as follows. For some reason, the epistemically possible worlds outside the bimodal composed equivalence class are not registering with her cognizance. It could be that she is overlooking some information. It could be that she is motivated in her skepticism for some psychological reason. It could be that she is under the cloud of some cognitive bias. Regardless, when $\varphi$ is true in the bimodal composed equivalence class but false in some epistemically possible world (\emph{e.g.} the actual world), her belief that $\varphi$ overpowers the lone epistemic relation, and she instead believes that she knows $\varphi$.
+
+If the actual world is in its own doxastic relation, we have the following. 
 
 \begin{theorem}[Strong Knowledge-Belief Indistinguishability]
-	For all $w,v \in W$, if $w\Rel{b}^i)w$ then for all $v \in W$, $w\Rel{b}^iv$ implies $\Rel{b}^i(w) = \Rel{k}^i(w) = \Rel{k}^i(v) = \Rel{b}^i(v)$.
+	For all $w,v \in W$, if $w\Rel{b}^i w$ then for all $v \in W$, $w\Rel{b}^iv$ implies $\Rel{b}^i(w) = \Rel{k}^i(w) = \Rel{k}^i(v) = \Rel{b}^i(v)$.
 \end{theorem}
-TODO. Proof.
+\begin{proof}
+	Suppose for an arbitrary $w,v\in W$ that $w\Rel{b}^iw$ and $w\Rel{b}^iv$. By definition, both are in $dc(w)$, which establishes the bimodal equivalence relation.
+\end{proof}
+
+So, when $i$ has no false beliefs, her belief and knowledge collapse into an S5 modal operator. This makes sense, because in this case she is an ideally rational agent who does not make mistakes. 
 
 
+BELOW NEEDS WORK.
 TODO. Belief is standard~\cite{FHMV}. They are related logically by EP(1-3), which hold that knowledge entails belief, belief entails that one believes that one knows, and belief entails than one knows that one believes. Finally, actions and safe actions are logically related by SP and PR, which hold that necessary consequences of \emph{mere} action are also necessary consequences of \emph{safe} actions, and that a pilot can execute an action only if he believes that he is executing a safe action. 
 
 Below are the axioms characterizing the reduction laws from the dynamic logic to a purely static logic through recursive application.\\
