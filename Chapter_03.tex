@@ -215,7 +215,7 @@ DASL is axiomatized by the following Hilbert system.\\
     $\tlnot\Bels{i}\varphi \iimplies \Bels{i}\tlnot\Bels{i}\varphi$ & Negative Belief Introspection\\
     $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ & Knowledge implies Belief \\
     $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ & Confidence in Belief\\
-    $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$ & Beliefs are Known\\
+%    $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$ & Beliefs are Known\\
     $\Pal{A,\laa}p \iiff (post(\laa) \iimplies p)$ & Atomic Consequence\\
     $\Pal{A,\laa}\tlnot \varphi \iiff (pre(\laa) \iimplies \tlnot \Pal{A,\laa}\varphi)$ & Action Negation\\
     $\Pal{A,\laa}(\varphi \tland \psi) \iiff (\Pal{A,\laa}\varphi \tland \Pal{A,\laa}\psi)$ & Action Conjunction\\
@@ -237,7 +237,71 @@ DASL is axiomatized by the following Hilbert system.\\
 \end{center}
 \end{table}
 
-Above are the axioms characterizing the logic. This system warrants defending, as John Rushby has recently challenged the decisions. His concerns can be summarized as follows:
+Above are the axioms characterizing the logic. We proceed by defending the axiom schema for the static foundation, then continue with the dynamic extensions.
+
+\subsection{Static Base}~\label{static}
+Like other dynamic logics for knowledge and belief, DASL consists of a static base of axiom schemas for the knowledge and belief operators. This section explains and defends DASL's static base, as they represent a novel axiomatization of formal epistemology and a contribution to the literature by this thesis. 
+
+The standard axiom schema for the knowledge operator, whether for a wholly static logic or for the static base of a dynamic system, is that of the S5 operator, described earlier in section~\ref{epistemic_logic}. This axiom schema for the knowledge operator was first formalized by Aumann in ~\cite{Aumann} as a logical foundation for the ideally rational agents of game theory and decision theory. Thus, we can consider that axiom schema to be the top tier of agent rationality axioms, where the belief operator is not even necessary.
+
+Lower tiers attempt to formalize axioms for \emph{boundedly rational} agents. An ideally rational agent has no limit to her ability to reason about higher order iterations of interactive epistemology. For example, common knowledge is formalized among agents $i$ and $j$ in the following way, where $i,j\in G$, the group:
+
+\begin{eqnarray}~\label{common_knowledge}
+	\mathbb{C}_{G}\varphi \equiv (\varphi \iimplies (\Kns{i}\varphi \tland \Kns{j}\varphi \tland \mathbb{C}_{G}(\Kns{i}\varphi \tland \Kns{j}\varphi))).
+\end{eqnarray}
+
+Thus, an ideally rational agent can carry this to any arbitrary $\mathit{n^{th}}$ order of $i$ knows that $j$ knows that $i$ knows \dots Herein, I refer to the $n$ levels of interactive epistemic knowledge as epistemic depth. Clearly, humans cannot actively carry out this depth of interactive reasoning, and this shows experimentally in games whose solutions require more than two or three levels of depth, \emph{e.g.,} the centipede game. Agents with bounded rationality have their epistemic depths formally bounded, to better reflect the limitations of human reasoning.
+
+Bounding agents in this way allows for formal models that capture how a human agent might realistically deviate from optimal Nash equilibria of games. However, bounding rationality in this way does not allow for agents who act based on false beliefs. A lower tier rationality model might impose bounds on the epistemic depth of its agents and also allow for the agents to make decisions based on false beliefs.
+
+The static base of DASL logic does not cover epistemic depth at all, and instead attends to the formalization of agents who can make decisions based on false beliefs, but whose beliefs are all justified. It is a very low tier of rationality.
+
+Recall the static base of DASL.
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{| l r |}
+			\hline
+			$\Kns{i}(\varphi \iimplies \psi) \iimplies (\Kns{i}\varphi \iimplies \Kns{i}\psi)$ & Distribution of $\Kns{i}$ \\
+			$\Kns{i}\varphi \iimplies \varphi$ & Truth Axiom \\
+			$\Bels{i}(\varphi \iimplies \psi) \iimplies (\Bels{i}\varphi \iimplies \Bels{i}\psi)$ & Distribution of $\Bels{i}$\\
+			$\Bels{i}\varphi \iimplies \BPoss{i}\varphi$ & Belief Consistency Axiom\\
+			$\Bels{i}\varphi \iimplies \Bels{i}\Bels{i}\varphi$ & Positive Belief Introspection \\
+			$\tlnot\Bels{i}\varphi \iimplies \Bels{i}\tlnot\Bels{i}\varphi$ & Negative Belief Introspection\\
+			$\Kns{i}\varphi \iimplies \Bels{i}\varphi$ & Knowledge implies Belief \\
+			$\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ & Confidence in Belief\\
+%			$\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$ & Beliefs are Known\\
+			From $\vdash \varphi$ and $\vdash \varphi \iimplies \psi$, infer $\vdash\psi$ & Modus Ponens\\
+			From $\vdash \varphi$, infer $\vdash \Kns{i}\varphi$ & Necessitation of $\Kns{i}$\\
+			\hline
+		\end{tabular}
+		\caption{Static Base of Dynamic Agent Safety Logic}
+	\end{center}
+\end{table}
+
+As far as we can tell, this axiom scheme is novel, and disagrees with other attempts to model the interaction of knowledge and belief. The primary point of departure is that the knowledge operator is no longer and S5 operator, but merely a T operator. Thus, it is severely weakened as a modal operator, but the corollary to this fact is that knowledge no longer has the imposing necessary conditions of positive and negative introspection. 
+
+Defense of S5 for knowledge rests on an interpretation of the knowledge operators not as capturing what agents \emph{actively} know at a moment, but rather what their knowledge allows them to potentially infer. Thus, the Distribution axiom is not a license for logical omniscience at a moment, but rather describes what is logically inferrable from what is known by an agent. Similarly for positive and negative introspection. We do not take this path in interpreting the knowledge operator. Instead, depart from the majority of formal epistemologists and interpret the knowledge operator as what is actively known by an agent at a moment.
+
+We must justify this interpretation. While ours is a model that departs from those that appear in formal epistemology, we shall argue that it does a good job of capturing the prominent theories of knowledge espoused by non-formal epistemologists. Our model is also situated well on the rationality tier for modeling realistic human agents whose beliefs are justified, which is a dramatic improvement, from the perspective of realism, over the higher tiers with S5 common knowledge or S5 bounded rationality.
+
+\subsubsection{Desiderata of a Static Base}
+In constructing our static base, we must identify the desirable features to be achieved. In laying out these desirable features, we motivate our model combining knowledge and belief. 
+
+First, we seek a model that is low on the tiers of rationality, so that it achieves a level of realism suitable for human agents but also maintains some normative prescriptions as a theory of rationality. The S5 common knowledge tier describes the behavior of ideally rational agents, and in this sense is wholly normative. However, this level of rationality is not achievable by human reasoners, due to their limited cognitive capacity. Thus, the theory of S5 common knowledge can serve to evaluate decisions made by human agents, and can realistically model only a very limited space of human behaviors. One would expect, however, that this theory of rationality would be an appropriate balance of realism and normativity for future systems of artificial intelligence. 
+
+Theories of bounded rationality achieve more realism, but the trade off of realism and normativity is not clearly in their favor. By keeping the S5 knowledge operator and limiting the agents' epistemic depth, theories of bounded rationality seek to model actual human behavior in the rarefied world of games of perfect information, where the agents know the payoff structure and the game tree or game matrix. The realism of this latter assumption is dubious, and therefore the theory's applicability is limited. Likewise, theories of bounded rationality with S5 knowledge do not offer clear normative prescriptions or evaluative guidelines. Rather, it appears to be an attempt to makes sense of the following finding of behavioral economics: In some situations, human agents depart from the Nash equilibrium, and they both end up with higher payoffs. The centipede game is a good example. The Nash equilibrium states that player $A$ should immediately take the money on the table, whereas experiments show that humans regularly let the pot build up until a few steps before the end, one of the players realizes what will happen, and takes the majority of the pot. From the perspective of maximizing expected payoffs, it is hard to criticize either player, as each achieved higher payoff from this outcome than they would have in the Nash equilibrium. A theory of bounded rationality takes this at face value, and seeks to build a model for it. With such a model, the hope is to offer general normative guidance for agents with bounded rationality. However, to examine the particular outcome of a centipede game, supposing player $B$ is the one with the minority payoff, we can truly say that $B$ will regret not having taken the majority pot one step earlier, and properly that he \emph{should} have, because then he would have had a higher payoff, and so this outcome is not in subgame perfect equilibrium. If the game is analyzed as a sequence of decisions, the final decision the minority-payoff-receiving player makes is the wrong one, normatively. Bounded rationality with S5 knowledge explains this as bad luck determined by the structure of the game and the first (or second) mover advantage, depending on the players' bounds on epistemic depth. But it is nonetheless true that $B$ could have and should have taken the majority pot one step earlier, and this is not a feature of games with outcomes determined by first (or second) mover advantage, like the game of nim with a 3-4-5 setup (or nim with a 1-3-5-7 setup). 
+
+
+
+With repeat iterations of the centipede game, each player becomes wise to what is happening, and after a couple iterations the Nash equilibrium is reached. So if you are playing the centipede game against someone unfamiliar with the game, and you plan on playing multiple rounds, you will do better overall to let the pot build for a bit, and then play the Nash equilibrium once the other player figures out the game. Thus, the task of the experienced player is not to reason through the game tree and use backward induction as soon as her bounded rationality allows her to, but rather to determine the opposing player's rationality bound and make her play accordingly. It is a different sort of game. Essentially, the experience player must determine whether the new player is a 2-depth type or a 3-depth type, and how quickly he can learn the trick of the game. 
+
+However, what guidance does the theory offer to a human agent playing centipede for the first time? The agent is bounded in how deep she can reason in the game tree, and the opposing player knows the game and so need not reason through it. The game becomes one of 
+
+For lower tier theories of bounded rationality with imperfect information, we find agents... 
+
+OLD BELOW\\
+This system warrants defending, as John Rushby has recently challenged the decisions. His concerns can be summarized as follows:
 \begin{enumerate}
 	\item Belief is sufficient for reasoning about pilots' actions
 	\item The axioms of Knowledge and Belief are nonstandard and seem contrived
@@ -308,9 +372,9 @@ We also have the following.
 	$\Rel{k}^i$-\emph{Euclidean}. We must show $v\Rel{k}^ix$ and $v\Rel{k}^iy$ implies $x\Rel{k}^iy$. Assume $v,x,y \in dc(w)$, $v\Rel{k}^ix$, and $v\Rel{k}^iy$. By the definition of $dc(w)$, $w\Rel{b}^iv$ and $w\Rel{b}^iy$, so $v\Rel{b}^iy$ by the Euclidean property of $\Rel{b}^i$, and by $\Rel{b}^i \subseteq \Rel{k}^i$, it follows that $v\Rel{k}^iy$.
 \end{proof}
 
-Since $\Rel{k}^i$ and $\Rel{b}^i$ are part of the same bimodal equivalence relation under $dc(w)$, for all $w\in W$, the following theorems follow in a straightforward manner, establishing notions of weak and strong indistinguishability.
+Since $\Rel{k}^i$ and $\Rel{b}^i$ are part of the same bimodal equivalence relation under $dc(w)$, for all $w\in W$, the following theorems follow in a straightforward manner, establishing notions of weak and strong indistinguishability, which we call \emph{BK Indistinguishability}, highlighting the fact that behind the belief operator's doxastic relation, belief and knowledge are indistinguishable from each other, and in a mutual equivalence relation with each other.
 
-\begin{theorem}[Weak Knowledge-Belief Indistinguishability]~\label{weak_equiv}
+\begin{theorem}[Weak BK Indistinguishability]~\label{weak_equiv}
 	For all $w,v,w' \in W$, $w(\Rel{k}^i \circ \Rel{b}^i)v$ and $w\Rel{b}^iw'$ implies $\Rel{b}^i(w') = \Rel{k}^i(w') = \Rel{k}^i(v) = \Rel{b}^i(v)$.
 \end{theorem}
 \begin{proof}
@@ -321,15 +385,16 @@ Theorem~\ref{weak_equiv} does not guarantee that the actual world $w$ is in this
 
 If the actual world is in its own doxastic relation, we have the following. 
 
-\begin{theorem}[Strong Knowledge-Belief Indistinguishability]
+\begin{theorem}[Strong BK Indistinguishability]
 	For all $w,v \in W$, if $w\Rel{b}^i w$ then for all $v \in W$, $w\Rel{b}^iv$ implies $\Rel{b}^i(w) = \Rel{k}^i(w) = \Rel{k}^i(v) = \Rel{b}^i(v)$.
 \end{theorem}
 \begin{proof}
 	Suppose for an arbitrary $w,v\in W$ that $w\Rel{b}^iw$ and $w\Rel{b}^iv$. By definition, both are in $dc(w)$, which establishes the bimodal equivalence relation.
 \end{proof}
 
-So, when $i$ has no false beliefs, her belief and knowledge collapse into an S5 modal operator. This makes sense, because in this case she is an ideally rational agent who does not make mistakes. 
+So, when $i$ has no false beliefs, her belief and knowledge collapse into an S5 modal operator. When this condition holds, she makes decisions on par with those of an ideally rational agent who does not make mistakes. However, she is not guaranteed to remain in this state, as the model (world) might change in such a way that the doxastic relation comes to exclude the actual world, in which case $i$ will have false beliefs again.
 
+Thus, in the static epistemic-doxastic logic of DASL, the intuitively appealing property of indistinguishability is maintained from a subjective, internal standpoint, \emph{i.e.,} from $i$'s own perspective. This should be all that is needed, because the motivating intuition behind the indistinguishability requirement is that an agent should not be able to tell which of her possible worlds she is in, and that is the case here with respect to her subjective evidence.
 
 BELOW NEEDS WORK.
 TODO. Belief is standard~\cite{FHMV}. They are related logically by EP(1-3), which hold that knowledge entails belief, belief entails that one believes that one knows, and belief entails than one knows that one believes. Finally, actions and safe actions are logically related by SP and PR, which hold that necessary consequences of \emph{mere} action are also necessary consequences of \emph{safe} actions, and that a pilot can execute an action only if he believes that he is executing a safe action. 
