@@ -324,30 +324,49 @@ A formal epistemic theory should strive for adequate philosophical grounding in 
 Epistemologists primarily seek a theory of justification that can avoid Gettier-style counterexamples~\cite{Gettier} and a theory of knowledge that can solve the problem of skepticism. A system of formal epistemology should respect these questions by coherently addressing them as formal theories of epistemology proper. The S5 with common knowledge epistemic logic does not strive for this, nor is it clear that theories of bounded rationality do, either. Recent work in epistemology has applied Bayesian reasoning to the justification problem, and probabilistic epistemic logics help formalize these Bayesian approaches. We briefly recount some broad positions of interest from epistemology that our model should take a considered position on.
 
 
-\subparagraph{Externalism and Internalism}
-A theory of justification is internalist if it holds that the believer has awareness or access to the basis for the belief. Externalist theories deny this, and hold that external facts, \emph{e.g.} the causal process that produced the belief, are what justify beliefs and produce knowledge. Theories of justification sometimes apply to both knowledge and justified belief, and sometimes to just one or the other.
+\subparagraph{The Space of Justification Theories}
+Epistemology is the study of knowledge, and knowledge is widely held to require truth and justified beliefs in some way, with perhaps additional conditions being required for a jointly sufficient set of conditions. Our model defines truth through the semantic $\models$ relation between worlds and formulas, and the knowledge explicitly requires belief via the axiom \emph{Knowledge implies belief}. Justification remains for us to elaborate. A theory of epistemic justification must respond to the infinite regress argument which concludes that justified beliefs are impossible. The infinite regress argument against justification runs as follows:
+\begin{enumerate}
+	\item A belief that $\varphi$ is justified if and only if the belief that $\varphi$ is justified by other justified beliefs.
+	\item A justification chain of beliefs either: (a) terminates with unjustified base beliefs, or (b) is circular, or (c) is infinite and non-circular.
+	\item If (a), then no beliefs are justified.
+	\item If (b), then no beliefs are justified.
+	\item If (c), then no beliefs are justified.
+	\item Therefore, justification is impossible for beliefs.
+\end{enumerate}
+A theory of justification is shaped by how it responds to this regress argument. Denying premise (1) requires a theory to explain what, other than beliefs, justifies beliefs. Denying premise (3) pushes one toward a \emph{foundationalist} theory, where the task then is to describe how a foundation of basic beliefs can be justified, and how the principle of premise (1) does not properly apply to them. Denying premise (4) pushes one toward \emph{coherentism}, where the task is to justify how a circular chain of beliefs is not viciously circular. Denying premise (5) pushes one toward \emph{infinitism}, where the task is to justify how an unfinished infinite chain can have justified constituent beliefs.
 
-A strong internalist view is that, through reflection, one can know that she knows a propostion, and know that she believes but does not know a proposition~\cite{Prichard}. This corresponds to including both introspection axioms for the knowledge operator. A weaker internalist view that we endorse is \emph{evidentialism}, which holds that a belief is justified if and only if the believer has evidence supporting the belief. Note that these views differ on whether they treat knowledge or belief. Thus, we can avoid the strong form of internalism about knowledge and endorse the weaker form of evidentialism if we are careful with our axioms and how we interpret them. 
+In addition to responding to the regress argument, a theory of epistemic justification must present an analysis of what constitutes justification. In addition to addressing the regress argument, theories of justification must address an argument from logical closure. The logical closure argument runs as follows:
+\begin{enumerate}
+	\item $i$ knows that $\varphi$ only if $i$ knows $\tlnot$\emph{skeptical hypothesis}, where \emph{skeptical hypothesis} is some possibility that entails $\tlnot \varphi$.
+	\item $i$ does not know $\tlnot$\emph{skeptical hypothesis}.
+	\item Therefore, $i$ does not know $\varphi$.
+\end{enumerate}
 
-The dominant externalist view of knowledge and belief is that justification depends on the causal chain that produced the knowledge or belief. 
+Denying (1) denies that knowledge is closed under logical entailment, and denying (2) strikes many as the wrong approach, as a skeptical hypothesis can be described in such a way that one cannot know it is false. G.E. Moore famously turned the argument from closure on its head and affirmed the antecedent of (1), thereby denying (2), but this is not the approach endorsed here.
 
+A theory of justification is internalist if it holds that the believer is justified in believing some proposition $\varphi$ if and only if she has awareness or access to the basis for believing $\varphi$. Externalist theories deny this, and hold that external facts, \emph{e.g.} the causal process that produced the belief, are what justify beliefs and produce knowledge. Theories of justification sometimes apply to both knowledge and justified belief, and sometimes to just one or the other.
+
+A strong internalist view is that, through reflection, one can know that she knows a propostion, and know that she believes but does not know a proposition~\cite{Prichard}. This corresponds to including both introspection axioms for the knowledge operator. A weaker internalist view that we endorse is \emph{evidentialism}, which holds that a belief is justified if and only if the believer has evidence supporting the belief. The task of an \emph{evidentialist} theory is to spell out what evidence is.
+
+A dominant externalist position is that the process that produced the belief that $\varphi$ be a \emph{reliable} one, in some sense to be defined by a given \emph{reliablist} theory.
 
 \subparagraph{Skepticism}
 We take it as a basic assumption that human knowledge is possible, and therefore that the epistemic position of general skepticism is false. Therefore, in constructing a formal model of epistemic logic, that model should not lead to general skepticism when applied to humans. The positive introspection axiom destroys almost all knowledge through the application of its contrapositive, $\tlnot \Kns{i}\Kns{i}\varphi \iimplies \tlnot \Kns{i}\varphi$. Thus, if strong internalism about knowledge is true, then knowledge is extremely rare. Knowing that one knows a proposition $\varphi$ amounts to satisfying all the conditions of knowledge with respect to the proposition that one knows $\varphi$. This means that in addition to satisfying all the conditions of knowledge with respect to $\varphi$, including the external conditions of justification, one must also be in a position to know that those external conditions are in fact satisfied. On a causal theory of justification, this amounts to knowing, actually \emph{knowing}, the exact causal process that produced your knowledge, and that this is a justifying causal process. An internalist theory of knowledge suffers from an infinite regress about the condition that known propositions be true. With the positive introspection axiom, $\Kns{i}\varphi$ only if $\Kns{i}\Kns{i}\varphi$, and $\Kns{i}\Kns{i}\varphi$ only if $\Kns{i}\Kns{i}\Kns{i}\varphi$, etc. At each layer, even for an internalist theory of knowledge, there is one externalist condition of knowledge, namely that the known proposition actually be true of the world. This amounts to knowing things in the object language about the metalanguage semantics, creating an infinitely high semantic tower that must be known in order for one atomic proposition to be known. The demands on knowledge are exceedingly high. Therefore, externalist positions about knowledge ought to, and frequently do, abandon the positive introspection requirement.
 
-\subparagraph{Open World Property}
-A formal model of human knowledge should do right by the world that humans know things about, to the largest extent as is reasonable. This means abiding by the open world property,
-
-
-\begin{definition}[Open World Property]~\label{owp}\newline
-	For some $\varphi$, $w\models \tlnot \Kns{i} \varphi \tland \tlnot \Kns{i} \tlnot \Kns{i}\varphi$.
-\end{definition}
-The open world property obviously leads to an immediate contradiction with the negative introspection axiom. Formally, where $w$ is taken to be the actual world,
-\begin{enumerate}
-	\item $\exists \varphi$ such that $w \models \tlnot \Kns{i}\varphi$.
-	\item $w \models \tlnot \Kns{i}\tlnot \Kns{i}\varphi$, by the open world property of reality.
-	\item $w \models \Kns{i}\varphi$, by the negative introspection axiom.
-\end{enumerate}
+%\subparagraph{Open World Property}
+%A formal model of human knowledge should do right by the world that humans know things about, to the largest extent as is reasonable. This means abiding by the open world property,
+%
+%
+%\begin{definition}[Open World Property]~\label{owp}\newline
+%	For some $p$, $p$ is an atomic proposition and $p \not \in AtProp$.
+%\end{definition}
+%The open world property obviously leads to an immediate contradiction with the negative introspection axiom. Formally, where $w$ is taken to be the actual world,
+%\begin{enumerate}
+%	\item $\exists p$ such that $w \models \tlnot \Kns{i}p$
+%	\item $w \models \tlnot \Kns{i}\tlnot \Kns{i}\varphi$, by the open world property of reality.
+%	\item $w \models \Kns{i}\varphi$, by the negative introspection axiom.
+%\end{enumerate}
 
 
 
