@@ -321,7 +321,36 @@ Along similar lines but in pursuit of different theoretical interests is the so-
 \paragraph{Epistemology}
 A formal epistemic theory should strive for adequate philosophical grounding in good epistemology. Hintikka took this very seriously in his 1967 book on \emph{Knowledge and Belief}~\cite{Hintikka}, which serves as a seminal work in the field of formal epistemology. Hintikka dedicates a great portion of the book to exploring how his formal system handles the intuitive judgments of philosophers regarding ordinary language statements, which was the primary method at the time. An epistemic logic divorced from a philosophical foundation is no longer an epistemic logic for reasoning about human-like knowledge. Some idealized epistemic logics can serve as logics for reasoning about machine knowledge in closed worlds, but as machines come to interact with larger and more complex parts of the world, these idealized logics diminish in adequacy, as computational limitations prevent the machine from implementing even a perfect Bayesian reasoning system. Thus, careful consideration of an epistemic logic's philosophical foundation is in order.
 
-Epistemologists primarily study a theory of knowledge that can rebut the problem of skepticism, and a theory of justification that can avoid Gettier-style counterexamples~\cite{Gettier}. A system of formal epistemology should respect these questions by coherently addressing them as formal theories of epistemology proper. The S5 with common knowledge epistemic logic does not strive for this, nor is it clear that theories of bounded rationality do, either. Recent work in epistemology has applied Bayesian reasoning to the justification problem, and probabilistic epistemic logics help formalize these Bayesian approaches. We briefly recount some broad positions of interest from epistemology that our model should take a considered position on.
+Epistemologists primarily seek a theory of justification that can avoid Gettier-style counterexamples~\cite{Gettier} and a theory of knowledge that can solve the problem of skepticism. A system of formal epistemology should respect these questions by coherently addressing them as formal theories of epistemology proper. The S5 with common knowledge epistemic logic does not strive for this, nor is it clear that theories of bounded rationality do, either. Recent work in epistemology has applied Bayesian reasoning to the justification problem, and probabilistic epistemic logics help formalize these Bayesian approaches. We briefly recount some broad positions of interest from epistemology that our model should take a considered position on.
+
+
+\subparagraph{Externalism and Internalism}
+A theory of justification is internalist if it holds that the believer has awareness or access to the basis for the belief. Externalist theories deny this, and hold that external facts, \emph{e.g.} the causal process that produced the belief, are what justify beliefs and produce knowledge. Theories of justification sometimes apply to both knowledge and justified belief, and sometimes to just one or the other.
+
+A strong internalist view is that, through reflection, one can know that she knows a propostion, and know that she believes but does not know a proposition~\cite{Prichard}. This corresponds to including both introspection axioms for the knowledge operator. A weaker internalist view that we endorse is \emph{evidentialism}, which holds that a belief is justified if and only if the believer has evidence supporting the belief. Note that these views differ on whether they treat knowledge or belief. Thus, we can avoid the strong form of internalism about knowledge and endorse the weaker form of evidentialism if we are careful with our axioms and how we interpret them. 
+
+The dominant externalist view of knowledge and belief is that justification depends on the causal chain that produced the knowledge or belief. 
+
+
+\subparagraph{Skepticism}
+We take it as a basic assumption that human knowledge is possible, and therefore that the epistemic position of general skepticism is false. Therefore, in constructing a formal model of epistemic logic, that model should not lead to general skepticism when applied to humans. The positive introspection axiom destroys almost all knowledge through the application of its contrapositive, $\tlnot \Kns{i}\Kns{i}\varphi \iimplies \tlnot \Kns{i}\varphi$. Thus, if strong internalism about knowledge is true, then knowledge is extremely rare. Knowing that one knows a proposition $\varphi$ amounts to satisfying all the conditions of knowledge with respect to the proposition that one knows $\varphi$. This means that in addition to satisfying all the conditions of knowledge with respect to $\varphi$, including the external conditions of justification, one must also be in a position to know that those external conditions are in fact satisfied. On a causal theory of justification, this amounts to knowing, actually \emph{knowing}, the exact causal process that produced your knowledge, and that this is a justifying causal process. An internalist theory of knowledge suffers from an infinite regress about the condition that known propositions be true. With the positive introspection axiom, $\Kns{i}\varphi$ only if $\Kns{i}\Kns{i}\varphi$, and $\Kns{i}\Kns{i}\varphi$ only if $\Kns{i}\Kns{i}\Kns{i}\varphi$, etc. At each layer, even for an internalist theory of knowledge, there is one externalist condition of knowledge, namely that the known proposition actually be true of the world. This amounts to knowing things in the object language about the metalanguage semantics, creating an infinitely high semantic tower that must be known in order for one atomic proposition to be known. The demands on knowledge are exceedingly high. Therefore, externalist positions about knowledge ought to, and frequently do, abandon the positive introspection requirement.
+
+\subparagraph{Open World Property}
+A formal model of human knowledge should do right by the world that humans know things about, to the largest extent as is reasonable. This means abiding by the open world property,
+
+
+\begin{definition}[Open World Property]~\label{owp}\newline
+	For some $\varphi$, $w\models \tlnot \Kns{i} \varphi \tland \tlnot \Kns{i} \tlnot \Kns{i}\varphi$.
+\end{definition}
+The open world property obviously leads to an immediate contradiction with the negative introspection axiom. Formally, where $w$ is taken to be the actual world,
+\begin{enumerate}
+	\item $\exists \varphi$ such that $w \models \tlnot \Kns{i}\varphi$.
+	\item $w \models \tlnot \Kns{i}\tlnot \Kns{i}\varphi$, by the open world property of reality.
+	\item $w \models \Kns{i}\varphi$, by the negative introspection axiom.
+\end{enumerate}
+
+
+
 
 %As with Hintikka's work, the test of an epistemic logic's adequacy is its ability to correctly handle touchstone cases from the philosophical literature, or better yet, to adequately explain problems that currently lack convincing explanations. For example, the so-called Moore's sentence is a problem pervasive in epistemology and the philosophy of language, attributed to G.E. Moore~\cite{Moore} by Wittgenstein~\cite{Wittgenstein}. The standard Moore's paradox to be solved is a statement of the form,
 %\begin{center}
