@@ -391,7 +391,7 @@ The problem for an epistemic logician constructing a formal theory is to select 
 
 \paragraph{3. Formal Properties}
 
-A system of logic ought to be sound and complete. An epistemic logic with both belief and knowledge operators must avoid an equivalence collapse of the knowledge and belief operator, which can occur if one is not careful in choosing axioms. For a logic of sufficient expressive power, namely one with agents who can reason about their own reasoning, it must avoid a special obstacle to an agent trusting its own conclusion, dubbed the L\"obian Obstacle by researchers in the foundations of artificial intelligence. Modal logics with reflective reasoners must address this obstacle. 
+A system of logic ought to be sound and complete. An epistemic logic with both belief and knowledge operators must avoid an equivalence collapse of the knowledge and belief operator, which can occur if one is not careful in choosing axioms. However, the logic must satisfy the intuition that for $v$ to be epistemically possible from $w$, $v$ and $w$ should in some sense be indistinguishable to the agent. Finally, for a logic of sufficient expressive power, namely one with agents who can reason about their own reasoning, it must avoid a special obstacle to an agent trusting its own conclusion, dubbed the L\"obian Obstacle by researchers in the foundations of artificial intelligence. Modal logics with reflective reasoners must address this obstacle. 
 
 \subparagraph{Soundness and Completeness}
 Soundness and completeness are familiar properties for students of logic. They are briefly mentioned here as a reminder.
@@ -404,10 +404,33 @@ where $\models\varphi$ is semantic validity of $\varphi$ and $\vdash\varphi$ is 
 	Logic $\mathcal{L}$ is \emph{complete} if and only if $\vdash\varphi$ implies $\models\varphi$.
 \end{definition}
 
-\subparagraph{Knowledge and Belief}
-Knowledge and belief are distinct. There are two distinguishing characteristics between them. The first is that belief and knowledge sit in a part-whole relationship to each other. $i$ knows that $\varphi$ if and only if 1) $i$ believes that $\varphi$, 2) $i$ is justified in believing $\varphi$, 3) $\varphi$ is true, with additional parts still being determined by epistemologists. The second is that knowledge of a proposition requires that the known proposition be true, while belief requires no such truth condition. If an epistemic logic with operators for belief and knowledge collapses them into equivalence, such that $\Bels{i}\varphi \iiff \Kns{i}\varphi$, it has gone wrong, and is not acceptable.
+\subparagraph{Avoid $\mathbf{KB}$ Collapse}
+Knowledge and belief are distinct. There are two distinguishing characteristics between them. The first is that belief and knowledge sit in a part-whole relationship to each other. $i$ knows that $\varphi$ only if $i$ believes that $\varphi$, with other necessary conditions that are jointly sufficient. The second is that knowledge of a proposition requires that the known proposition be true, while belief requires no such truth condition. If an epistemic logic with operators for belief and knowledge collapses them into equivalence, such that $\Bels{i}\varphi \iiff \Kns{i}\varphi$, it has gone wrong, and is not acceptable.
 
+An offending theorem flagged in the literature as responsible for equivalence collapse is $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$, which is our axiom \emph{Confidence in Belief}. We must show that our system avoids $\Kns{}\Bels{}$ collapse.
 
+\subparagraph{Indistinguishability}
+Many find it intuitive to speak of the epistemic relation as an equivalence or indistinguishability relation, which requires it to be symmetric, transitive, and reflexive. The epistemic relation in S5 is Euclidean and reflexive, which together yield symmetry and transitivity, and therefore an equivalence relation. Equivalence relations satisfy and indistinguishability relation because each world in the equivalence class is indistinguishable from each other relative to the relation defining the class. We must show that our axiom schema can satisfy the intuition behind epistemic indistinguishability.
+
+\subparagraph{L\"obian Obstacle}
+The L\"obian Obstacle is a problem facing any sufficiently powerful (formally-defined) reasoner. It refers to L\"ob's Theorem. The modal version of L\"ob's Theorem is
+\begin{center}
+\begin{eqnarray}~\label{modal_lob}
+	\Box(\Box\varphi \iimplies \varphi) \implies \Box\varphi,
+\end{eqnarray}
+\end{center}
+where the standard interpretation is that $\Box$ denotes provability in Peano Arithmetic. When~\ref{modal_lob} is included as a theorem of a normal modal logic, it can lead to undesirable results. For epistemic logics, or logics with reflective reasoners, the result is a reasoner who is guaranteed to conclude falsehoods, despite proving or knowing or believing (however one interprets the modal operator) that they do not conclude falsehoods. 
+
+The theorem grew out of G\"odel's incompleteness results about self-referential true but unprovable statements in systems at least as strong as Peano Arithmentic. L\"ob addressed the question of self-referential statements asserting their own provability. When quantified over statements, the question concerns a system's ability to prove its own consistency. L\"ob's Theorem states that a system can prove its own consistency only if it can prove every well formed formula in its language, including contradictions. For agents who can reflect on their own reasoning, this is a disaster. This is the L\"obian Obstacle that systems must strive to avoid. Research at the foundations of artificial intelligence is actively engaged in this avoidance task, for if an artificial general intelligence, possessed of a reasoning system at least as powerful as Peano Arithmetic (which it likely shall possess), tries to establish that it can trust its own reasoning, it shall cease to reason consistently.
+
+The standard modal provability logic is \boldmath{GL}, for G\"odel L\"ob. It is a normal modal logic with~\ref{modal_lob} as an axiom. The conditions that lead to the derivation of L\"ob's Theorem for other modal logics are the following:
+\begin{enumerate}
+	\item The modal logic contains the Rule of Necessitation: From $\vdash \varphi$ infer $\vdash \Box \varphi$.
+	\item The modal logic is normal: $\Box(\varphi \iimplies \psi) \iimplies (\Box \varphi \iimplies \Box \psi)$
+	\item The modal operator's relation is transitive, \emph{i.e.,} it is a theorem that $\Box \varphi \iimplies \Box \Box \varphi$.
+	\item The modal logic contains modal fixpoints: $\vdash \psi \iiff F(\Box\psi)$, for some formula $F$ containing $\psi$ as a subformula.
+\end{enumerate}
+If these four conditions are met, the modal logic will include L\"ob's Theorem. For logic's of knowledge and belief, conditions (1)-(3) are almost unavoidable for at least one of the operators. Condition (4) is likewise challenging to avoid, as common knowledge and common belief explicitly introduce modal fixpoints.
 
 OLD BELOW\\
 This system warrants defending, as John Rushby has recently challenged the decisions. His concerns can be summarized as follows:
