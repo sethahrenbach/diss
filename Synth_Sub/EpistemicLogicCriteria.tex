@@ -1,0 +1,495 @@
+%%%%%%%%%%%%%%%%%%%%%%% file template.tex %%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% This is a general template file for the LaTeX package SVJour3
+% for Springer journals.          Springer Heidelberg 2010/09/16
+%
+% Copy it to a new file with a new name and use it as the basis
+% for your article. Delete % signs as needed.
+%
+% This template includes a few options for different layouts and
+% content for various journals. Please consult a previous issue of
+% your journal as needed.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% First comes an example EPS file -- just ignore it and
+% proceed on the \documentclass line
+% your LaTeX will extract the file if required
+\begin{filecontents*}{example.eps}
+%!PS-Adobe-3.0 EPSF-3.0
+%%BoundingBox: 19 19 221 221
+%%CreationDate: Mon Sep 29 1997
+%%Creator: programmed by hand (JK)
+%%EndComments
+gsave
+newpath
+  20 20 moveto
+  20 220 lineto
+  220 220 lineto
+  220 20 lineto
+closepath
+2 setlinewidth
+gsave
+  .4 setgray fill
+grestore
+stroke
+grestore
+\end{filecontents*}
+%
+\RequirePackage{fix-cm}
+%
+%\documentclass{svjour3}                     % onecolumn (standard format)
+%\documentclass[smallcondensed]{svjour3}     % onecolumn (ditto)
+\documentclass[smallextended]{svjour3}       % onecolumn (second format)
+%\documentclass[twocolumn]{svjour3}          % twocolumn
+%
+\smartqed  % flush right qed marks, e.g. at end of proof
+%
+\usepackage{graphicx}
+%
+% \usepackage{mathptmx}      % use Times fonts if available on your TeX system
+%
+% insert here the call for the packages your document requires
+%\usepackage{latexsym}
+% etc.
+%
+\usepackage{amsmath}		% AMS Math (http://www.ams.org/tex/amslatex.html)
+\usepackage{amssymb}		% AMS Symbols
+%\usepackage{amsthm}			% AMS Theorems
+\usepackage{tocloft}		% Format the Table of Contents
+\usepackage{float}			% More float commands
+%\usepackage{sectsty}		% Format section and chapter headings
+\usepackage{graphicx}		% Insert images in eps or pdf format
+\usepackage{setspace}		% Line-spacing
+
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+%\usepackage{setspace}
+%\doublespacing
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{color}
+\usepackage{tcolorbox}
+\usepackage{amsmath}
+\usepackage{float}% http://ctan.org/pkg/float
+\usepackage{gensymb}
+\usepackage{makeidx}  % allows for indexgeneration
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{mathrsfs}
+
+\usepackage{mathrsfs}
+%\usepackage{nd3}
+\usepackage{pgf}
+\usepackage{multirow,array}
+\usepackage{mathpartir}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata,positioning,shapes.multipart}
+\usepackage{stmaryrd}
+
+%\usepackage{natbib}
+\usepackage{fancyvrb}
+%\usepackage{microtype}
+\usepackage{alltt}
+\usepackage{listings}
+
+%\newtheorem{theorem}{Theorem}[section]
+%\newtheorem{lemma}[theorem]{Lemma}
+%\newtheorem{corollary}{Corollary}[theorem]
+%\newtheorem{definition}{Definition}[theorem]
+% please place your own definitions here and don't use \def but
+% \newcommand{}{}
+\newcommand{\Rel}[1]{R_{#1}}
+\newcommand{\Act}[1]{[ \mathit{#1} ]}
+\newcommand{\ActPos}[1]{\langle \mathit{XSTIT_{#1}} \rangle}
+\newcommand{\Know}{\mathbf{K}\,} 
+\newcommand{\Kns}[1]{\mathbf{K}_{\mathbf{#1}}\,} 
+\newcommand{\Bel}{\mathbf{B}\,} 
+\newcommand{\Bels}[1]{\mathbf{B}_{\mathbf{#1}}\,} 
+\newcommand{\Pos}  {\langle \mathbf{K} \rangle\,} 
+\newcommand{\Poss}[1]  {\langle \mathbf{K}_{#1} \rangle\,}
+\newcommand{\BPos} {\langle \mathbf{B} \rangle\,}
+\newcommand{\BPoss}[1]{\langle \mathbf{B}_{#1} \rangle\,}
+\newcommand{\STIT}[1] {\mathbf{[XSTIT\ {#1}]}}
+\newcommand{\Safe} {\mathbf{S}}
+\newcommand{\safe} {\mathit{safe}}
+\newcommand{\choice}[1]{\mathit{Choice_{#1}}}
+\newcommand{\neXt}{\mathit{X}}
+\newcommand{\Pal}[1]{\mathbf{[#1]}}
+\newcommand{\PalPos}[1]{\mathbf{\langle#1\rangle}}
+\newcommand{\SPal}[1]{\mathbf{[#1]^\mathcal{S}}}
+%	\stackrel{\mathbf{safe}}{\mathbf{[#1,#2]}}}
+\newcommand{\SPalPos}[1]{\mathbf{\langle#1\rangle^\mathcal{S}}}
+%
+\newcommand{\etal}{\textit{et.~al.}}
+\newcommand{\nnot}{\textsf{\ not \ }}
+\newcommand{\oor}{\textsf{\  or \ }}
+\newcommand{\iiff}{{\  \Leftrightarrow \ }}
+\newcommand {\aand}{ \textsf{\ and \ } }
+\newcommand {\timplies} { \textsf{\ implies \ }}
+\newcommand {\tland}{{\ \wedge \ }}
+\newcommand {\tlor}{{\ \vee \ }}
+\newcommand {\tlnot}{{\neg}}
+\newcommand {\iimplies}{{\ \Rightarrow \ }}
+
+\newenvironment{proofenum}{%                                     
+	\begin{enumerate}
+		\renewcommand\labelenumi{(\arabic{section}.\arabic{enumi})}}
+	{\end{enumerate}}
+% Insert the name of "your journal" with
+% \journalname{myjournal}
+%
+\begin{document}
+
+\title{The adequacy criteria for epistemic logics%\thanks{Grants or other notes
+%about the article that should go on the front page should be
+%placed here. General acknowledgments should be placed at the end of the article.}
+}
+\subtitle{Do you have a subtitle?\\ If so, write it here}
+
+%\titlerunning{Short form of title}        % if too long for running head
+
+\author{Seth Ahrenbach         \and
+        Second Author %etc.
+}
+
+%\authorrunning{Short form of author list} % if too long for running head
+
+\institute{F. Author \at
+              first address \\
+              Tel.: +123-45-678910\\
+              Fax: +123-45-678910\\
+              \email{fauthor@example.com}           %  \\
+%             \emph{Present address:} of F. Author  %  if needed
+           \and
+           S. Author \at
+              second address
+}
+
+\date{Received: date / Accepted: date}
+% The correct dates will be entered by the editor
+
+
+\maketitle
+
+\begin{abstract}
+Most epistemic logics model agents with an S5 knowledge operator, which precludes unknown unknowns and is defined semantically by an equivalence relation. The S5 knowledge operator is appealing because the equivalence relation matches our intuition that epistemically possible states should be indistinguishable from an agent's perspective, which we call the indistinguishability criterion for ignorance (ICI). However, the S5 knowledge operator is inappropriate for human-like agents, who have unknown unknowns. Thus, the epistemic logician interested in modeling human-like knowledge face a dilemma: deny the existence of unknown unknowns, or satisfy the ICI. This paper defines a multi-modal logic of knowledge and belief that is appropriate for human-like agents, allowing for unknown unknowns, mistaken but justified beliefs, with what we call a subjective equivalence relation. 
+
+\keywords{First keyword \and Second keyword \and More}
+% \PACS{PACS code1 \and PACS code2 \and more}
+% \subclass{MSC code1 \and MSC code2 \and more}
+\end{abstract}
+
+\section{Introduction}
+\label{intro}
+Recent advances in epistemic logic  tend to focus on layering formal machinery of dynamic logics on top of a static base logic that is epistemic. This allows for the development of formal systems that combine agent knowledge with actions, as in Dynamic Epistemic Logic (DEL), and public announcements, as in Public Announcement Logic (PAL). This `dynamic turn' as it is called has led to a plethora of highly technical logics that involve aspects of agency, including knowledge. The static epistemic base almost always consists of an S5 epistemic modal operator. An S5 modal operator is powerful and has very nice technical properties for logicians to work with when proving soundness, completeness, and decidability. However, the benefits of these various dynamic logics of agency are undercut by the fact that an S5 epistemic operator is inappropriate for human-like knowledge, despite its formal niceties. This paper argues for a static epistemic base of epistemic and doxastic operators that can serve as a foundation for agency-relevant dynamic extensions. The static base we propose allows for the sort of ignorance humans tend to have called `unknown unknowns', maintains a reasonable level of normativity that can support game-theoretic reasoning, and satisfies what we call the indistinguishability criterion for epistemic logic.
+
+This paper proceeds as follows. In Section~\ref{sec:background} we provide the necessary formal background a reader might need in order to understand the context of the thesis.
+\section{Background}
+\label{sec:background}
+Epistemic logic grew out of efforts in the 1950's and 1960's to formalize important philosophical concepts. Epistemology is the philosophical study of knowledge, and an epistemic logic is a formal logic for reasoning about knowledge. Most epistemic logics are a type of modal logic, which similarly shares its roots in philosophy, developed for the study of necessity and possibility. A modal logic in its most basic form modifies propositional logic by adding modal operators. The usual modal operators are $\Box$ for ``it is necessary that" and $\Diamond$ for ``it is possible that". The operators are defined by a relational semantics, sometimes called Kripke semantics, with a set of possible worlds and a binary possibility relation $R$ defined over worlds. A proposition is true or false at each world, and we use the symbols $w\models\varphi$ to say that world $w$ satisfies $\varphi$, or equivalently, that $\varphi$ is true at $w$. A proposition is necessarily true at a world $w$ just in case it is true at all possible worlds relative to $w$: $w\models \Box\varphi$ just in case for all $v$, $wRv$ implies $v\models\varphi$. A proposition is possibly true at $w$ just in case it is true at at least one possible world relative to $w$: $w\models\Diamond \varphi$ just in case for some $v$, $wRv$ and $v\models\varphi$.
+
+Epistemic logic interprets the possibility relation as one of epistemic possibility. This is typically explained as a state of affairs that is possible given what evidence an agent $i$ has. The knowledge operator for $i$ is $\Kns{i}$, and the corresponding possibility operator is $\Poss{i}$, which is typically somewhat difficult to interpret other than something like ``$i$ considers $\varphi$ possible, given her evidence" for the formula $\Poss{i}\varphi$.
+
+The theorems a modal logic proves depends heavily on the properties of the binary possibility relation which defines the operators. Certain algebraic properties correspond to axioms of the logic. A reflexive possibility relation is one such that 
+\begin{definition}[Reflexivity]
+	\begin{center}
+		\begin{eqnarray}
+		\mathit{For\ all\ }w,\ wRw.
+		\end{eqnarray}
+	\end{center}~\label{reflexivity}
+\end{definition}
+A transitive possibility relation is one such that
+\begin{definition}[Transitivity]
+	\begin{center}
+		\begin{eqnarray}
+		\mathit{For\ all\ }w,v,u,\ (wRv\tland vRu \iimplies wRu).
+		\end{eqnarray}
+	\end{center}~\label{transitivity}
+\end{definition}
+
+A Euclidean possibility relation is one such that
+\begin{definition}[Euclidean]
+	\begin{center}
+		\begin{eqnarray}
+		\mathit{For\ all\ }w,v,u,\ (wRv\tland wRv \iimplies vRu).
+		\end{eqnarray}
+	\end{center}~\label{euclidean}
+\end{definition}
+
+The reflexive and euclidean properties together entail a symmetric property, which is
+\begin{definition}[Symmetry]
+	\begin{center}
+		\begin{eqnarray}
+		\mathit{For\ all\ }w,v\ (wRv\iimplies vRw).
+		\end{eqnarray}
+	\end{center}
+\end{definition}~\label{symmetry}
+\begin{proof}
+	We assume ~\ref{reflexivity} and ~\ref{euclidean} properties hold of relation $R$. Then we have for all $w,v$, $wRw$ by reflexivity, and $wRw \tland wRv \iimplies vRw$, by ~\ref{euclidean}. Therefore, for all $w,v$, $wRv\iimplies vRw$.    QED
+\end{proof}
+
+When a knowledge operator is defined with a possibility relation that is \emph{reflexive} and \emph{Euclidean}, it becomes an equivalence relation, defined as a relation that is reflexive, transitive, and symmetric. We briefly lay out the syntax of epistemic logic and provide English characterizations of the symbols.
+
+\begin{center}
+$$\varphi := p\  |\  \varphi \tland \varphi\   |\ \tlnot \varphi \ |\   \Kns{i}\varphi\ |\ \Poss{i}\varphi. 
+$$
+\end{center}
+The remaining Boolean operators are defined and interpreted as usual. $\Kns{i}\varphi$ reads in English that ``agent $i$ knows that $\varphi$ is the case." This should be unproblematic. $\Poss{i}$, however, is not easily interpretable into English. This can result in rather verbose translations of formulas it appears in. For example, $\Poss{i}\varphi$ might be translated as ``$i$ cannot rule out that $\varphi$ might be the case, given her evidence". Imagine this translation for a formula of any real complexity! One might translate it as "$i$ considers $\varphi$ possible, given her evidence", but we resist this translation for reasons to be clear later. Another common translation is, "for all $i$ knows, it may be that $\varphi$." We interpret this translation and the evidence-based translation as equivalent, but we use the following shorthand to capture them: ``$i$ \emph{may have} that $\varphi$."
+
+Later in the paper we consider logics with modal operators for belief. These operators are $\Bels{i}$ and $\BPoss{i}$. $\Bels{i}$ has an intuitive interpretation as ``$i$ believes that $\varphi$. We reserve ``$i$ considers it possible that $\varphi$" for $\BPoss{i}\varphi$, and we will typically shorten this to ``$i$ considers that $\varphi$."
+
+We choose these interpretations because there is something more objective about when something may be the case for $i$, and something more subjective about when $i$ considers something possible, and we think this divides nicely along epistemic and doxastic (belief) lines.
+
+We proceed with our criteria for assessing an epistemic logic.
+
+\section{Criterion 1: Descriptive Accuracy}
+\label{sec:desc}
+A formal system first and foremust must accurately formalize some target phenomenon. Propositional logic formalizes and accurately describes valid inferences among propositions. First order logic formalizes and accurately describes valid inferences among quantified formulas with objects and predicates. Probability theory formalizes and accurately describes reasoning about the relations among probabilistic events. Can the same be said about epistemic logic for reasoning about knowledge? 
+
+As with modal logic in general, there are infinitely many ways to define an epistemic logic, because there are infinitely many first order conditions one an impose on the epistemic operator. The most common epistemic logic uses an S5 operator defined by a possibility relation that is Euclidean and transitive, and therefore is an equivalence relation. This corresponds to the following axioms schema.
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{| l r |}
+			\hline
+			$\Kns{i}(\varphi \iimplies \psi) \iimplies (\Kns{i}\varphi \iimplies \Kns{i}\psi)$ & Distribution of $\Kns{i}$ \\
+			$\Kns{i}\varphi \iimplies \varphi$ & Truth Axiom \\
+%			$\Bels{i}(\varphi \iimplies \psi) \iimplies (\Bels{i}\varphi \iimplies \Bels{i}\psi)$ & Distribution of $\Bels{i}$\\
+%			$\Bels{i}\varphi \iimplies \BPoss{i}\varphi$ & Belief Consistency Axiom\\
+%			$\Bels{i}\varphi \iimplies \Bels{i}\Bels{i}\varphi$ & Positive Belief Introspection \\
+			$\tlnot\Kns{i}\varphi \iimplies \Kns{i}\tlnot\Kns{i}\varphi$ & Negative Introspection\\
+%			$\Kns{i}\varphi \iimplies \Bels{i}\varphi$ & Knowledge implies Belief \\
+%			$\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ & Confidence in Belief\\
+			%			$\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$ & Beliefs are Known\\
+			From $\vdash \varphi$ and $\vdash \varphi \iimplies \psi$, infer $\vdash\psi$ & Modus Ponens\\
+			From $\vdash \varphi$, infer $\vdash \Kns{i}\varphi$ & Necessitation of $\Kns{i}$\\
+			\hline
+		\end{tabular}
+		\caption{S5 Axiom Schema}
+	\end{center}
+\end{table}
+ 
+Distribution of $\Kns{i}$ is an axiom schema that every normal modal logic contains, which is a logic that uses possible world semantics with standard quantification over worlds.
+
+The Truth Axiom requires that known propositions be true, which is considered a distinguishing feature of knowledge.
+
+Negative introspection presents a problem. Hintikka considered this formula to be clearly unacceptable and did not include it in his system of epistemic logic. It states that an agent $i$ does not know something only if she knows that she does not know it. Presented in this form, it places a strong knowledge condition on ignorance.  One can get a good sense of a potential axiom by considering its equivalent forms. Consider its contrapositive.
+
+\begin{equation}~\label{NI_contra}
+	\tlnot\Kns{i}\tlnot\Kns{i}\varphi \iimplies \Kns{i}\varphi.
+\end{equation}
+That is to say, if $i$ does not know that she does not know $\varphi$, then she knows $\varphi$. By the definition of $\Poss{i}$, this is equivalent to 
+
+\begin{equation}~\label{NI_contra_POSS}
+	\Poss{i}\Kns{i}\varphi\iimplies \Kns{i}\varphi.
+\end{equation}
+This states that if $i$ has MAYBES that she knows $\varphi$, then she knows it.
+
+A theorem of S5 is
+\begin{equation}~\label{PI}
+	\Kns{i}\varphi \iimplies \Kns{i}\Kns{i}\varphi,
+\end{equation}
+ 
+Which holds that knowledge implies positive introspective knowledge. (\ref{PI}) is in fact referred to as positive introspection. By focusing on the fact that positive introspection here is a necessary condition for what we might call first order knowledge, we can see that if we are ever in doubt about whether we know something, then it follows that we do not know it. Many philosophers find this property to be counterintuitive, and hold that such a necessary condition on knowledge would have the effect of incorrectly ruling out cases of genuine knowledge.
+
+Yet another counterintuive theorem of S5 is the so-called B Theorem, after L.E.J. Brouwer,
+
+\begin{equation}~\label{B_theorem}
+	\varphi \iimplies \Kns{i}\Poss{i}\varphi.
+\end{equation}
+
+If the reader considers what this mean, she should recognize that S5 is a striking mischaracterization of human-like knowledge. We consider two ways in which S5 inaccurately describes human-like knowledge, other than its inclusion of (\ref{B_theorem}). First, that it denies that unknown unknowns exist. Second, that it denies that unknown knowns exist.
+\subsubsection{Unknown Unknowns}
+\label{sec:unkunks}
+The negative introspection axiom denies that unknown unknowns exist for the agents it models. We argue that such agents are not human-like, and that this counts against S5 epistemic logic on grounds of accuracy.
+
+The reason we say S5 denies that unknown unknowns exists is because the negative introspection axiom states that ``if $i$ does not know that $\varphi$, then $i$ knows that she does not know that $\varphi$." In this sentence, $\varphi$ is the unknown, and by the axiom this implies that she knows that it is unknown to her. 
+
+This is inaccruate for human-like knowledge, and it should be clear that this is so to the reader, but we shall make the case anyway. First, we need not show that all unknowns are unknown unknowns in order to invalidate the axiom; we must show only that sometimes human-like knowledge involves unknown unknowns. Therefore, a simple counterexample will do. Suppose Alice believes that there is milk in the fridge, but that this is false. Bob finished off the milk earlier. Thus, the proposition being false, it is not the case that Alice knows it. But, since she believes it to be the case, she clearly does not know that she does not know it. She is totally unaware of her ignorance regarding the milk. This suffices to show that the axiom does not describe many common occurences for human-like knowledge.
+
+Another case concerns a true belief that is unjustified. Suppose Alice is watching a mystery film, and Bob walks in near the beginning, and asks Alice what she is watching. She tells him it is a who-dunnit. He looks at the screen and predicts that the character $M$ is the murderer, without knowing anything about the story. He simply sees $M$ on the screen, and forms the confident belief that $M$ is the murderer. It turns out he is correct, but he had no evidence to base his prediction on. He'd have guessed whichever character was on the screen when he walked in. When the film reveals the murderer is $M$, Bob proclaims that he knew it, which is false. He did not know it, and he did not know that he didn't know it.
+
+A final case is perhaps most interesting. It exploits the human condition of not being aware of all the propositions in the world. Alice and Bob are firefighters, and their fire station receives an emergency call. Approaching the burning building, there are many things that they know they do not know. They know that they don't know if there are any people trapped in there. They know that they don't know what caused the fire. But they don't know that the construction company violated regulations when erecting the structure, and that these decisions led to a foundation that is more flammable than the remaining structure. They do not know that they don't know this, because it does not even occur to them; it is a highly irregular situation. The proposition that ``the construction company built the foundation out of a material more flammable than the remaining structure" is not one that they think to assess their evidence for. If you mention it to them as a possibility, they would rightly dismiss it as highly unlikely. This proposition is an unknown unknown.
+
+\subsubsection{Unknown Knowns}
+
+Positive introspection imposes a necessary condition on knowledge such that the agent must know that she knows a proposition. We present an argument against the principle of positive introspection based on taking the higher order character of the principle seriously.
+
+Before presenting our argument, we consider a regular case of knowledge. Suppose Alice knows that the tile in front of her is a rectangle. In order to know this, Alice must know the correct defnition of a rectangle, and she must have evidence that the tile she is looking at satisfies the definition, namely that it is a four sided polygon with 90$^\circ$ vertices. This should be uncontroversial.
+
+However, if we apply the same standard to the higher order question, whether Alice knows that she knows that the tile she is looking at is a rectangle, she must now know the correct definition of knowledge, and have evidence that her mental attitude toward the proposition satisfies that definition. With this in mind, we present the argument that achieving higher order knowledge about knowledge is not possible for most human-like agents, whether in reality or described by a formal system.
+
+For the case of reality, we have Alice and the rectangle. She knows that the tile is a rectangle. Unfortunately, her notion of what constitutes knowledge is that it is a justified true belief; she has not read Gettier. Furthermore, when she seeks evidence that the proposition "the tile I am looking at is a rectangle" is true, she realizes she must now identify the correct notion of truth, and identify evidence that that the proposition satisfies those conditions. Maybe truth is just as Tarski said, and the proposition is true just in case the tile is a rectangle. But maybe not. Whichever definitions of knowledge and truth are correct, we suppose Alice subscribes to a competing view, and therefore she does not have higher order knowledge.
+
+For formal agents defined with knowledge that includes the positive introspection property, things get more interesting. As with Alice, the agent, call it \emph{AlphaKnow}, must have the correct definition of a rectangle, and evidence demonstrating that the tile satisfies that definition. When deliberating on its own knowledge status, \emph{AlphaKnow} might crack open its own hood and see that it knows that the tile is a rectangle just in case ``the tile is a rectangle" is true in all possible worlds consistent with the evidence, which is the definition of its own knowledge. It sees that a sentence is true at a possible world just in case the world satisfies the sentence according to the inductively defined satisfaction relation. It sees further that knowledge entails truth, because it sees that the its possibility relation is reflexive, guaranteeing that the actual world is in the equivalence relation. It computes that ``the tile is a rectangle" is true in all possible worlds consistent with its evidence. Therefore, it knows that the tile is a rectangle, and having reasoned to this conclusion soundly, it knows that it knows it.
+
+In what follows, we present \emph{AlphaKnow}'s reasoning formally, with the outermost $\Kns{ak}$ referring to its object level reasoning, and everything within its scope is the content of its object level reasoning. Thus, \emph{AlphaKnow} is capable of self-reference. Let $\varphi$ be the proposition that ``the tile is a rectangle".  We represent object level propositional encoding of the metalanguage with $\ulcorner$these$\urcorner$. \emph{AlphaKnow} reasons:
+\begin{enumerate}
+%\item $\Kns{ak}(\Kns{ak}\varphi \iimplies \varphi)$
+\item $\Kns{ak}(\Kns{ak}\varphi \iiff \ulcorner(\forall v, w\Rel{k}^{ak}v \timplies v\models\varphi) \aand w\Rel{k}^{ak}w\urcorner)$
+\item $\Kns{ak}(\ulcorner w\Rel{k}^{ak}w\urcorner)$
+\item $\Kns{ak}(\ulcorner \forall v, w\Rel{k}^{ak}v \timplies v\models\varphi\urcorner)$
+\item $\Kns{ak}(\Kns{ak}\varphi)$
+\item $\Kns{ak}(\Kns{ak}\Kns{ak}\varphi)$
+
+\end{enumerate}
+
+So, \emph{AlphaKnow} reasons that if it knows that knowing the definition of knowledge and that the tile is a rectangle in all possible worlds entails that the tile is a rectangle, then it knows that the tile is a rectangle. Therefore, it knows that the tile is a rectangle, and because it deduced this by valid inference rules, it knows that it knows this.
+
+Unfortunately, if \emph{AlphaKnow} is capable of such self-referential reasoning, it can deduce the following theorem, 
+\begin{equation}~\label{alpha_know}
+	\Kns{AlphaKnow}(\Kns{AlphaKnow}\varphi \iimplies \varphi) \iimplies \Kns{AlphaKnow}\varphi,
+\end{equation} 
+which is better known as L\"ob's Theorem. An agent with L\"ob's Theorem in its head will always end up knowing false propositions. Agent foundations researchers refer to this as the \emph{L\"obian Obstacle}. Smullyan identified it as a problem for agents modeled by doxastic logic which we address in a future section. The obstacle presents itself to agents who (1) can conceive of self-referential sentences like, ``if I know that this sentence is true, then $\varphi$," (2) are normal modal reasoners, (3) have a reflexive and transitive modal possibility relation. (2) and (3) obviously hold for S5 epistemic agents, and we make the assumption that by being human-like reasoners they have a sufficient expressive language buried beneath our propositional abstraction.
+
+Thus, they face the L\"obian Obstacle, which is, for an arbitrary $\varphi$:
+\begin{center}
+	\begin{proofenum}
+        \item $\Kns{ak}(\psi \iiff (\Kns{ak}\psi \iimplies \varphi))$ \mbox{}\hfill L\"ob Sentence\footnote{The literature sometimes refers to this as a Curry Sentence, after the logician Haskell Curry, who used it to derive similar paradoxes in the lambda calculus.}
+        \item $\Kns{ak}(\Kns{ak}\psi \iiff \Kns{ak}(\Kns{ak}\psi \iimplies \varphi))$\mbox{}\hfill  Distribution
+        \item $\Kns{ak}(\Kns{ak}\psi \iimplies (\Kns{ak}\Kns{ak}\psi \iimplies \Kns{ak}\varphi))$\mbox{}\hfill  Taut, Distribution
+        \item $\Kns{ak}(\Kns{ak}\psi \iimplies \Kns{ak}\Kns{ak}\psi)$ \mbox{}\hfill  Positive Introspection
+        \item $\Kns{ak}(\Kns{ak}\psi \iimplies \Kns{ak}\varphi)$ \mbox{}\hfill  Taut (2.4)
+        \item $\Kns{ak}(\Kns{ak}\varphi \iimplies \varphi)$\mbox{}\hfill  Truth Axiom
+        \item $\Kns{ak}(\Kns{ak}\psi\iimplies \varphi)$ \mbox{}\hfill  Taut (2.5)
+        \item $\Kns{ak}\psi$ \mbox{}\hfill Taut (2.1)
+        \item $\Kns{ak}\varphi$ \mbox{}\hfill Taut (2.8), (2.5)
+    \end{proofenum}\flushright$\mathcal{QED}$
+    \end{center}
+
+
+
+Thus, if a formal agent \emph{really} has positive introspection, and can look inside itself to see whether the conditions for knowledge are satisfied, and reason in a human-like way, then it will reason itself into falsehoods. If formal agents lack positive introspection of the above sort, but their knowledge is governed by the positive introspection property, then they cannot know any proposition. Therefore, the positive introspection axiom is inappropriate for representing human-like knowledge in both humans and human-like machines.
+
+
+%Suppose Alice and Bob are deciding which store to go to to buy groceries. Alice recently saw a commercial that grocery store $G$ has the lowest prices on average, and she knows that it would violate marketing laws to claim this falsely. She tells Bob, ``Store $G$ has the lowest prices on average, so we should go there." Bob does not want to drive that far, so he asks, ``Do you \emph{know} that for a fact?" Alice has good evidence for her belief, and it turns out to be true, but introspecting she starts to consider other possibilities. She feels less confident, so she responds, ``I \emph{think} I know\dots" She explains her evidence to Bob, who grants that it is knowledge. Alice knew that $G$ has the lowest prices on average, but when challenged, she did not know that she knew this. This is a case where raising the question of one's attitude counting as knowledge invites enough doubt to rule out the higher order knowledge.
+
+%It need not depend on empirical evidence, either. Knowledge about logic and math are susceptible as well. Suppose Alice is studying for a logic quiz with Bob's help. She sometimes struggles with identifying which of \emph{denying the antecedent} and \emph{modus tollens} is valid and which a fallacy. After much practice, the practice question comes up ``Which is valid, denying the antecedent in order to infer that the consequent is false, or denying the consequent in order to infer that the antecedent is false?" Again, she cannot remember the difference, but she tries to work it out in her head. She thinks of a case: If $x$ is a square, then $x$ is a rectangle. She denies the antecedent: If $x$ is not a square, then $x$ is not a rectangle. No, she thinks, there are plenty of non-square rectangles. Try the other direction. If $x$ is not a rectangle, then $x$ is not a square. This seems right. Bob interrupts her thoughts, ``Come on, you \emph{know} this." And she does. But still in doubt, she doesn't know she knows it.
+
+
+%One does not often hear accusations of irrationality of the form, ``that claim you just made violates the theorem of S5 epistemic logic that $\Kns{i}\varphi$ implies $\Kns{i}\Kns{i}\varphi$. Therefore, your argument is unsound." If confronted with this claim, a person might rightly respond "so much the worse for S5 epistemic logic. She knows the answer to this math question, she just doesn't know she knows it!" This makes sense. To say that someone, perhaps a student, knows the answer to a question but does not know she knows it is to say that the information is available to her in her very own head, but because she struggles to recall the information, she gives up the internal search and concludes she does not know the answer. This scenario actually happens, so clearly the S5 epistemic operator, with the positive introspection property as a theorem, does not accurately describe implicit knowledge.
+%
+%Positive introspection might be defended by saying just as the student implicitly knows the answer because it is available to her in her own head, so is her higher order knowledge of her knowledge implicitly available to her. But this does not follow, because cases also happen where a student knows the answer, recalls the information after some struggle, and feels as if she is guessing as she tentatively asserts the information as an answer. She implicitly knows the answer exactly analogously as in the previous case, but she lacks the belief that she knows it, so she cannot know that she knows it.
+This section has shown that negative and positive introspection are inappropriate properties for human-like knowledge. Since S5 epistemic logic includes these properties, we conclude that it does not perform well by the criterion of accuracy as a formal system, at least regarding human-like knowlege.
+
+The next section presents the criterion of normativity.
+\section{Criterion 2: Normativity}
+\label{sec:normativity}
+Just as propositional logic accurately describes the valid rules of inference for reasoning about propositions, it also has a significant normative aspect. Philosophers, lawyers, mathematicians, and anyone who takes reasoning and argumentation seriously, learns the basic validities of propositional logic, as well as perhaps first order logic and the classical syllogisms. They use these rules to guide their own thinking and to evaluate the arguments presented in defense of positions. Human thinking does not naturally abide by all the validities of propositional, first order, and syllogistic logic, so knowing these formal rules can serve as a way to improve one's own thinking through conscious effort.
+
+A similar normativity is present in probabilistic reasoning. The axioms and theorems of probability theory describe the valid probabilistic inferences relating to conjunction, disjunction, negation, and conditionals. The normative aspect of probability theory evaluates human probabilistic inferences in terms of how well they abide by these rules, and a human can consciously avoid fallacious reasoning by keeping in mind the theorems of probability theory. One does better to make inferences in accordance with probability theory, both in terms of expected utility and in terms of forming accurate degrees of belief. This thesis does not address degrees of belief, so we abstract away from probability theory, but the principle stands that correct formalisms for describing a method of reasoning tend to have a normative character.
+
+Epistemic logic, and modal logics generally, do not tend to have the same normative character. The normative aspects of S5 epistemic logic might be due to the fact that more knowledge allows for better decisions, as is the case with ideally rational agents in game theory. If you can approximate the knowledge conditions of these agents, and use an optimal decision procedure to choose which action to take, then you can approximate the optimal outcomes of ideally rational agents. 
+
+Consider a case in which Bob does not know there is a car in his blind spot on the highway. Bob is driving at a reasonable speed, and checked his blind spot a reasonable time ago. But there is a car there now because it is moving unreasonably fast. Bob is about to change lanes. He reasons, ``I checked my blind spot a short time ago and saw no car, so I have recent evidence that no car is there, but I should check again to make sure." Has Bob reasoned invalidly? The contrapositive of negative introspection states that if Bob \emph{may have}\footnote{Recall this is our shorthand for ($\Poss{Bob}$)} that he knows that the lane next to him is clear, then he knows it. But Bob identified that he may have that he knows, but does not know. According to S5 epistemic logic, his reasoning is invalid. But he clearly is better off by reasoning this way and checking his mirror again before changing lanes.
+
+Thus, in this case, if Bob were to reason by S5 epistemic logic, he would be strictly worse off, because he would infer that he knows the lane next to him is empty from his maybe having knowledge of it. This is a mark against S5 epistemic logic as a normative standard to strive for.
+
+%Should we say Bob is irrational for not being aware of his knowledge status regarding such a relevant proposition? What about the fact that Bob does not know the year of the renaming of the Japanese prefecture of Kanazawa, and, while driving, does not know that he does not know this, because he has never heard of Kanazawa? If asked whether he knows, he could correctly identify his ignorance, and so it could be said that he implicitly knows it, but is he not irrational, since the proposition is irrelevant for his activities? Suppose instead Bob falsely believes that the lane next to him is empty of cars. Suppose further that he has good reason to believe this because a reasonable time ago he checked his blindspot, but that the car currently there is speeding. Analogously to the other case, Bob does not know that there is a car in his blind spot, and he does not know that he does not know this. In this case, it seems Bob is not irrational. So, we have a case where a fundamental axiom of S5 epistemic logic is neither descriptive nor normative.
+
+%Hintikka, in laying out his system of epistemic logic, was primarily concerned with when statements about knowledge and belief were criticizable or self-defeating. He did not include the negative introspection axiom in his system. Why, then, is it included in so many epistemic logics?
+Next we present the criterion of indistinguishability.
+
+\section{Criterion 3: Indistinguishability}
+\label{sec:indist}
+Many find it intuitive to speak of the epistemic relation as an equivalence or indistinguishability relation, which requires it to be symmetric, transitive, and reflexive. The epistemic relation in S5 is Euclidean and reflexive, which together yield symmetry and transitivity, and therefore an equivalence relation. Equivalence relations capture the idea of indistinguishability because each world in the equivalence class is indistinguishable from each other relative to the relation defining the class. All the modal formulas true at one of the worlds in an equivalence relation are true at each of the other worlds in the relation, so from a modal perspective, they are indistinguishable. When the modality is knowledge, this means that relative to the agent's knowledge, the worlds are indistinguishable. 
+
+This property of S5 epistemic logic is a strong point in its favor, despite the shortcomings detailed in the previous section. Any formal system seeking to model human-like knowledge must surely represent the idea that an agent does not know \emph{whether} a proposition $\varphi$ is true or false just in case he cannot distinguish the world he is in from the possible worlds in which either is the case. For epistemic logic, this condition, which we call the \emph{indistinguishability criterion}, applies to the underlying epistemic relation. S5, having an equivalence relation, clearly satisfies the criterion.
+
+Hintikka's system described in the seminal work on epistemic logic did not meet this criterion. In rejecting the negative introspection axiom, Hintikka formalized knowledge as an S4 operator, which is weaker than S5, with a reflexive and transitive epistemic relation. This is known as a preorder relation, an instance of which is the familiar $\leq$ relation. For this relation, it is not the case that an agent cannot distinguish related worlds from each other. However, this relation does nicely formalize the notion that implicit knowledge is available to someone in her own head as a sort of \emph{reachability} relation. The reachability relation of directed acyclic graphs is a preorder. One could consider the process of trying to remember a piece of information as stepping down the epistemic possibility relation in a directed acyclic graph in one's head, making inferences and recollections and transitioning from a state of not knowing, ruling out possibilities along the way, until reaching a state of knowledge. However, this representation has a temporal quality not shared by the indistinguishability criterion, nor represented by the formal system itself, which is static. Furthermore, it does not represent the idea that the agent at present has all the information that allows her to rule out the possibilities inconsistent with the proposition she implicitly knows. In the world at the root of the preorder chain, she does not know the proposition, by assumption.
+
+Therefore, S5 epistemic logic, specifically the negative introspection axiom, allows for this very appealing notion of epistemic indistinguishability. Anything weaker than an equivalence relation will not capture this notion. It is a benchmark against which candidate epistemic logics should be measured, along with the ability to accurately describe human-like knowledge and offer normative criteria for evaluating epistemic states.
+
+\section{Adding Belief}
+\label{sec:belief}
+One aspect of human-like knowledge that we have not mentioned formally, but have referenced informally, is belief. To many philosophers, an agent's believing a proposition is a necessary condition for her knowing it. S5 epistemic logic on its own makes no reference to belief. Agents know things or not, and they know whether they know them or not. If one wishes to formally model an agent's knowledge and belief, one must devise an epistemic logic that synthesizes the two notions. The modal logic for reasoning about beliefs is called \emph{doxastic logic}. We refered to synthesized logics for reasoning about knowledge and belief as epistemic logic, though, because these logics are still logics for reasoning about knowledge, of which belief is a component.
+
+In formalizing knowledge and belief, a logician identifies a set of axioms for the knowledge operator, a set of axioms for the belief operator, and a set of axioms logically relating the two operators. This creates an epistemic logic that synthesizes knowledge and belief. Human-like agents sometimes have false beliefs, so an epistemic logic that can formalize inferences about knowlede, beliefs, and particularly false beliefs, increases its accuracy in describing human-like knowledge. If it can do so while maintaining a normative character, it maintains value as a normative formal system. We examine various attempts at synthesizing knowledge and belief, evaluating them according to the above criteria, and then present our own attempt.
+
+\subsection{Species of Logics for Knowledge and Belief}
+\label{sec:ep_logs}
+
+In examining the standard epistemic logic presented in the current literature, which we referred to as S5 epistemic logic due to the properties of its modal operator, we identified the following desirable properties of an epistemic logic. First, the epistemic logic should accurately describe human-like knowledge. Second, the epistemic logic should have a normative character, such that agents who violate its theorems are properly criticizable in some way, and it should offer guidance to agents in how to improve their epistemic states by abiding by the theorems. Finally, the epistemic logic must capture the intuition that epistemically possible worlds should be indistinguishable from each other, which requires an equivalence relation. This may seem to be a set of criteria that are jointly unachievable. Before drawing that conclusion, we shall consider some other epistemic logics and asses them by these criteria.
+
+\subsection{Hintikka}
+
+\subsection{KL}
+
+\subsection{Autoepistemic}
+
+\subsection{GC Logic}
+
+
+\paragraph{Paragraph headings} Use paragraph headings as needed.
+\begin{equation}
+a^2+b^2=c^2
+\end{equation}
+
+% For one-column wide figures use
+%\begin{figure}
+% Use the relevant command to insert your figure file.
+% For example, with the graphicx package use
+%  \includegraphics{example.eps}
+% figure caption is below the figure
+%\caption{Please write your figure caption here}
+%\label{fig:1}       % Give a unique label
+%\end{figure}
+%
+% For two-column wide figures use
+%\begin{figure*}
+% Use the relevant command to insert your figure file.
+% For example, with the graphicx package use
+%  \includegraphics[width=0.75\textwidth]{example.eps}
+% figure caption is below the figure
+%\caption{Please write your figure caption here}
+%\label{fig:2}       % Give a unique label
+%\end{figure*}
+%
+% For tables use
+%\begin{table}
+% table caption is above the table
+%\caption{Please write your table caption here}
+%\label{tab:1}       % Give a unique label
+% For LaTeX tables use
+%\begin{tabular}{lll}
+%\hline\noalign{\smallskip}
+%first & second & third  \\
+%\noalign{\smallskip}\hline\noalign{\smallskip}
+%number & number & number \\
+%number & number & number \\
+%\noalign{\smallskip}\hline
+% \end{tabular}
+%\end{table}
+
+
+%\begin{acknowledgements}
+%If you'd like to thank anyone, place your comments here
+%and remove the percent signs.
+%\end{acknowledgements}
+
+% BibTeX users please use one of
+%\bibliographystyle{spbasic}      % basic style, author-year citations
+%\bibliographystyle{spmpsci}      % mathematics and physical sciences
+%\bibliographystyle{spphys}       % APS-like style for physics
+%\bibliography{}   % name your BibTeX data base
+
+% Non-BibTeX users please use
+\begin{thebibliography}{}
+%
+% and use \bibitem to create references. Consult the Instructions
+% for authors for reference list style.
+%
+\bibitem{RefJ}
+% Format for Journal Reference
+Author, Article title, Journal, Volume, page numbers (year)
+% Format for books
+\bibitem{RefB}
+Author, Book title, page numbers. Publisher, place (year)
+% etc
+\end{thebibliography}
+
+\end{document}
+% end of file template.tex
+
