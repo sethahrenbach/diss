@@ -298,7 +298,7 @@ In Hintikka's 1967 \emph{Knowledge and Belief: A logic of the two notions}, he p
 \subsection{Voorbraak's Objective Knowledge and Rational Belief: OKRIB}
 \label{sec:okrib}
 
-\section{Avoiding L\"ob's Obstacle}
+\section{CRAP}
 \label{sec:avoid_lob}
 
 \begin{table}[H]
@@ -322,7 +322,8 @@ In Hintikka's 1967 \emph{Knowledge and Belief: A logic of the two notions}, he p
 \end{center}
 \end{table}
 
-The operators in this logic are reduced in power relative to other logics of knowledge and belief. Here, knowledge is true, belief is consistent, knowledge implies belief, beliefs are subjectively justified, and both operators are normal modal operators. Knowledge lacks both epistemic introspection properties, while belief has positive introspection. As with all normal epistemic operators, these suffer from the problem of logical omniscience, which this paper does not attempt to solve. Rather, we shall show that in the instance of knowledge, the L\"obian Obstacle is avoided. The positive introspection property of belief is a theorem, however, so L\"ob's Theorem will be derivable for the belief operator.
+%
+%The operators in this logic are reduced in power relative to other logics of knowledge and belief. Here, knowledge is true, belief is consistent, knowledge implies belief, beliefs are subjectively justified, and both operators are normal modal operators. Knowledge lacks both epistemic introspection properties, while belief has positive introspection. As with all normal epistemic operators, these suffer from the problem of logical omniscience, which this paper does not attempt to solve. Rather, we shall show that in the instance of knowledge, the L\"obian Obstacle is avoided. The positive introspection property of belief is a theorem, however, so L\"ob's Theorem will be derivable for the belief operator.
 \begin{theorem}[Positive Belief Introspection]~\label{belief_posint}
 	$\Bels{i}\varphi \iimplies \Bels{i}\Bels{i}\varphi$
 \end{theorem}
@@ -335,72 +336,72 @@ The operators in this logic are reduced in power relative to other logics of kno
 	\end{proofenum}
 \end{proof}\mbox{}\hfill $\mathcal{QED}$
 
-The logic defined by these axiom schemas and inference rules avoids L\"ob's Obstacle for $\Kns{i}$, as it is no longer has the positive introspection property.
-
-\begin{figure}[H]
-	\begin{center}
-		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
-		thick,base node/.style={circle,draw,minimum size=35pt}]
-		
-		\node[base node] (w) {\begin{tabular}{c}
-			$w:  p$ \\ $\Kns{i}p$ \\ $\tlnot\Kns{i}\Kns{i}p$
-			\end{tabular}};
-		\node[base node] (v) [right of=w] {\begin{tabular}{c}
-			$v:  p$ \\ $\tlnot\Kns{i}p $
-			\end{tabular}};
-		\node[base node] (u) [right of=v] {$u: \tlnot p$};
-		\path[]
-		(w) edge node[above] {$\Rel{k}^i$} (v)
-		edge [loop left] node {$\Rel{k}^i$} (w)
-		(v) 
-%		edge node[below] {} (w)
-		%	\draw [->] (v) edge[in=5,out=355,loop] node[right] {$R$} (v)
-		edge [<-, loop above] node {$\Rel{k}^i$} (v)
-		edge node[above] {$\Rel{k}^i$} (u)
-		(u)  edge [<-, loop right] node {$\Rel{k}^i$} (u);
-		\end{tikzpicture}
-	\end{center}
-	\caption{A counterexample to $\Kns{i}\varphi\iimplies\Kns{i}\Kns{i}\varphi$.}
-\end{figure}
-
-This logic also avoids the disaster of L\"ob's Theorem for belief, because $\Bels{i}(\Bels{i}\varphi \iimplies \varphi)$ is no longer a theorem.
-
-\begin{figure}[H]
-	\begin{center}
-		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3.4cm,
-		thick,base node/.style={circle,draw,minimum size=35pt}]
-		
-		\node[base node] (w) {\begin{tabular}{c}
-			$w:  p$ \\ $\BPoss{i}(\Bels{i}p \tland \tlnot p)$
-			\end{tabular}};
-		\node[base node] (v) [right of=w] {\begin{tabular}{c}
-			$v:  \tlnot p$  \\
-			$\Bels{i}p$
-			\end{tabular}};
-		\node[base node] (u) [right of=v] {$u:  p$};
-		\path[]
-		(w) edge node[above] {$\Rel{k,b}^i$} (v)
-		edge [loop left] node {$\Rel{k}^i$} (w)
-		(v) 
-		%		edge node[below] {} (w)
-		%	\draw [->] (v) edge[in=5,out=355,loop] node[right] {$R$} (v)
-		edge [<-, loop above] node {$\Rel{k}^i$} (v)
-		edge node[above] {$\Rel{k,b}^i$} (u)
-		(u)  edge [<-, loop right] node {$\Rel{k,b}^i$} (u);
-		\end{tikzpicture}
-	\end{center}
-	\caption{A counterexample to $\Bels{i}(\Bels{i}\varphi \iimplies \varphi)$.}~\label{not_conceited}
-\end{figure}
-
-Therefore, L\"ob's Theorem has the same effect for belief as it does for Peano arithmetic: $i$ believes that her belief is accurate only for propositions that she actually believes. Her belief in her own accuracy is not a general claim. In this light, its effect is mitigated, in the same way it is for arithmetic. Because L\"ob's antecedent is not valid for belief, $i$ is not what Smullyan calls a \emph{conceited} reasoner. With L\"ob's Theorem for belief, $i$ constitutes what Smullyan calls a \emph{modest} reasoner.
-
-How shall we interpret the $\BPoss{i}$ operator? Figure \ref{not_conceited} could be read ``it is consistent with what $i$ believes that $i$ falsely believes that $p$". It is somewhat standard to interpret knowledge and belief operators in this way: ``...consistent with what $i$ knows/believes".  We do not endorse this interpretation due to the smell of circularity hanging around it. We prefer the interpretation ``$i$ considers it possible that..." for $\BPoss{i}$ and ``$i$ has evidence that..." for $\Poss{i}$. 
-
-If we consider the contrapositive of L\"ob's Theorem for belief, it states $\tlnot \Bels{i} \varphi \iimplies \tlnot\Bels{i}(\Bels{i} \varphi \iimplies \varphi)$. Indeed, this is G\"odel's Second Incompleteness Theorem applied to belief: ``if $i$ does not believe $\varphi$, then $i$ does not believe that believing $\varphi$ implies its truth." If we substitute in $BPoss{i}$ for $\tlnot\Bels{i}\tlnot$ and push the negation into the implication, the consequent is $\BPoss{i}(\Bels{i}\varphi \tland \tlnot \varphi)$, which is the formula illustrated in Figure \ref{not_conceited}. We read this as ``$i$ considers it possible that she believe $p$ but $p$ be false. This is perhaps a bit strange. However, the interpretations we propose have the following benefit.
-
-Recall that the contrapositive of the Knowledge implies Belief axiom is $\BPoss{i}\varphi \iimplies \Poss{i}\varphi$. Our interpretation reads this as, ``$i$ considers $\varphi$ to be possible only if she has evidence that $\varphi$."  This may not be valid for how humans \emph{in fact} form beliefs, but it provides a normative dimension to the logic and some modest level of idealization. The agent's modeled by this logic are human-like, and maybe some particular humans actually abide by these axioms. We call these agents Grounded-Coherent agents, because their beliefs are grounded in evidence, and coherent because they avoid L\"ob's Obstacle.
-
-The belief operator narrowly avoids L\"ob's Obstacle. Doxastic logic typically includes as an axiom of Belief Consistency, which corresponds to a serial doxastic possibility relation. Crucially, this axiom $\Bels{i}\varphi\iimplies\BPoss{i}]\varphi$ is equivalent to $\tlnot(\Bels{i}\varphi \tland \Bels{i}\tlnot\varphi)$, not $\tlnot\Bels{i}(\varphi \tland \tlnot \varphi)$. The former does not run into L\"ob's Obstacle, while the latter ends in disaster.
+%The logic defined by these axiom schemas and inference rules avoids L\"ob's Obstacle for $\Kns{i}$, as it is no longer has the positive introspection property.
+%
+%\begin{figure}[H]
+%	\begin{center}
+%		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
+%		thick,base node/.style={circle,draw,minimum size=35pt}]
+%		
+%		\node[base node] (w) {\begin{tabular}{c}
+%			$w:  p$ \\ $\Kns{i}p$ \\ $\tlnot\Kns{i}\Kns{i}p$
+%			\end{tabular}};
+%		\node[base node] (v) [right of=w] {\begin{tabular}{c}
+%			$v:  p$ \\ $\tlnot\Kns{i}p $
+%			\end{tabular}};
+%		\node[base node] (u) [right of=v] {$u: \tlnot p$};
+%		\path[]
+%		(w) edge node[above] {$\Rel{k}^i$} (v)
+%		edge [loop left] node {$\Rel{k}^i$} (w)
+%		(v) 
+%%		edge node[below] {} (w)
+%		%	\draw [->] (v) edge[in=5,out=355,loop] node[right] {$R$} (v)
+%		edge [<-, loop above] node {$\Rel{k}^i$} (v)
+%		edge node[above] {$\Rel{k}^i$} (u)
+%		(u)  edge [<-, loop right] node {$\Rel{k}^i$} (u);
+%		\end{tikzpicture}
+%	\end{center}
+%	\caption{A counterexample to $\Kns{i}\varphi\iimplies\Kns{i}\Kns{i}\varphi$.}
+%\end{figure}
+%
+%This logic also avoids the disaster of L\"ob's Theorem for belief, because $\Bels{i}(\Bels{i}\varphi \iimplies \varphi)$ is no longer a theorem.
+%
+%\begin{figure}[H]
+%	\begin{center}
+%		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3.4cm,
+%		thick,base node/.style={circle,draw,minimum size=35pt}]
+%		
+%		\node[base node] (w) {\begin{tabular}{c}
+%			$w:  p$ \\ $\BPoss{i}(\Bels{i}p \tland \tlnot p)$
+%			\end{tabular}};
+%		\node[base node] (v) [right of=w] {\begin{tabular}{c}
+%			$v:  \tlnot p$  \\
+%			$\Bels{i}p$
+%			\end{tabular}};
+%		\node[base node] (u) [right of=v] {$u:  p$};
+%		\path[]
+%		(w) edge node[above] {$\Rel{k,b}^i$} (v)
+%		edge [loop left] node {$\Rel{k}^i$} (w)
+%		(v) 
+%		%		edge node[below] {} (w)
+%		%	\draw [->] (v) edge[in=5,out=355,loop] node[right] {$R$} (v)
+%		edge [<-, loop above] node {$\Rel{k}^i$} (v)
+%		edge node[above] {$\Rel{k,b}^i$} (u)
+%		(u)  edge [<-, loop right] node {$\Rel{k,b}^i$} (u);
+%		\end{tikzpicture}
+%	\end{center}
+%	\caption{A counterexample to $\Bels{i}(\Bels{i}\varphi \iimplies \varphi)$.}~\label{not_conceited}
+%\end{figure}
+%
+%Therefore, L\"ob's Theorem has the same effect for belief as it does for Peano arithmetic: $i$ believes that her belief is accurate only for propositions that she actually believes. Her belief in her own accuracy is not a general claim. In this light, its effect is mitigated, in the same way it is for arithmetic. Because L\"ob's antecedent is not valid for belief, $i$ is not what Smullyan calls a \emph{conceited} reasoner. With L\"ob's Theorem for belief, $i$ constitutes what Smullyan calls a \emph{modest} reasoner.
+%
+%How shall we interpret the $\BPoss{i}$ operator? Figure \ref{not_conceited} could be read ``it is consistent with what $i$ believes that $i$ falsely believes that $p$". It is somewhat standard to interpret knowledge and belief operators in this way: ``...consistent with what $i$ knows/believes".  We do not endorse this interpretation due to the smell of circularity hanging around it. We prefer the interpretation ``$i$ considers it possible that..." for $\BPoss{i}$ and ``$i$ has evidence that..." for $\Poss{i}$. 
+%
+%If we consider the contrapositive of L\"ob's Theorem for belief, it states $\tlnot \Bels{i} \varphi \iimplies \tlnot\Bels{i}(\Bels{i} \varphi \iimplies \varphi)$. Indeed, this is G\"odel's Second Incompleteness Theorem applied to belief: ``if $i$ does not believe $\varphi$, then $i$ does not believe that believing $\varphi$ implies its truth." If we substitute in $BPoss{i}$ for $\tlnot\Bels{i}\tlnot$ and push the negation into the implication, the consequent is $\BPoss{i}(\Bels{i}\varphi \tland \tlnot \varphi)$, which is the formula illustrated in Figure \ref{not_conceited}. We read this as ``$i$ considers it possible that she believe $p$ but $p$ be false. This is perhaps a bit strange. However, the interpretations we propose have the following benefit.
+%
+%Recall that the contrapositive of the Knowledge implies Belief axiom is $\BPoss{i}\varphi \iimplies \Poss{i}\varphi$. Our interpretation reads this as, ``$i$ considers $\varphi$ to be possible only if she has evidence that $\varphi$."  This may not be valid for how humans \emph{in fact} form beliefs, but it provides a normative dimension to the logic and some modest level of idealization. The agent's modeled by this logic are human-like, and maybe some particular humans actually abide by these axioms. We call these agents Grounded-Coherent agents, because their beliefs are grounded in evidence, and coherent because they avoid L\"ob's Obstacle.
+%
+%The belief operator narrowly avoids L\"ob's Obstacle. Doxastic logic typically includes as an axiom of Belief Consistency, which corresponds to a serial doxastic possibility relation. Crucially, this axiom $\Bels{i}\varphi\iimplies\BPoss{i}]\varphi$ is equivalent to $\tlnot(\Bels{i}\varphi \tland \Bels{i}\tlnot\varphi)$, not $\tlnot\Bels{i}(\varphi \tland \tlnot \varphi)$. The former does not run into L\"ob's Obstacle, while the latter ends in disaster.
 
 \begin{theorem}[Consistency Disaster]~\label{no_bel_cons}
 	If $\tlnot\Bels{i}(\varphi \tland \tlnot \varphi)$ and\\ $\Bels{i}(\Bels{i}\varphi \iimplies\varphi)\iimplies \Bels{i}\varphi$ are theorems, then $\Bels{i}(\varphi \tland \tlnot \varphi)$.
@@ -416,7 +417,18 @@ The belief operator narrowly avoids L\"ob's Obstacle. Doxastic logic typically i
 	\end{proofenum}
 \end{proof}
 
-However, so long as it is merely not the case that $i$ believes $\varphi$ and that she believes $\tlnot \varphi$, we avoid disaster. It is worth exploring the cost of avoiding L\"ob's Obstacle. Does this epistemic logic still characterize something resembling a realistic logic of human-like knowledge? It still suffers from the problem of logical omniscience, for both knowledge and belief. This is unavoidable for a normal modal logic. It maintains the critical axiom that knowledge is true. 
+But of course we have the equivalence $\Bels{i}(\varphi \tland \psi) \equiv (\Bels{i}\varphi \tland \Bels{i}\psi)$, so from the axiom of Belief Consistency and Theorem \ref{no_bel_cons}, it follows that:
+
+\begin{theorem}[Beliefs Inconsistent]~\label{crap}
+	For all $\varphi$, $\Bels{i}\varphi$.
+\end{theorem}
+
+\begin{proof}
+	This follows from Theorem \ref{no_bel_cons} and $\Bels{i}(\varphi \tland \psi) \equiv (\Bels{i}\varphi \tland \Bels{i}\psi)$.
+\end{proof}\mbox{}\hfill $\mathcal{QED}$
+
+Therefore, the logic of Grounded Coherent Agents cannot apply to humans.
+%However, so long as it is merely not the case that $i$ believes $\varphi$ and that she believes $\tlnot \varphi$, we avoid disaster. It is worth exploring the cost of avoiding L\"ob's Obstacle. Does this epistemic logic still characterize something resembling a realistic logic of human-like knowledge? It still suffers from the problem of logical omniscience, for both knowledge and belief. This is unavoidable for a normal modal logic. It maintains the critical axiom that knowledge is true. 
 
 One might wonder whether it would be acceptable to abandon the Truth Axiom for knowledge and allow L\"ob's Theorem to hold for it. This would introduce more modesty to the notion of knowledge, where a human-like agent knows that her knowledge is true only for those propositions that she actually knows, but not in the general sense. What would this mean for epistemology? A false proposition would no longer imply a lack of knowledge. 
 
