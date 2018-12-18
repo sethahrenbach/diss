@@ -573,28 +573,41 @@ BELOW NEEDS WORK.
 TODO. Belief is standard~\cite{FHMV}. They are related logically by EP(1-3), which hold that knowledge entails belief, belief entails that one believes that one knows, and belief entails than one knows that one believes. Finally, actions and safe actions are logically related by SP and PR, which hold that necessary consequences of \emph{mere} action are also necessary consequences of \emph{safe} actions, and that a pilot can execute an action only if he believes that he is executing a safe action. 
 
 Below are the axioms characterizing the reduction laws from the dynamic logic to a purely static logic through recursive application.\\
-\begin{tcolorbox}
-	Aprop: $\Pal{i,(A,\laa)}p \Leftrightarrow (pre(\laa)\iimplies(post(A,p) \iimplies p))$\\
-	AN: $\Pal{i,(A,\laa)}\tlnot\varphi \Leftrightarrow (pre(\laa) \iimplies \tlnot \Pal{i(A,\laa)}\varphi)$\\
-	AC: $\Pal{i,(A,\laa)}(\varphi \tland \psi) \Leftrightarrow (\Pal{i,(A,\laa)}\varphi \tland \Pal{i,(A,\laa)}\psi)$\\
-	AK: $\Pal{i,(A,\laa)}\Kns{i}\varphi \Leftrightarrow (pre(\laa) \iimplies \bigwedge_{\laa\chi_{k}^i \lbb}\Kns{i}\Pal{i,(A,\lbb)}\varphi)$\\
-	AB: $\Pal{i,(A,\laa)}\Bels{i}\varphi \Leftrightarrow (pre(\laa) \iimplies \bigwedge_{\laa\chi_{b}^i \lbb}\Bels{i}\Pal{i,(A,\lbb)}\varphi)$\\
-	Sprop: $\Pal{i,(A,\laa),S}p \Leftrightarrow (pre_s(\laa) \iimplies (post(A,p) \iimplies p))$\\
-	SN: $\Pal{i,(A,\laa),s}\tlnot\varphi \Leftrightarrow (pre_s(\laa) \iimplies \tlnot \Pal{i(A,\laa),S}\varphi)$\\
-	SC: $\Pal{i,(A,\laa),S}(\varphi \tland \psi) \Leftrightarrow (\Pal{i,(A,\laa),S}\varphi \tland \Pal{i,(A,\laa),S}\psi)$\\
-	SK: $\Pal{i,(A,\laa),S}\Kns{i}\varphi \Leftrightarrow (pre_s(\laa) \iimplies \bigwedge_{\laa\Rel{k}'^{i}\lbb}\Kns{i}\Pal{i,(A,\lbb),S}\varphi)$\\
-	SB: $\Pal{i,(A,\laa),S}\Bels{i}\varphi \Leftrightarrow (pre_s(\laa) \iimplies \bigwedge_{\laa\Rel{b}'^{i}\lbb}\Bels{i}\Pal{i,(A,\lbb),S}\varphi)$\\
-\end{tcolorbox}
+\begin{table}[H]
+	\begin{center}
+    \begin{tabular}{| l r |}
+    \hline & \\
+	$\Pal{A,\laa}p \Leftrightarrow (pre(\laa)\iimplies(post(A,p) \iimplies p))$ & Aprop \\
+	$\Pal{A,\laa}\tlnot\varphi \Leftrightarrow (pre(\laa) \iimplies \tlnot \Pal{A,\laa}\varphi)$ & AN\\
+	$\Pal{A,\laa}(\varphi \tland \psi) \Leftrightarrow (\Pal{A,\laa}\varphi \tland \Pal{A,\laa}\psi)$ & AC\\
+	$\Pal{A,\laa}\Kns{i}\varphi \Leftrightarrow (pre(\laa) \iimplies \bigwedge_{\laa\chi_{k}^i \lbb}\Kns{i}\Pal{A,\lbb}\varphi)$ & AK\\
+	$\Pal{A,\laa}\Bels{i}\varphi \Leftrightarrow (pre(\laa) \iimplies \bigwedge_{\laa\chi_{b}^i \lbb}\Bels{i}\Pal{A,\lbb}\varphi)$ & AB\\ & \\
+	\hline & \\
+	$\SPal{A,\laa}p \Leftrightarrow (pre_s(\laa) \iimplies (post(A,p) \iimplies p))$ & Sprop\\
+	$\SPal{A,\laa}\tlnot\varphi \Leftrightarrow (pre_s(\laa) \iimplies \tlnot \SPal{A,\laa}\varphi)$ & SN\\
+	$\SPal{A,\laa}(\varphi \tland \psi) \Leftrightarrow (\SPal{A,\laa}\varphi \tland \SPal{A,\laa}\psi)$ & SC\\
+	$\SPal{A,\laa}\Kns{i}\varphi \Leftrightarrow (pre_s(\laa) \iimplies \bigwedge_{\laa\Rel{k}'^{i}\lbb}\Kns{i}\SPal{A,\lbb}\varphi)$ & SK\\
+	$\SPal{A,\laa}\Bels{i}\varphi \Leftrightarrow (pre_s(\laa) \iimplies \bigwedge_{\laa\Rel{b}'^{i}\lbb}\Bels{i}\SPal{A,\lbb}\varphi)$ & SB\\ & \\
+	\hline
+	\end{tabular}
+	\caption{The reduction axioms of DASL.}
+	\end{center}
+\end{table}
 
 %\PalPos{i}{\laa}\varphi \iimplies \Bels{i}\SPalPos{i}{\laa}\varphi$\\
 
 
 
-\section{Soundness}
+\section{Soundness and Completeness}
+
+This section establishes the soundness and completeness of the logic. Often these properties are examined separately for a formal system, but some modal logics have features that allow the powerful Sahlqvist theorem to prove them both at once. Because the theorem is very powerful, and may be unfamiliar to some, we devote some space to explaining it and the conditions under which it applies. Without this groundwork, the proof of soundness and completeness will seem inadequate and suspicious.
+
+We first present the features that make a modal logic formula a member of the class of Sahlqvist formulas. We then present the Sahlqvist theorem, which applies to the class of Sahlqvist formulas. Finally, we show that the axioms of DASL are Sahlqvist formulas, and therefore that the Sahlqvist theorem applies to them. This suffices to show soundness and completeness.
+
+
 \begin{tcolorbox}
 	\begin{theorem}[Soundness]
-		Dynamic Agent Safety Logic is sound for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, transitive, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, \\(4) $\llbracket i,(A,\laa),S\rrbracket \subseteq \llbracket i,(A,\laa)\rrbracket$%for all $\laa,\  V^s(\laa) \subseteq V^p(\laa),$ [Questionable]
-		and\\ (5) $(\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i) \subseteq \llbracket i, (A,\laa)\rrbracket$.
+		Dynamic Agent Safety Logic is sound for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, transitive, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$.
 	\end{theorem}
 \end{tcolorbox}
 $\mathbf{Proof}.$ $(1)\  and\  (2)$ correspond to the axioms that $\Kns{i}$ is a T modality and $\Bels{i}$ is a KD45 modality in the usual way. $(3)$ corresponds to EP1, EP2, and EP3. Axioms AP through SB are reduction axioms. This leaves $(4)$, corresponding to SP, and $(5)$ which corresponds to PR. Here we will prove $(5)$. Let $M$ be a Kripke structure satisfying the five conditions above. Let $A$ be an Action structure with $\laa$ and $i$ as its actual action token and agent. 
