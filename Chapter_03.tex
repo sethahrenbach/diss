@@ -604,6 +604,21 @@ This section establishes the soundness and completeness of the logic. Often thes
 
 We first present the features that make a modal logic formula a member of the class of Sahlqvist formulas. We then present the Sahlqvist theorem, which applies to the class of Sahlqvist formulas. Finally, we show that the axioms of DASL are Sahlqvist formulas, and therefore that the Sahlqvist theorem applies to them. This suffices to show soundness and completeness.
 
+A formula is \emph{positive} if all of its propositional letters are in the scope of an even number of negation signs. A formula is \emph{negative} if all of its propositional letters are in the scope of an odd number of negation signs.
+
+A \emph{Sahlqvist antecedent} is a formula built from $a)$ propositional letters prefixed by $n\geq0$ $\Box$'s and $b)$ negative formulas, $c)$ using only $\tlnot$, $\tland$, and $\Diamond$ to build the antecedent from $(a)$ and $(b)$ components.
+
+A \emph{Sahlqvist formula} is a formula with a \emph{Sahlqvist antecedent} and a \emph{positive} consequent.
+
+\begin{theorem}[Sahlqvist's Theorem]~\label{thm:sahlqvist}
+	Every Sahlqvist formula $\varphi$ has a corresponding first-order translation $\mathnormal{FO}(\varphi)$ and is valid for the frames for which $\mathnormal{FO}(\varphi)$ is canonical.
+\end{theorem}
+
+For soundness and completeness, it suffices to show that each DASL axiom is a Sahlqvist formula.
+
+
+
+OLD BELOW
 
 \begin{tcolorbox}
 	\begin{theorem}[Soundness]
