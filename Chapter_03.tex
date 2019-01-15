@@ -306,7 +306,7 @@ Recall the static base of DASL.
 			$\Kns{i}\varphi \iimplies \varphi$ & Truth Axiom \\
 			$\Bels{i}(\varphi \iimplies \psi) \iimplies (\Bels{i}\varphi \iimplies \Bels{i}\psi)$ & Distribution of $\Bels{i}$\\
 			$\Bels{i}\varphi \iimplies \BPoss{i}\varphi$ & Belief Consistency Axiom\\
-			$\Bels{i}\varphi \iimplies \Bels{i}\Bels{i}\varphi$ & Positive Belief Introspection \\
+%			$\Bels{i}\varphi \iimplies \Bels{i}\Bels{i}\varphi$ & Positive Belief Introspection \\
 			$\tlnot\Bels{i}\varphi \iimplies \Bels{i}\tlnot\Bels{i}\varphi$ & Negative Belief Introspection\\
 			$\Kns{i}\varphi \iimplies \Bels{i}\varphi$ & Knowledge implies Belief \\
 			$\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ & Confidence in Belief\\
@@ -600,21 +600,245 @@ Below are the axioms characterizing the reduction laws from the dynamic logic to
 
 \section{Soundness and Completeness}
 
-This section establishes the soundness and completeness of the logic. Often these properties are examined separately for a formal system, but some modal logics have features that allow the powerful Sahlqvist theorem to prove them both at once. Because the theorem is very powerful, and may be unfamiliar to some, we devote some space to explaining it and the conditions under which it applies. Without this groundwork, the proof of soundness and completeness will seem inadequate and suspicious.
+This section establishes the soundness and completeness of the logic.  We present mechanized formalizations of each proof in the Coq Proof Assistant. The proof of soundness shows that each axiom corresponds to a frame relation definiing the models. The proof of soundness shows that each axiom schema is a Sahlqvist formula, and therefore forms a complete logic built by adding them to the axiom K of the minimal modal logic.
 
-We first present the features that make a modal logic formula a member of the class of Sahlqvist formulas. We then present the Sahlqvist theorem, which applies to the class of Sahlqvist formulas. Finally, we show that the axioms of DASL are Sahlqvist formulas, and therefore that the Sahlqvist theorem applies to them. This suffices to show soundness and completeness.
+\subsection{Soundness}~\label{sec:soundness}
 
-A formula is \emph{positive} if all of its propositional letters are in the scope of an even number of negation signs. A formula is \emph{negative} if all of its propositional letters are in the scope of an odd number of negation signs.
+A logic has the property of soundness \emph{if and only if} all of its derivable theorems are valid in its model theory. $\mathcal{DASL}$'s model theory is the class of relational frames with two binary relations for each agent $i$, $\Rel{k}^i$ and $\Rel{b}^i$, defined over possible worlds. The $\Rel{k}^i|$ relations are reflexive, and the $\Rel{b}^i$ relations are serial, euclidean, subsets of $\Rel{k}^i$, and subsets of $(\Rel{k}^i \circ \Rel{b}^i$. Any formula satisfied by all models of this class of frames, no matter the valuation assignment of propositional variables, is a valid formula. Thus, to show that $\mathcal{DASL}$ is sound is to show that all of its theorems are satisfied by all such models.
 
-A \emph{Sahlqvist antecedent} is a formula built from $a)$ propositional letters prefixed by $n\geq0$ $\Box$'s and $b)$ negative formulas, $c)$ using only $\tlnot$, $\tland$, and $\Diamond$ to build the antecedent from $(a)$ and $(b)$ components.
+Formally, this amounts to:
 
-A \emph{Sahlqvist formula} is a formula with a \emph{Sahlqvist antecedent} and a \emph{positive} consequent.
-
-\begin{theorem}[Sahlqvist's Theorem]~\label{thm:sahlqvist}
-	Every Sahlqvist formula $\varphi$ has a corresponding first-order translation $\mathnormal{FO}(\varphi)$ and is valid for the frames for which $\mathnormal{FO}(\varphi)$ is canonical.
+\begin{theorem}[Soundness]
+	Dynamic Agent Safety Logic is sound for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$.
 \end{theorem}
 
-For soundness and completeness, it suffices to show that each DASL axiom is a Sahlqvist formula.
+In order to formalize this in Coq for mechanical proof checking, we must define the notions of a frame, model, proposition, and theorem. We follow the Master's thesis of Paulien De Wind \cite{dewind} and the works of Malikovi\'c and Cubrilo \cite{delcoq1, delcoq2} in setting up these components.
+
+A frame is a record in Coq that consists of a set of possible worlds and relations on agent-world-world tuples to capture the fact that each binary relation is parameterized by each agent in the model.
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Record frame : Type := {
+		W : Set;
+		Rk : DASL.Agents -> W -> W -> Prop;
+		Rb : DASL.Agents -> W -> W -> Prop
+	}.
+	\end{lstlisting}	
+	
+\end{tcolorbox}
+
+A model is a frame combined with a valuation function assigning worlds to atoms. We likewise create a set of agents here, imported from a library $\mathtt{DASL}$, defining them as,
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Inductive Agents: Type := Pilot | CoPilot | AutoPilot.
+	\end{lstlisting}	
+	
+\end{tcolorbox}
+ 
+ but any target domain's agents will suffice here.
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Record model : Type := {
+		F : frame;
+		Val : (W F) -> Atoms -> Prop;
+		Agents: DASL.Agents
+	}.
+	\end{lstlisting}	
+	
+\end{tcolorbox}
+
+We say a proposition is an $\mathtt{Inductive}$ type of atoms, implications, negations, falsum, and the doxastic and epistemic modal operators.
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Inductive prop : Type :=
+		| atm : Atoms -> prop
+		| imp : prop -> prop -> prop
+		| negp : prop -> prop
+		| falsum : prop
+		| K : Agents -> prop -> prop
+		| B : Agents -> prop -> prop.
+	\end{lstlisting}	
+	
+\end{tcolorbox}
+
+The type of $\mathtt{Atoms}$ is domain specific for the ground truth facts on which propositions in the system are built. For $\mathcal{DASL}$ these are instrument readings in the cockpit, but for other domains they will be different.
+
+A theorem type is defined in Coq so as to include all propositional tautologies, the modal axioms at the static base of $\mathcal{DASL}$, and closure through Modus Ponens and Necessitation.
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Inductive theorem : prop -> Prop :=
+		| Hilbert_K: forall p q : prop, theorem (p ==> q ==> p)
+		| Hilbert_S: forall p q r : prop, 
+			theorem ((p==>q==>r)==>(p==>q)==>(p==>r))
+		| Classic_NOTNOT : forall p : prop, theorem ((NOT (NOT p)) ==> p)
+		| MP : forall p q : prop, theorem (p ==> q) -> theorem p -> theorem q
+		| K_Nec : forall (a : DASL.Agents) (p : prop), 
+			theorem p -> theorem (K a p)
+		| K_K : forall (a : DASL.Agents) (p q : prop), 
+			theorem (K a p ==> K a (p ==> q) ==> K a q)
+		| K_T : forall (a : DASL.Agents) (p : prop), theorem (K a p ==> p)
+		| B_K : forall (a : DASL.Agents) (p q : prop),
+			 theorem (B a p ==> B a (p ==> q) ==> B a q)
+		 |B_Serial : forall (a : DASL.Agents) (p : prop), 
+		 	theorem (B a p ==> NOT (B a (NOT p)))
+		| B_5 : forall (a : DASL.Agents) (p : prop), 
+			theorem (NOT (B a p) ==> B a (NOT (B a p)))
+		| K_B : forall (a : DASL.Agents) (p : prop), theorem (K a p ==> B a p)
+		| B_BK : forall (a : DASL.Agents) (p : prop), 
+			theorem (B a p ==> B a (K a p)).
+	
+	\end{lstlisting}	
+	
+\end{tcolorbox}
+
+We denote the $\mathtt{theorem}$ type judgment with $\mathtt{|--}$.
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Theorem DASL_Soundness : forall (phi : prop) (F : frame) (a : DASL.Agents),
+		DASL_Frame F ->
+		|-- phi ->
+		F ||= phi.
+	\end{lstlisting}	
+	
+\end{tcolorbox}
+
+	
+The proof can be found in the appendix.
+
+\subsection{Comleteness}~\label{sec:completeness}
+For completeness, our proof depends on the notion of a Sahlqvist formula, which itself depends on more foundational properties of modal formulas, which we must also define. 
+
+A \emph{Sahlqvist formula} is a formula with a \emph{Sahlqvist antecedent} and a \emph{positive consequent}.
+
+A formula is \emph{positive} if all of its propositional letters are in the scope of an even number of negation signs. A formula is \emph{negative} if one or more of its propositional letters are in the scope of an odd number of negation signs.
+
+A \emph{Sahlqvist antecedent} is a formula built from $a)$ propositional letters prefixed by $n\geq0$ $\Box$'s and $b)$ negative formulas, $c)$ using only $\tlor$, $\tland$, and $\Diamond$ to build the antecedent from $(a)$ and $(b)$ components.
+
+To define these notions and reason about axiom schemas rather than actual well-formed formulas of the language, we define an inductive type in Coq that more closely resembles the formula schemas one typically uses when discussing a logic, as in $\Kns{i}\varphi \iimplies \varphi$, where $\varphi$ is a metalanguage variable standing in for any well-formed formula of the language. Because our inductive Coq type for well-formed formulas of the language is $\mathtt{prop}$, we must create an inductive type that takes $\mathtt{prop}$ as basic.
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+ Inductive formula : Type :=
+	| FProp : prop -> formula
+	| FAnd : formula -> formula -> formula
+	| FOr : formula -> formula -> formula
+	| FImp : formula -> formula -> formula
+	| FNeg : formula -> formula
+	| FK : DASL.Agents -> formula -> formula
+	| FB : DASL.Agents -> formula -> formula.
+	\end{lstlisting}	
+	
+\end{tcolorbox}
+
+We define a $\mathtt{negative}$ formula as follows.
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Fixpoint negative_formula (phi : formula) : Prop :=
+		match phi with
+			| FProp p => False
+			| FAnd phi1 phi2 => (negative_formula phi1)
+				 \/ (negative_formula phi2)
+			| FOr phi1 phi2 => (negative_formula phi1) 
+				\/ (negative_formula phi2)
+			| FImp phi1 phi2 => (not (negative_formula phi1)
+				 \/ negative_formula phi2)
+			| FNeg phi' => not (negative_formula phi')
+			| FK a phi' => negative_formula phi'
+			| FB a phi' => negative_formula phi'
+		end.
+	\end{lstlisting}	
+	
+\end{tcolorbox}
+
+We define a $\mathtt{positive}$ formula as the oppositve of a $\mathtt{negative}$ formula.
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Definition positive_formula (phi : formula) : Prop :=
+		not (negative_formula phi).
+	\end{lstlisting}	
+	
+\end{tcolorbox}
+
+To construct Sahlqvist antecedents, we define the notions of a $\mathtt{boxed}$ formula and a $\mathtt{s\_a\_component}$ (for Sahlqvist antecedent component).
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+Fixpoint boxed_formula (phi : formula) : Prop :=
+	match phi with
+		| FProp p => True
+		| FAnd phi1 phi2 => False
+		| FOr phi1 phi2 => False
+		| FImp phi1 phi2 => False
+		| FNeg phi' => False
+		| FK a phi' => boxed_formula phi'
+		| FB a phi' => boxed_formula phi'
+	end.
+	\end{lstlisting}	
+	
+\end{tcolorbox}
+
+This states that a $\mathtt{boxed\_formula}$ can be a formula variable on its own, or any number of modal boxes prefixing a formula variable, but any other structure imposed on the formula schema means it is not boxed.
+
+A $\mathtt{s\_a\_component}$ is a formula schema built up of $\mathtt{boxed\_formula}$'s and $\mathtt{negative}$ formulas connected by conjunction, disjunction, and $\Poss{i}$, $\BPoss{i}$.
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+Fixpoint s_a_component (phi : formula) : Prop :=
+		match phi with
+			| FProp p => True
+			| FAnd phi1 phi2 => (s_a_component phi1) /\ (s_a_component phi2)
+			| FOr phi1 phi2 => (s_a_component phi1) /\ (s_a_component phi2)
+			| FImp phi1 phi2 => False
+			| FNeg phi' => match phi' with
+				| FProp p => True
+				| FAnd p1 p2 => s_a_component p1 /\ s_a_component p2
+				| FOr p1 p2 => s_a_component p1 /\ s_a_component p2
+				| FImp p1 p2 => False
+				| FNeg p' => s_a_component p'
+				| FK a p' => s_a_component p'
+				| FB a p' => s_a_component p'
+				end
+			| FK a phi' => boxed_formula phi'
+			| FB a phi' => boxed_formula phi'
+		end.
+	\end{lstlisting}	
+	
+\end{tcolorbox}
+
+\begin{theorem}[Sahlqvist's Theorem]~\label{thm:sahlqvist}
+	Every Sahlqvist formula $\varphi$ defines a complete modal logic when added as an axiom to the minimal modal logic defined by the axiom K, with respect to the first order frame relation corresponding to $\varphi$,  $\mathnormal{FO}(\varphi)$.
+\end{theorem}
+
+For soundness and completeness, it suffices to show that each DASL axiom is a Sahlqvist formula. In order to make use of Theorem \ref{thm:sahlqvist}, we characterize the Negative Belief Introspection axiom as the equivalent contrapositive $\BPoss{i}\Bels{i}\varphi \iimplies \Bels{i}\varphi$, as in below:
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{| l r |}
+			\hline
+			$\Kns{i}(\varphi \iimplies \psi) \iimplies (\Kns{i}\varphi \iimplies \Kns{i}\psi)$ & Distribution of $\Kns{i}$ \\
+			$\Kns{i}\varphi \iimplies \varphi$ & Truth Axiom \\
+			$\Bels{i}(\varphi \iimplies \psi) \iimplies (\Bels{i}\varphi \iimplies \Bels{i}\psi)$ & Distribution of $\Bels{i}$\\
+			$\Bels{i}\varphi \iimplies \BPoss{i}\varphi$ & Belief Consistency Axiom\\
+			%			$\Bels{i}\varphi \iimplies \Bels{i}\Bels{i}\varphi$ & Positive Belief Introspection \\
+			$\BPoss{i}\Bels{i}\varphi \iimplies \Bels{i}\varphi$ & (Sahlqvist) Negative Belief Introspection\\
+			$\Kns{i}\varphi \iimplies \Bels{i}\varphi$ & Knowledge implies Belief \\
+			$\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ & Confidence in Belief\\
+			%			$\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$ & Beliefs are Known\\
+			From $\vdash \varphi$ and $\vdash \varphi \iimplies \psi$, infer $\vdash\psi$ & Modus Ponens\\
+			From $\vdash \varphi$, infer $\vdash \Kns{i}\varphi$ & Necessitation of $\Kns{i}$\\
+			\hline
+		\end{tabular}
+		\caption{Equivalent Static Base with Sahlqvist-friendly Negative Belief Introspection.}
+	\end{center}
+\end{table}
+
 
 
 
