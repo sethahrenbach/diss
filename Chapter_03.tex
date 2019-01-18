@@ -600,7 +600,11 @@ Below are the axioms characterizing the reduction laws from the dynamic logic to
 
 \section{Soundness and Completeness}
 
-This section establishes the soundness and completeness of the logic.  We present mechanized formalizations of each proof in the Coq Proof Assistant. The proof of soundness shows that each axiom corresponds to a frame relation definiing the models. The proof of soundness shows that each axiom schema is a Sahlqvist formula, and therefore forms a complete logic built by adding them to the axiom K of the minimal modal logic.
+This section establishes the soundness and completeness of the logic.  We present mechanized formalizations of each proof in the Coq Proof Assistant. The proof of soundness shows that axioms of $\mathcal{DASL}$ are each valid for all $\mathcal{DASL}$ frames. The proof of completeness shows that each axiom schema is a Sahlqvist formula, and therefore forms a complete logic built by adding them to the axiom K of the minimal modal logic, by Sahlqvist's Theorem~\cite{sahlqvist}.
+
+Both proofs make use of a special property of modal logics. Every modal logic formula is equivalent to a first- or second-order logic formula, in the sense that it is valid on the same frames as the \emph{corresponding} first- or second order formula. The frame conditions of $\mathcal{DASL}$ are first order logic formulas, and they each correspond to an axiom schema of the modal logic. This correspondence suffices for soundness. When the modal formulas correspond to first order formulas, and the formulas have a certain special structure, the resulting logic is guaranteed to be complete with respect to the first order frame relations.
+
+We begin this section with the soundness proof, and follow up with the completeness proof. 
 
 \subsection{Soundness}~\label{sec:soundness}
 
@@ -695,7 +699,7 @@ A theorem type is defined in Coq so as to include all propositional tautologies,
 	
 \end{tcolorbox}
 
-We denote the $\mathtt{theorem}$ type judgment with $\mathtt{|--}$.
+We denote the $\mathtt{theorem}$ type judgment with $\mathtt{|--}$. 
 
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]
@@ -710,7 +714,7 @@ We denote the $\mathtt{theorem}$ type judgment with $\mathtt{|--}$.
 	
 The proof can be found in the appendix.
 
-\subsection{Comleteness}~\label{sec:completeness}
+\subsection{Completeness}~\label{sec:completeness}
 For completeness, our proof depends on the notion of a Sahlqvist formula, which itself depends on more foundational properties of modal formulas, which we must also define. 
 
 A \emph{Sahlqvist formula} is a formula with a \emph{Sahlqvist antecedent} and a \emph{positive consequent}.
