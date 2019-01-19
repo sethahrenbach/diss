@@ -275,7 +275,7 @@ Dynamic Epistemic Logic (DEL) formalizes situations in which agents' epistemic s
 
 To capture informational events, we introduce the idea of relativizing a Kripke structure. In the previous example, if we model the Alice and Bob situation prior to Alice's communication, we can have a world $w$ from which Bob considers $\varphi$- as well as $\neg\varphi$-worlds possible. However, after the informational event, Bob knows $\varphi$, so the model is \emph{relativized} to a submodel in which only $\varphi$-worlds are accessible by Bob's epistemic possibility relation. Thus, after the informational event, the model transitions to a submodel with fewer edge relations.
 
-The logic for reasoning about information flow in knowledge games is called Dynamic Epistemic Logic (DEL). As its name suggests, it combines elements of epistemic logic and dynamic logic. Epistemic logic is the static logic for reasoning about knowledge, and dynamic logic is used to reason about actions. In dynamic logic semantics, nodes are states of the system or the world, and relations on nodes are transitions via programs or actions from node to node. If we think of each node in dynamic logic as being a model of epistemic logic, then actions become relations on models, representing transitions from one multi-agent epistemic model to another. For example, if we have a static epistemic model $M1$ representing the knowledge states of agents $1$ and $2$ at a moment, then the action $``p?"$ is a relation between $M1$ and $M2$, a new static epistemic model of $1$'s and $2$'s knowledge after the question is asked. All of this is captured by DEL.
+The logic for reasoning about information flow in knowledge games is called Dynamic Epistemic Logic (DEL). As its name suggests, it combines elements of epistemic logic and dynamic logic. Epistemic logic is the static logic for reasoning about knowledge, and dynamic logic is used to reason about actions. In dynamic logic semantics, nodes are states of the system or the world, and relations on nodes are transitions via programs or actions from node to node. If we think of each node in dynamic logic as being a model of epistemic logic, then actions become relations on models, representing transitions from one multi-agent epistemic model to another. For example, if we have a static epistemic model $M1$ representing the knowledge states of agents Alice and Bob at a moment, then the action $``\varphi"$ is a relation between $M1$ and $M2$, a new static epistemic model of Alice's and Bob's knowledge after the question is asked. All of this is captured by DEL.
 
 \begin {center}
 \begin {tikzpicture}[-latex ,auto ,node distance =3 cm and 4cm ,on grid ,
@@ -286,7 +286,7 @@ state/.style ={ circle ,top color =white , bottom color = white ,
 \node[state] (A)  {$M1$};
 \node[state] (B) [right =of A] {$M2$};
 
-\path (A) edge  node[above] {$``p?"$} (B);
+\path (A) edge  node[above] {$``\varphi"$} (B);
 %\path (C) edge [bend left =25] node[below =0.15 cm] {$1/2$} (A);
 %\path (A) edge [bend right = -15] node[below =0.15 cm] {$1/2$} (C);
 %\path (A) edge [bend left =25] node[above] {$1/4$} (B);
@@ -296,7 +296,37 @@ state/.style ={ circle ,top color =white , bottom color = white ,
 \end{tikzpicture}
 \end{center}
 
-The above figure illustrates the relationship between static epistemic models and dynamic logic models. As a purely dynamic model, the figure shows the action $``p?"$ transitioning between nodes $M1$ and $M2$. If we were to zoom in on the nodes, we would see their structure as epistemic models, with their own nodes and edges, representing possible worlds and epistemic relations.
+
+The above figure illustrates the relationship between static epistemic models and dynamic logic models. As a purely dynamic model, the figure shows the action $``p?"$ transitioning between nodes $M1$ and $M2$. If we zoom in on the nodes, we see their structure as epistemic models, with their own nodes and edges, representing possible worlds and epistemic relations.
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
+thick,base node/.style={circle,draw,minimum size=35pt}]
+
+\node[base node] (w) {$w: \tlnot \varphi$};
+\node[base node] (v) [right of=w] {$v: \varphi$};
+\path[]
+(w) edge node[above] {$Bob$} (v)
+edge [loop left] node {$Bob$} (w)
+(v) edge node[below] {} (w)
+%	\draw [->] (v) edge[in=5,out=355,loop] node[right] {$R$} (v)
+edge [<-, loop right] node {$Bob$} (v);
+\end{tikzpicture}
+\end{center}
+\caption{$M1$: The model before Alice announces $``\varphi"$.}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
+		thick,base node/.style={circle,draw,minimum size=35pt}]
+		
+		\node[base node] (v) [right of=w] {$v: \varphi$};
+
+		\end{tikzpicture}
+	\end{center}
+	\caption{$M2$: The model after Alice announces $``\varphi"$.}
+\end{figure}
 
 We are concerned with an additional element: the \emph{safety} status of an action, and an agent's knowledge and belief about that. To capture this, we extend DEL and call the new logic Dynamic Agent Safety Logic (DASL), which we introduce in the next chapter. The next section lays out the state of formal methods involving human-machine systems.
 
