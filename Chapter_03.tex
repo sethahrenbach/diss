@@ -608,7 +608,7 @@ We begin this section with the soundness proof, and follow up with the completen
 
 \subsection{Soundness}~\label{sec:soundness}
 
-A logic has the property of soundness \emph{if and only if} all of its derivable theorems are valid in its model theory. $\mathcal{DASL}$'s model theory is the class of relational frames with two binary relations for each agent $i$, $\Rel{k}^i$ and $\Rel{b}^i$, defined over possible worlds. The $\Rel{k}^i|$ relations are reflexive, and the $\Rel{b}^i$ relations are serial, euclidean, subsets of $\Rel{k}^i$, and subsets of $(\Rel{k}^i \circ \Rel{b}^i$. Any formula satisfied by all models of this class of frames, no matter the valuation assignment of propositional variables, is a valid formula. Thus, to show that $\mathcal{DASL}$ is sound is to show that all of its theorems are satisfied by all such models.
+A logic has the property of soundness \emph{if and only if} all of its derivable theorems are valid in its model theory. $\mathcal{DASL}$'s model theory is the class of relational frames with two binary relations for each agent $i$, $\Rel{k}^i$ and $\Rel{b}^i$, defined over possible worlds. The $\Rel{k}^i|$ relations are reflexive, and the $\Rel{b}^i$ relations are serial, euclidean, subsets of $\Rel{k}^i$, and subsets of $(\Rel{k}^i \circ \Rel{b}^i)$. Any formula satisfied by all models of this class of frames, no matter the valuation assignment of propositional variables, is a valid formula. Thus, to show that $\mathcal{DASL}$ is sound is to show that all of its theorems are satisfied by all such models.
 
 Formally, this amounts to:
 
@@ -743,15 +743,16 @@ We define a $\mathtt{negative}$ formula as follows.
 
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]
+	
 	Fixpoint negative_formula (phi : formula) : Prop :=
 		match phi with
 			| FProp p => False
-			| FAnd phi1 phi2 => (negative_formula phi1)
-				 \/ (negative_formula phi2)
+			| FAnd phi1 phi2 => (negative_formula phi1) 
+				/\ (negative_formula phi2)
 			| FOr phi1 phi2 => (negative_formula phi1) 
-				\/ (negative_formula phi2)
-			| FImp phi1 phi2 => (not (negative_formula phi1)
-				 \/ negative_formula phi2)
+				/\ (negative_formula phi2)
+			| FImp phi1 phi2 => (negative_formula phi1) 
+				/\ (negative_formula phi2)
 			| FNeg phi' => not (negative_formula phi')
 			| FK a phi' => negative_formula phi'
 			| FB a phi' => negative_formula phi'
@@ -764,8 +765,19 @@ We define a $\mathtt{positive}$ formula as the oppositve of a $\mathtt{negative}
 
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]
-	Definition positive_formula (phi : formula) : Prop :=
-		not (negative_formula phi).
+	Fixpoint positive_formula (phi : formula) : Prop :=
+		match phi with
+			| FProp p => True
+			| FAnd phi1 phi2 => (positive_formula phi1) 
+				/\ (positive_formula phi2)
+			| FOr phi1 phi2 => (positive_formula phi1)
+				 /\ (positive_formula phi2)
+			| FImp phi1 phi2 => (positive_formula phi1)
+				 /\ (positive_formula phi2)
+			| FNeg phi' => not (positive_formula phi')
+			| FK a phi' => positive_formula phi'
+			| FB a phi' => positive_formula phi'
+		end.
 	\end{lstlisting}	
 	
 \end{tcolorbox}
@@ -795,23 +807,23 @@ A $\mathtt{s\_a\_component}$ is a formula schema built up of $\mathtt{boxed\_for
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]
 Fixpoint s_a_component (phi : formula) : Prop :=
-		match phi with
+	match phi with
+		| FProp p => True
+		| FAnd phi1 phi2 => (s_a_component phi1) /\ (s_a_component phi2)
+		| FOr phi1 phi2 => (s_a_component phi1) /\ (s_a_component phi2)
+		| FImp phi1 phi2 => not (s_a_component phi1) /\ (s_a_component phi2)
+		| FNeg phi' => match phi' with
 			| FProp p => True
-			| FAnd phi1 phi2 => (s_a_component phi1) /\ (s_a_component phi2)
-			| FOr phi1 phi2 => (s_a_component phi1) /\ (s_a_component phi2)
-			| FImp phi1 phi2 => False
-			| FNeg phi' => match phi' with
-				| FProp p => True
-				| FAnd p1 p2 => s_a_component p1 /\ s_a_component p2
-				| FOr p1 p2 => s_a_component p1 /\ s_a_component p2
-				| FImp p1 p2 => False
-				| FNeg p' => s_a_component p'
-				| FK a p' => s_a_component p'
-				| FB a p' => s_a_component p'
-				end
-			| FK a phi' => boxed_formula phi'
-			| FB a phi' => boxed_formula phi'
-		end.
+			| FAnd p1 p2 => positive_formula p1 /\ positive_formula p2
+			| FOr p1 p2 => positive_formula p1 /\ positive_formula p2
+			| FImp p1 p2 => negative_formula p1 /\ positive_formula p2
+			| FNeg p' => s_a_component p'
+			| FK a p' => not (s_a_component p')
+			| FB a p' => not (s_a_component p')
+		end
+		| FK a phi' => boxed_formula phi'
+		| FB a phi' => boxed_formula phi'
+	end.
 	\end{lstlisting}	
 	
 \end{tcolorbox}
@@ -855,29 +867,29 @@ OLD BELOW
 \end{tcolorbox}
 $\mathbf{Proof}.$ $(1)\  and\  (2)$ correspond to the axioms that $\Kns{i}$ is a T modality and $\Bels{i}$ is a KD45 modality in the usual way. $(3)$ corresponds to EP1, EP2, and EP3. Axioms AP through SB are reduction axioms. This leaves $(4)$, corresponding to SP, and $(5)$ which corresponds to PR. Here we will prove $(5)$. Let $M$ be a Kripke structure satisfying the five conditions above. Let $A$ be an Action structure with $\laa$ and $i$ as its actual action token and agent. 
 
-We prove $(5)$ via the contrapositive of PR: $\BPoss{i}\Pal{i,(A,\laa),S}\varphi \iimplies \Pal{i, (A,\laa)}\varphi$.
-Assume $M,w \models \BPoss{i}\Pal{i.(A,\laa),S}\varphi$. By the semantics of $\BPoss{i}$, there exists a $v$, such that $w\Rel{b}^i v$ and $v \models \Pal{i,(A,\laa),S}\varphi$. From the semantics, it follows that forall $M',v'$, if $(M,v)\llbracket i,(A,\laa),S\rrbracket (M',v')$ then $M',v' \models \varphi$. By slightly abusing the notation, and letting $(W,w)\Rel{b}^i (W,v)$ be equivalent to $w\Rel{b}^i v$, we can create the composed relation $(\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i)$. It then holds, by condition $(5)$, that $(M,w) (\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i) (M',v')$ implies $(M,w)\llbracket i, (A,\laa)\rrbracket (M',v')$. So, for all $M',v'$, if $(M,w) \llbracket i,(A,\laa)\rrbracket (M',v')$, then $M',v' \models \varphi$. So, $M,w \models \Pal{i,(A,\laa)}\varphi$. $\Box$
+We prove $(5)$ via the contrapositive of PR: $\BPoss{i}\SPal{A,\laa}\varphi \iimplies \Pal{ A,\laa}\varphi$.
+Assume $M,w \models \BPoss{i}\SPal{A,\laa}\varphi$. By the semantics of $\BPoss{i}$, there exists a $v$, such that $w\Rel{b}^i v$ and $v \models \SPal{A,\laa}\varphi$. From the semantics, it follows that forall $M',v'$, if $(M,v)\llbracket (A,\laa) \rrbracket^S (M',v')$ then $M',v' \models \varphi$. By slightly abusing the notation, and letting $(W,w)\Rel{b}^i (W,v)$ be equivalent to $w\Rel{b}^i v$, we can create the composed relation $(\llbracket (A,\laa) \rrbracket^S \circ \Rel{b}^i)$. It then holds, by condition $(5)$, that $(M,w) (\llbracket (A,\laa) \rrbracket^S \circ \Rel{b}^i) (M',v')$ implies $(M,w)\llbracket (A,\laa) \rrbracket (M',v')$. So, for all $M',v'$, if $(M,w)\llbracket (A,\laa) \rrbracket (M',v')$, then $M',v' \models \varphi$. So, $M,w \models \Pal{A,\laa}\varphi$. $\Box$
 
 %We leave out proofs of the reduction axioms for space.
-$\mathbf{Aprop: \iimplies}$. Assume $M,w \models \Pal{i,(A,\laa)}p$. We must show that $M,w \models pre(\laa)\iimplies (post(A,p) \iimplies p)$. By the semantics of $\Pal{i,(A,\laa)}$, for all $(M',w')$, if $M,w \models pre(\laa)$ and $update(M,A,w,\laa,i)= (M',w')$, then $M',w' \models p$. By definition of $post(A,p)$, if $update(M,A,w,\laa,i)=(M',w')$ and $M',w' \models p$, then $post(A,p)=p$. So, if $M,w \models pre(\laa)$, then $post(A,p) = p$, and thus $post(A,p)\iimplies p$. 
+$\mathbf{Aprop: \iimplies}$. Assume $M,w \models \Pal{A,\laa}p$. We must show that $M,w \models pre(\laa)\iimplies (post(A,p) \iimplies p)$. By the semantics of $\Pal{A,\laa}$, for all $(M',w')$, if $M,w \models pre(\laa)$ and $update(M,A,w,\laa,i)= (M',w')$, then $M',w' \models p$. By definition of $post(A,p)$, if $update(M,A,w,\laa,i)=(M',w')$ and $M',w' \models p$, then $post(A,p)=p$. So, if $M,w \models pre(\laa)$, then $post(A,p) = p$, and thus $post(A,p)\iimplies p$. 
 
 $\Leftarrow$. Assume $M,w \models pre(\laa) \iimplies (post(A,p)\iimplies p)$. By the definition of $post(A,p)$, if $post(A,p)=p$ then $update(M,A,w,\laa,i)\models p$. So, if $M,w \models pre(\laa)$, then $update(M,A,w,\laa,i)\models p$. Therefore, $M,w\models \Pal{i,(A,\laa)}p$.
 
-$\mathbf{AN: \iimplies}$. Assume $M,w \models \Pal{i,(A,\laa)}\tlnot \varphi$. It suffices to show that $M,w \models pre(\laa) \iimplies \PalPos{i}{(A,\laa)}\tlnot \varphi$. From the assumption and the semantics, for all $(W',w')$, if $(M,w)\llbracket i, (A,\laa) \rrbracket (M',w')$ then $M',w' \models \tlnot \varphi$. So, if $M,w \models pre(\laa)$ and $update(\\M,A,w,\laa,i)=(M',w')$, then $M',w' \models \tlnot \varphi$. Assume $M,w \models pre(\laa)$, and it follows that $update(M,A,w,\laa,i)$ is defined, so there exists a $M',w'$ such that $(M,w)\llbracket i, (A,\laa) \rrbracket(M',w')$ and $update(M,A,i)=(M',w')$ and $M',w' \models \tlnot \varphi$. Therefore, $M,w \models pre(\laa) \iimplies \PalPos{i}{(A,\laa)}\tlnot \varphi$.
+$\mathbf{AN: \iimplies}$. Assume $M,w \models \Pal{i,(A,\laa)}\tlnot \varphi$. It suffices to show that $M,w \models pre(\laa) \iimplies \PalPos{i}{(A,\laa)}\tlnot \varphi$. From the assumption and the semantics, for all $(W',w')$, if $(M,w)\llbracket (A,\laa) \rrbracket(M',w')$ then $M',w' \models \tlnot \varphi$. So, if $M,w \models pre(\laa)$ and $update(\\M,A,w,\laa,i)=(M',w')$, then $M',w' \models \tlnot \varphi$. Assume $M,w \models pre(\laa)$, and it follows that $update(M,A,w,\laa,i)$ is defined, so there exists a $M',w'$ such that $(M,w)\llbracket (A,\laa) \rrbracket(M',w')$ and $update(M,A,i)=(M',w')$ and $M',w' \models \tlnot \varphi$. Therefore, $M,w \models pre(\laa) \iimplies \PalPos{A,\laa}\tlnot \varphi$.
 
-$\Leftarrow$. Assume $M,w \models pre(\laa) \iimplies \tlnot \Pal{i,(A,\laa)}\varphi$. This is equivalent to $M,w \models pre(\laa) \iimplies \PalPos{i}{(A,\laa)}\tlnot \varphi$.  By the semantics, if $M,w \models pre(\laa)$, then there exists a $(M',w')$ such that $(M,w)\llbracket i, (A,\laa)\rrbracket (M',w') \aand M',w' \models \tlnot \varphi$. The relation $\llbracket i, (A,\laa)\rrbracket$ is functional, so $\exists$ implies $\forall$. So, for all $(M',w')$, if $(M,w)\llbracket i,(A,\laa)\rrbracket (M',\\w')$, then $M',w' \models \tlnot \varphi$, and therefore $M,w\models \Pal{i,(A,\laa)}\tlnot \varphi$.
+$\Leftarrow$. Assume $M,w \models pre(\laa) \iimplies \tlnot \Pal{A,\laa}\varphi$. This is equivalent to $M,w \models pre(\laa) \iimplies \PalPos{A,\laa}\tlnot \varphi$.  By the semantics, if $M,w \models pre(\laa)$, then there exists a $(M',w')$ such that $(M,w)\llbracket (A,\laa)\rrbracket (M',w') \aand M',w' \models \tlnot \varphi$. The relation $\llbracket (A,\laa)\rrbracket$ is functional, so $\exists$ implies $\forall$. So, for all $(M',w')$, if $(M,w)\llbracket (A,\laa)\rrbracket (M',w')$, then $M',w' \models \tlnot \varphi$, and therefore $M,w\models \Pal{A,\laa}\tlnot \varphi$.
 
 $\mathbf{AC}$ is obvious.
 
 $\mathbf{AK}$. For this proof, assume for simplicity, without loss of generality, that $Actions = \{\laa\}$.
 
-$\iimplies$. Assume $M,w \models \Pal{i,(A,\laa)}\Kns{i}\varphi$. Unfolding the semantics, for all $(M',w')$, if $(M,w)\models pre(\laa)$ and $update(M,A,w,\laa,\\i)=(M',v')$, then $M',w'\models\Kns{i}\varphi$. $M',w'\models \Kns{i}\varphi$ iff for all $v\in W$, if $w\Rel{k}^iv$ and $M,v\models pre(\laa)$ and $update(M,A,v,\laa,i)=(M',v')$ and  $\laa\chi_{k}^i\laa$, then $M',v'\models\varphi$. That is, $M,w\models \Kns{i}\Pal{i,(A,\laa)}\varphi$. 
+$\iimplies$. Assume $M,w \models \Pal{A,\laa}\Kns{i}\varphi$. Unfolding the semantics, for all $(M',w')$, if $(M,w)\models pre(\laa)$ and $update(M,A,w,\laa,\\i)=(M',v')$, then $M',w'\models\Kns{i}\varphi$. $M',w'\models \Kns{i}\varphi$ iff for all $v\in W$, if $w\Rel{k}^iv$ and $M,v\models pre(\laa)$ and $update(M,A,v,\laa,i)=(M',v')$ and  $\laa\chi_{k}^i\laa$, then $M',v'\models\varphi$. That is, $M,w\models \Kns{i}\Pal{A,\laa}\varphi$. 
 
 $\Leftarrow$. Assume $M,w \models pre(\laa) \iimplies \Kns{i}\Pal{i,(A,\laa)}\varphi$. We must show $M,w \models \Pal{i,(A,\laa)}\\\Kns{i}\varphi$. Thus, we must show $M,w \models pre(\laa)$ and $update(M,A,w,\laa,i)=(M',w')$ implies $M',w' \models \Kns{i}\varphi$. So it suffices to show that if $update(M,A,w,\laa,i)=(M',w')$ and $M,w\models \Kns{i}\Pal{i,(A,\laa)}\varphi$, then $M',w'\models \Kns{i}\varphi$. Assume $update(M,A,w,\\\laa,i)=(M',w')$ and $M,w\models\Kns{i}\Pal{i,(A,\laa)}\varphi$. Then for all $v$, if $w\Rel{k}^iv$, then $M,v\models\Pal{i,(A,\laa)}\varphi$. It follows that $M,v\models pre(\laa)$ and $update(M,A,v,\laa,i)=(M',v')$ implies $M',v'\models\varphi$. Since $w\Rel{k}^iv$ and $\laa\chi_{k}^i\laa$, it holds that $w'\Rel{k}^{i'}v'$. Thus, $M',w'\models\Kns{i}\varphi$.
 
 Proofs for $\mathbf{AB}$ through $\mathbf{SB}$ follow the above proofs exactly analogously. $\Box$ 
 
-Assume $M,w \models \PalPos{i}{\laa}true.$ By the semantics of $\PalPos{i}{\laa},$ $M,w \models pre(\laa)$ and $update(M,w,\chi)\models true$. Let $(M',w') = update(M,w,\chi)$. Then $M',w' \models true$. From $(5)$ above, it holds that $\Rel{b}^i (w) \subseteq V^s (\laa)$. $\Rel{b}$ is serial, so there is at least one such $v \in \Rel{b}^i$. Then $M,v \models pre_s(\laa)$. From (4), $M,v \models pre(\laa)$, so $update(M,v,\chi)$ is defined, call it $(M'',v')$. Because $(M'',v')$ is defined, $M'',v' \models true$. So, $M,v \models pre_s(\laa)$ and $update(M,v,\chi)\models true$. This holds for all $v$, such that $w\Rel{b}v$. Thus, $M,w \models \Bels{i}\SPalPos{i}{\laa}true$. Therefore, $M,w \models \PalPos{i}{\laa}true \iimplies \Bels{i}\SPalPos{i}{\laa}true$. $\square$ 
+Assume $M,w \models \PalPos{A,\laa}true.$ By the semantics of $\PalPos{A,\laa},$ $M,w \models pre(\laa)$ and $update(M,w,\chi)\models true$. Let $(M',w') = update(M,w,\chi)$. Then $M',w' \models true$. From $(5)$ above, it holds that $\Rel{b}^i (w) \subseteq V^s (\laa)$. $\Rel{b}$ is serial, so there is at least one such $v \in \Rel{b}^i$. Then $M,v \models pre_s(\laa)$. From (4), $M,v \models pre(\laa)$, so $update(M,v,\chi)$ is defined, call it $(M'',v')$. Because $(M'',v')$ is defined, $M'',v' \models true$. So, $M,v \models pre_s(\laa)$ and $update(M,v,\chi)\models true$. This holds for all $v$, such that $w\Rel{b}v$. Thus, $M,w \models \Bels{i}\SPalPos{A,\laa}true$. Therefore, $M,w \models \PalPos{A,\laa}true \iimplies \Bels{i}\SPalPos{A,\laa}true$. $\square$ 
 
 Next we turn to completeness.
 
@@ -885,7 +897,7 @@ Next we turn to completeness.
 
 Completeness proofs in contemporary modal logic research follow the following format. First, a \emph{canonical model} is defined such that it belongs to the Kripke frames for which the logic under investigation is sound. The model combines validity and deducibility so that the former entails the latter. The worlds of the canonical model are sets of formulas from the language. If a formula is a member of a such a set, then it is true at the world. We define this formally below. The objective is to show that all formulas valid for the relevant Kripke frames are likewise deducible in the logic. The key is to construct the sets in a particular way, to be discussed below.
 
-The previous section proved soundness of DASL with respect to frames with a reflexive $\Rel{k}^i$ relation, a serial, transitive, Euclidean $\Rel{b}^i$ relation, which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, and with action relations  $\llbracket i,(A,\laa)\rrbracket \subseteq \llbracket i,(A,\laa),S\rrbracket$, and $(\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i) \subseteq \llbracket i, (A,\laa)\rrbracket$. The canonical model we proceed to define will belong to this frame. Because it belongs to this frame, the logical closure of a set of formulas will consist of valid DASL deductions. This allows us to infer deducibility from validity. First we must define the notion of a maximal consistent set.
+The previous section proved soundness of DASL with respect to frames with a reflexive $\Rel{k}^i$ relation, a serial, transitive, Euclidean $\Rel{b}^i$ relation, which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, and with action relations  $\llbracket (A,\laa)\rrbracket \subseteq \llbracket (A,\laa)\rrbracket^S$, and $(\llbracket (A,\laa)\rrbracket^S \circ \Rel{b}^i) \subseteq \llbracket (A,\laa)\rrbracket$. The canonical model we proceed to define will belong to this frame. Because it belongs to this frame, the logical closure of a set of formulas will consist of valid DASL deductions. This allows us to infer deducibility from validity. First we must define the notion of a maximal consistent set.
  
 Informally, a maximal consistent set of formulas is one that is a subset of the well-formed formulas of the language $\mathcal{L}_{DASL}$ according to the syntax presented earlier, whose members are consistent with each other, such that the set has no consistent extension. \\
 $\mathbf{Definition}$. Maximal Consistent Set.\\
@@ -904,8 +916,8 @@ $\mathbf{Definition}$. Canonical Model. A canonical model $M^C = \langle W^C,\ \
 
 \begin{tcolorbox}
 	\begin{theorem}[Completeness]
-		The language of Dynamic Agent Safety Logic, $\mathcal{L}_{DASL}$, is complete for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, transitive, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, \\(4) $\llbracket i,(A,\laa)\rrbracket \subseteq \llbracket i,(A,\laa),S\rrbracket$%for all $\laa,\  V^s(\laa) \subseteq V^p(\laa),$ [Questionable]
-		and\\ (5) $(\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i) \subseteq \llbracket i, (A,\laa)\rrbracket$.
+		The language of Dynamic Agent Safety Logic, $\mathcal{L}_{DASL}$, is complete for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, transitive, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, \\(4) $\llbracket (A,\laa)\rrbracket \subseteq \llbracket (A,\laa)\rrbracket^S$%for all $\laa,\  V^s(\laa) \subseteq V^p(\laa),$ [Questionable]
+		and\\ (5) $(\llbracket (A,\laa)\rrbracket^S \circ \Rel{b}^i) \subseteq \llbracket (A,\laa)\rrbracket$.
 	\end{theorem}
 \end{tcolorbox}
 
@@ -949,9 +961,9 @@ If $\Gamma$ and $\Delta$ are maximal consistent sets and $\beta$ a consistent se
 \end{proof}
 \begin{lemma}[Truth]~\label{truth}
 For every $\varphi \in \mathcal{L}_{DASL}$, and every maximal consistent set $\Gamma$:
-\begin{eqnarray*}
+\begin{eqnarray}
 	\varphi \in \Gamma \ \mathit{iff}\ (M^C,\Gamma)\models\varphi
-\end{eqnarray*}
+\end{eqnarray}
 \end{lemma}
 \begin{proof}
 	By induction on $\varphi$, all the non-modal formulas follow straight-forwardly from the definition of $V^C(p) = \{\Gamma \in W^C\ |\ p \in \Gamma\}$. The modal formulas require some explanation. For the left to right direction, assume we have a formula $\Kns{i}\varphi \in \Gamma$. We must show that $(M^C, \Gamma) \models \Kns{i}\varphi$. The definition of $\Gamma\Rel{k,i}^C\Delta$ is that $\Kns{i}\varphi \in \Gamma$ implies $\varphi \in \Delta$. Thus, for all $\Delta \in W^C$, if $\Gamma \Rel{k,i}^C \Delta$, then $\varphi \in \Delta$. Therefore, by the semantics of $\Kns{i}$, $(M^C, \Gamma) \models \Kns{i}\varphi$.
@@ -974,8 +986,8 @@ The canonical model satisfies the frame conditions of the $\mathcal{L}_{DASL}$ s
 	\item $\Rel{b,i}^C \subseteq \Rel{k,i}^C$,
 	\item $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, 
 	\item $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$,
-	\item $\llbracket i,(A,\laa),S\rrbracket \subseteq \llbracket i,(A,\laa)\rrbracket$, and 	
-	\item  $(\llbracket i,(A,\laa),S\rrbracket \circ \Rel{b}^i) \subseteq \llbracket i, (A,\laa)\rrbracket$.
+	\item $\llbracket (A,\laa)\rrbracket^S \subseteq \llbracket (A,\laa)\rrbracket$, and 	
+	\item  $(\llbracket (A,\laa)\rrbracket^S \circ \Rel{b}^i) \subseteq \llbracket (A,\laa)\rrbracket$.
 	\end{enumerate}
 	
 	We prove these by appealing to the fact that the worlds in the canonical model $M^C$ are maximal consistent sets that each contains all of the theorems of $\mathcal{L}_{DASL}$. Therefore, each of the axiom schemas of the DASL Hilbert system is true at each world. We use this to prove that the doxastic, belief, and dynamic relations on $M^C$ satisfy the above properties, thereby placing $M^C$ in the appropriate class of Kripke frames.
@@ -993,26 +1005,26 @@ The canonical model satisfies the frame conditions of the $\mathcal{L}_{DASL}$ s
 	Condition (3) follows from the axiom schema $\Kns{i}\varphi \iimplies \Bels{i}\varphi$.
 	
 Recall the defintion of two relations $S$ and $R$ \emph{composing}:
-	\begin{eqnarray*}
+	\begin{eqnarray}
 	 S \circ R \equiv \{(x,z)\in X\times Z\ |\ \exists y \in Y \colon (x,y)\in R \tland (y,z) \in S\}
-	\end{eqnarray*}
+	\end{eqnarray}
 	
 	Condition (4) follows from the axiom schema $\Bels{i}\varphi\iimplies\Bels{i}\Kns{i}\varphi$.
 	
 	Condition (5) follows from the axiom schema $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$.
 	
-	Condition (6) follows from the axiom schema $\Pal{i, (A,\laa)}\varphi\iimplies\Pal{i,(A,\laa,S)}\varphi$.
+	Condition (6) follows from the axiom schema $\Pal{A,\laa}\varphi\iimplies\SPal{A,\laa}\varphi$.
 	
 	Condition (7) follows from the axiom schema \\
-	$\llbracket i,(A,\laa),S \rrbracket \circ \Rel{b,i}^C \equiv \{(\Gamma,\Delta')\in W^C\times W^C\ |\ \exists \Delta \in W^C \colon (\Gamma,\Delta)\in \Rel{b,i}^C \tland (\Delta,\Delta') \in \llbracket i,(A,\laa),S \rrbracket\}$
+	$\llbracket (A,\laa) \rrbracket^S \circ \Rel{b,i}^C \equiv \{(\Gamma,\Delta')\in W^C\times W^C\ |\ \exists \Delta \in W^C \colon (\Gamma,\Delta)\in \Rel{b,i}^C \tland (\Delta,\Delta') \in \llbracket(A,\laa) \rrbracket^S\}$
 	
 	
-	Must show: $\{(\Gamma,\Delta')\}\subset \llbracket i,(A,\laa) \rrbracket$.
+	Must show: $\{(\Gamma,\Delta')\}\subset \llbracket (A,\laa) \rrbracket$.
 	
-	$\PalPos{i}{A,\laa}\varphi\iimplies\Bels{i}\SPalPos{i}{A,\laa}\varphi$. Assume an arbitrary world $(M^C,\Gamma)\models\PalPos{i}{A,\laa}\varphi$. By the axiom schema, it follows that $(M^C,\Gamma)\models\Bels{i}\SPalPos{i}{A,\laa}\varphi$. By the semantics of $\Bels{i}$, it follows that $\forall \Delta\in W^C$, if $\Gamma\Rel{b,i}^C\Delta$, then $(M^C,\Delta)\models\SPalPos{i}{A,\laa}\varphi$. We use the reduction law $SN$: $\Pal{i,(A,\laa),s}\tlnot\varphi \Leftrightarrow (pre_s(\laa) \iimplies \tlnot \Pal{i(A,\laa),S}\varphi)$ to deduce the equivalent if $\Gamma\Rel{b,i}^C\Delta$, then $(M^C,\Delta)\models pre_s(\laa)$ and $(M^C,\Delta) \llbracket i,(A,\laa),S \rrbracket (M^C,\Delta')$ implies $(M^C,\Delta'\models\varphi)$, which implies $update(M^C,A,\Delta,a,i)=(M^C,\Delta')$.
+	$\PalPos{iA,\laa}\varphi\iimplies\Bels{i}\SPalPos{A,\laa}\varphi$. Assume an arbitrary world $(M^C,\Gamma)\models\PalPos{A,\laa}\varphi$. By the axiom schema, it follows that $(M^C,\Gamma)\models\Bels{i}\SPalPos{A,\laa}\varphi$. By the semantics of $\Bels{i}$, it follows that $\forall \Delta\in W^C$, if $\Gamma\Rel{b,i}^C\Delta$, then $(M^C,\Delta)\models\SPalPos{A,\laa}\varphi$. We use the reduction law $SN$: $\SPal{A,\laa}\tlnot\varphi \Leftrightarrow (pre_s(\laa) \iimplies \tlnot \SPal{A,\laa}\varphi)$ to deduce the equivalent if $\Gamma\Rel{b,i}^C\Delta$, then $(M^C,\Delta)\models pre_s(\laa)$ and $(M^C,\Delta) \llbracket (A,\laa) \rrbracket^S (M^C,\Delta')$ implies $(M^C,\Delta'\models\varphi)$, which implies $update(M^C,A,\Delta,a,i)=(M^C,\Delta')$.
 	
 	
-	The semantics of $\Pal{i,(A,\laa),S}$ yield $update(M^C, A, \Delta,\laa, i)=(M'^C,\Delta')$. From the assumption that $(M^C,\Gamma)\models\PalPos{i}{A,\laa}\varphi$ and the semantics of $\PalPos{i}{A,\laa}$, it is true that $(M^C,\Gamma) \llbracket i,(A,\laa) \rrbracket (M'^C,\Gamma')$ and $(M'^C,\Gamma') \models \varphi$. 
+	The semantics of $\SPal{A,\laa}$ yield $update(M^C, A, \Delta,\laa, i)=(M'^C,\Delta')$. From the assumption that $(M^C,\Gamma)\models\PalPos{A,\laa}\varphi$ and the semantics of $\PalPos{A,\laa}$, it is true that $(M^C,\Gamma) \llbracket (A,\laa) \rrbracket (M'^C,\Gamma')$ and $(M'^C,\Gamma') \models \varphi$. 
 \end{proof}
 %With these lemmas, we assume $(M^C,\Gamma)\models\varphi$ and show that $\Gamma\vdash\varphi$. From Lemma~\ref{truth}, it follows from the assumption that $\varphi\in\Gamma$. 
 With these lemmas, we assume $\not\vdash\varphi$, and show that $\not\models\varphi$. Since $\not\vdash\varphi$, the set $\{\tlnot\varphi\}$ is consistent. From Lindenbaum, $\{\tlnot\varphi\}$ is part of a maximal consistent set, call it $\Gamma$. From the Truth Lemma, $(M^C,\Gamma)\models\tlnot\varphi$. Therefore, $\not\models\varphi$.$\Box$
