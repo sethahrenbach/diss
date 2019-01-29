@@ -74,11 +74,11 @@ The Dynamic Agent Safety Logic (DASL) used in this paper has the following synta
 \end{tcolorbox}
 where $\lpp \in AtProp$ is an atomic proposition, $\mathbf{i}$ refers to $i \in Agents$, $\mathbf{\laa}$ is the name of an action, called an action token, belong to a set of such tokens, $Actions$, and $\mathbf{A}$ refers to an action model. The knowledge operator $\Kns{i}$ indicates that ``agent \emph{i} knows that ..." Similarly, the operator for belief, $\Bels{i}$ can be read, ``agent \emph{i} believes that..." The notion of action tokens and structures will be defined in the semantics. The operators $\Pal{A,\laa}$ and $\SPal{A,\laa}$ are the dynamic operators for action $\laa$ from action structure $A$ occurring in the former case, and happening safely in the latter case. One can read the action operators as ``after $\laa$ from $A$ occurs (\emph{safely}), $\varphi$ holds in all resulting worlds.' We define the dual modal operators $\Poss{i}$, $\BPoss{i}$, $\PalPos{A,\laa}$, and $\SPalPos{A,\laa}$ in the usual way. 
 
-The semantics of DASL involve two structures that are defined simultaneously, one for epistemic models, and one for action structures capturing the transition relation among epistemic models. Additionally, we define numerous helper functions that straddle the division between metalanguage and object language. 
+The semantics of \DASL involve two structures that are defined simultaneously, one for epistemic models, and one for action structures capturing the transition relation among epistemic models. Additionally, we define numerous helper functions that straddle the division between metalanguage and object language. 
 
 \subsection{Metalanguage}
 
-The metalanguage defining DASL consists of traditional Kripke structures, called models, and action models, with functions for action pre- and post-conditions and the product update of Kripke and action models~\cite{DEL}.
+The metalanguage defining \DASL consists of traditional Kripke structures, called models, and action models, with functions for action pre- and post-conditions and the product update of Kripke and action models~\cite{DEL}.
 
 \subsubsection{Kripke (Relational) Structure}%$\mathbf{Definition}$. Kripke Model.\\ 
 A Kripke structure, called model $M$, is a tuple $\langle W, \Rel{k}^i, \Rel{b}^i, w, V \rangle$. It is a set of worlds $W$, epistemic and doxastic relations on worlds for agents, a world denoting the actual world, and a valuation function \emph{V} mapping atomic propositions to the set of worlds satisfying them.
@@ -206,7 +206,7 @@ The Safety Precondition Function, $pre_s :: Actions \mapsto \varphi$, is a more 
 %$\mathbf{Definition}$. Safety Valuation Function.\\ $V^s :: Actions \mapsto W.$ The safety valuation function takes an action and maps it to the set of worlds satisfying that action's safety precondition:\\ $V^s (\laa) = \{w|w\models pre_s(\laa)\}$.
 %\\
 \subsection{Semantics}
-The logic DASL has the following Kripke semantics.
+The logic \DASL has the following Kripke semantics.
 \begin{tcolorbox}
 	\begin{align*}
 	M,w \models p  &\iiff w \in V(p) \\
@@ -229,7 +229,7 @@ The definitions of the dynamic modalities make use of a relation between two mod
 
 
 \subsection{Hilbert System}
-DASL is axiomatized by the following Hilbert system.\\
+\DASL is axiomatized by the following Hilbert system.\\
 
 %\begin{tcolorbox}All propositional tautologies are axioms.\\$\Kns{i}$ is T (knowledge relation is reflexive)\\
 %	$\Bels{i}$ is KD45 (belief relation is serial, transitive, and Euclidean)\\
@@ -280,7 +280,7 @@ DASL is axiomatized by the following Hilbert system.\\
 Above are the axioms characterizing the logic. We proceed by defending the axiom schema for the static foundation, then continue with the dynamic extensions.
 
 \subsection{Static Base}~\label{static}
-Like other dynamic logics for knowledge and belief, DASL consists of a static base of axiom schemas for the knowledge and belief operators. This section explains and defends DASL's static base, as they represent a novel axiomatization of formal epistemology and a contribution to the literature by this thesis. 
+Like other dynamic logics for knowledge and belief, \DASL consists of a static base of axiom schemas for the knowledge and belief operators. This section explains and defends \DASL's static base, as they represent a novel axiomatization of formal epistemology and a contribution to the literature by this thesis. 
 
 The standard axiom schema for the knowledge operator, whether for a wholly static logic or for the static base of a dynamic system, is that of the S5 operator, described earlier in section~\ref{epistemic_logic}. This axiom schema for the knowledge operator was first formalized by Aumann in ~\cite{Aumann} as a logical foundation for the ideally rational agents of game theory and decision theory. Thus, we can consider that axiom schema to be the top tier of agent rationality axioms, where the belief operator is not even necessary.
 
@@ -294,9 +294,9 @@ Thus, an ideally rational agent can carry this to any arbitrary $\mathit{n^{th}}
 
 Bounding agents in this way allows for formal models that capture how a human agent might realistically deviate from optimal Nash equilibria of games. However, bounding rationality in this way does not allow for agents who act based on false beliefs. A lower tier rationality model might impose bounds on the epistemic depth of its agents and also allow for the agents to make decisions based on false beliefs.
 
-The static base of DASL logic does not cover epistemic depth at all, and instead attends to the formalization of agents who can make decisions based on false beliefs, but whose beliefs are all justified. It is a very low tier of rationality.
+The static base of \DASL logic does not cover epistemic depth at all, and instead attends to the formalization of agents who can make decisions based on false beliefs, but whose beliefs are all justified. It is a very low tier of rationality.
 
-Recall the static base of DASL.
+Recall the static base of \DASL.
 
 \begin{table}[H]
 	\begin{center}
@@ -590,7 +590,7 @@ Below are the axioms characterizing the reduction laws from the dynamic logic to
 	$\SPal{A,\laa}\Bels{i}\varphi \Leftrightarrow (pre_s(\laa) \iimplies \bigwedge_{\laa\Rel{b}'^{i}\lbb}\Bels{i}\SPal{A,\lbb}\varphi)$ & SB\\ & \\
 	\hline
 	\end{tabular}
-	\caption{The reduction axioms of DASL.}
+	\caption{The reduction axioms of \DASL.}
 	\end{center}
 \end{table}
 
@@ -600,15 +600,15 @@ Below are the axioms characterizing the reduction laws from the dynamic logic to
 
 \section{Soundness and Completeness}
 
-This section establishes the soundness and completeness of the logic.  We present mechanized formalizations of each proof in the Coq Proof Assistant. The proof of soundness shows that axioms of $\mathcal{DASL}$ are each valid for all $\mathcal{DASL}$ frames. The proof of completeness shows that each axiom schema is a Sahlqvist formula, and therefore forms a complete logic built by adding them to the axiom K of the minimal modal logic, by Sahlqvist's Theorem~\cite{sahlqvist}.
+This section establishes the soundness and completeness of the logic.  We present mechanized formalizations of each proof in the Coq Proof Assistant. The proof of soundness shows that axioms of \DASL are each valid for all \DASL frames. The proof of completeness shows that each axiom schema is a Sahlqvist formula, and therefore forms a complete logic built by adding them to the axiom K of the minimal modal logic, by Sahlqvist's Theorem~\cite{sahlqvist}.
 
-Both proofs make use of a special property of modal logics. Every modal logic formula is equivalent to a first- or second-order logic formula, in the sense that it is valid on the same frames as the \emph{corresponding} first- or second order formula. The frame conditions of $\mathcal{DASL}$ are first order logic formulas, and they each correspond to an axiom schema of the modal logic. This correspondence suffices for soundness. When the modal formulas correspond to first order formulas, and the formulas have a certain special structure, the resulting logic is guaranteed to be complete with respect to the first order frame relations.
+Both proofs make use of a special property of modal logics. Every modal logic formula is equivalent to a first- or second-order logic formula, in the sense that it is valid on the same frames as the \emph{corresponding} first- or second order formula. The frame conditions of \DASL are first order logic formulas, and they each correspond to an axiom schema of the modal logic. This correspondence suffices for soundness. When the modal formulas correspond to first order formulas, and the formulas have a certain special structure, the resulting logic is guaranteed to be complete with respect to the first order frame relations.
 
 We begin this section with the soundness proof, and follow up with the completeness proof. 
 
 \subsection{Soundness}~\label{sec:soundness}
 
-A logic has the property of soundness \emph{if and only if} all of its derivable theorems are valid in its model theory. $\mathcal{DASL}$'s model theory is the class of relational frames with two binary relations for each agent $i$, $\Rel{k}^i$ and $\Rel{b}^i$, defined over possible worlds. The $\Rel{k}^i|$ relations are reflexive, and the $\Rel{b}^i$ relations are serial, euclidean, subsets of $\Rel{k}^i$, and subsets of $(\Rel{k}^i \circ \Rel{b}^i)$. Any formula satisfied by all models of this class of frames, no matter the valuation assignment of propositional variables, is a valid formula. Thus, to show that $\mathcal{DASL}$ is sound is to show that all of its theorems are satisfied by all such models.
+A logic has the property of soundness \emph{if and only if} all of its derivable theorems are valid in its model theory. \DASL's model theory is the class of relational frames with two binary relations for each agent $i$, $\Rel{k}^i$ and $\Rel{b}^i$, defined over possible worlds. The $\Rel{k}^i$ relations are reflexive, and the $\Rel{b}^i$ relations are serial, euclidean, subsets of $\Rel{k}^i$, and subsets of $(\Rel{k}^i \circ \Rel{b}^i)$. Any formula satisfied by all models of this class of frames, no matter the valuation assignment of propositional variables, is a valid formula. Thus, to show that \DASL is sound is to show that all of its theorems are satisfied by all such models.
 
 Formally, this amounts to:
 
@@ -616,7 +616,7 @@ Formally, this amounts to:
 	Dynamic Agent Safety Logic is sound for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$.
 \end{theorem}
 
-In order to formalize this in Coq for mechanical proof checking, we must define the notions of a frame, model, proposition, and theorem. We follow the Master's thesis of Paulien De Wind \cite{dewind} and the works of Malikovi\'c and Cubrilo \cite{delcoq1, delcoq2} in setting up these components.
+In order to formalize this in Coq for mechanical proof checking, we must define the notions of a frame, model, proposition, and theorem. We follow the Master's thesis of Paulien De Wind \cite{dewind} for the model theory mechanization and the works of Lescanne and Puiss\'egur \cite{lescanne, puislescanne} and Malikovi\'c and \v Cubrilo \cite{delcoq1, delcoq2} in setting up the proof theory.
 
 A frame is a record in Coq that consists of a set of possible worlds and relations on agent-world-world tuples to capture the fact that each binary relation is parameterized by each agent in the model.
 
@@ -631,7 +631,7 @@ A frame is a record in Coq that consists of a set of possible worlds and relatio
 	
 \end{tcolorbox}
 
-A model is a frame combined with a valuation function assigning worlds to atoms. We likewise create a set of agents here, imported from a library $\mathtt{DASL}$, defining them as,
+A model is a frame combined with a valuation function assigning worlds to atoms. We likewise create a type of agents here, imported from a library \DASL, defining them as,
 
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]
@@ -668,9 +668,9 @@ We say a proposition is an $\mathtt{Inductive}$ type of atoms, implications, neg
 	
 \end{tcolorbox}
 
-The type of $\mathtt{Atoms}$ is domain specific for the ground truth facts on which propositions in the system are built. For $\mathcal{DASL}$ these are instrument readings in the cockpit, but for other domains they will be different.
+The type of $\mathtt{Atoms}$ is domain specific for the ground truth facts on which propositions in the system are built. For \DASL these are instrument readings in the cockpit, but for other domains they will be different.
 
-A theorem type is defined in Coq so as to include all propositional tautologies, the modal axioms at the static base of $\mathcal{DASL}$, and closure through Modus Ponens and Necessitation.
+A theorem type is defined in Coq so as to include all propositional tautologies, the modal axioms at the static base of \DASL, and closure through Modus Ponens and Necessitation.
 
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]
@@ -1029,7 +1029,7 @@ Recall the defintion of two relations $S$ and $R$ \emph{composing}:
 %With these lemmas, we assume $(M^C,\Gamma)\models\varphi$ and show that $\Gamma\vdash\varphi$. From Lemma~\ref{truth}, it follows from the assumption that $\varphi\in\Gamma$. 
 With these lemmas, we assume $\not\vdash\varphi$, and show that $\not\models\varphi$. Since $\not\vdash\varphi$, the set $\{\tlnot\varphi\}$ is consistent. From Lindenbaum, $\{\tlnot\varphi\}$ is part of a maximal consistent set, call it $\Gamma$. From the Truth Lemma, $(M^C,\Gamma)\models\tlnot\varphi$. Therefore, $\not\models\varphi$.$\Box$
 
-Because the static logic is complete and we have translation axioms that convert the dynamic formulas to equivalent static ones, we can conclude that the entirety of DASL is complete. In the next chapter we examine case studies and a mechanization of the logic.
+Because the static logic is complete and we have translation axioms that convert the dynamic formulas to equivalent static ones, we can conclude that the entirety of \DASL is complete. In the next chapter we examine case studies and a mechanization of the logic.
 %We can proceed by case analysis on the frame conditions and axioms in conjunction with the rules of Modus Ponens and Necessitation. For brevity, we appeal to the well-known theorems establishing that the axioms of the static fragment of DASL are complete for system T and KD45. It remains to show that EP1, EP2, EP3, SP, and PR are complete for the frame conditions. For each frame condition, we assume that there exists a valid formula that is not deducible, and derive a contradiction. 
 %
 %For $(3)$, assume $\varphi$ is valid for all frames with partially-ordered relations $\Rel{b}^i \subseteq \Rel{k}^i$, but that $\varphi$ is not deducible. The relation states that for all $w,v$, if $w\Rel{k}^iv$ then $w\Rel{b}^iv$. Since $\varphi$ is valid for such frames, for all $v$, if $w\Rel{k}^iv$, $v\models\varphi$, in which case $w\models\Kns{i}\varphi$. But since the knowledge relation implies the belief relation, it follows that for all $v$, $w\Rel{b}^iv$ implies $v\models \varphi$, and therefore that $w\models\Bels{i}\varphi$. Thus, the axiom EP1 is valid for such frames. Since $\varphi$ is not deducible, and the axiom EP1 is valid for all such frames, it must be that EP1 and $\tlnot \varphi$ are consistent.
