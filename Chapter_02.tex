@@ -1,13 +1,16 @@
 \chapter{Background}
 	\label{CH_02}
 
-This chapter describes the context in which my research makes advances. Section~\ref{gametheory} lays out the basics of game theory. Section~\ref{logic_foundation} introduces Dynamic Epistemic Logic, upon which the logic presented in this thesis is based. Section~\ref{fm} describes the state of formal methods.
+This chapter describes the context in which this dissertation makes advances. Section~\ref{sec:gametheory} lays out the basics of game theory, which provides a model of agency that we target and make more realistic. Section~\ref{sec:logic_foundation} introduces Dynamic Epistemic Logic, upon which the logic presented in this thesis is based, with axioms corresponding to the more realistic model of agency we develop. Section~\ref{sec:fm} describes the formal tools we use to mechanically check that \DASL\ is sound and complete, that its application to aviation safety is without errors, and to encode the inference of safety-critical information. Coq is both a programming language and a tool for verifying proofs, based on the Calculus of Inductive Constructions. We explain the basics of each of these to the reader in this section, since Coq is the tool we use for proof and application checking. Z3 is a theorem prover and model checker, which interract with solely for its SMT solving abilities. We encode the actual instrument readings as a first order formula, and we encode the safety precondition of an action as formulas comprising the constraining theory. We then check whether the formula is satisfiable modulo that theory. This tells us whether the intrument readings are consistent with the safety preconditions for an action, and if not, where the conflict lies. There is some additional complexity here, but we describe this in more detail in Chapter \ref{CH_05}.
 
 %Section 2.3 describes related work involving logical approaches to agents in system verification. Section 2.4 describes the Coq Proof Assistant, a tool for constructing mechanically checked mathematical proofs, to be used in this research.
 
 
 
-\section{Game Theory}~\label{gametheory}
+\section{Game Theory}~\label{sec:gametheory}
+
+This section presents the basics of game theory in order to motivate the model of agency that \DASL\ seeks to formally capture. However, this dissertation does not seek to make advances in game theory itself. Future research could take the resulting logic and use it as a new foundation for game theoretic reasoning among more realistic agents, but that task is not taken on in the present work. We begin this section with a brief overview and an example game, and then present the model of agency required for the standard solution to the game.
+
 Game theory is a mathematical model for strategic reasoning. Strategic reasoning refers to the way an agent reasons in situations where her payoffs depend on the actions of other agents in addition to her own, and in which she knows about these dependencies. For turn-based games, the mathematical structure employed is a \emph{game tree}, where each node represents a player's turn, and each edge the transition via a player's action. The leaves of the tree represent the payoffs each player receives at the end of the game. This paper is not concerned with the games themselves, but rather with the underlying assumptions about agency that entail their solutions. We briefly illustrate these underlying assumptions with the following example.
 
 %Prisoner's Dilemma Matrix
@@ -105,7 +108,7 @@ Recent work at the intersection of game theory and logic focuses on the informat
 
 The proceeding sections introduce the various logical systems that form a foundation for the work of this thesis, starting with modal logic in its traditional philosophical interpretation, and expanding to epistemic and doxastic logic. Then, we introduce dynamic logic, and its expansion into Dynamic Epistemic Logic and Public Announcement Logic.
 
-\section{Modal Logic}
+\section{Modal Logic}\label{sec:logic_foundation}
 Philosophers going back to Aristotle have noted a distinction between contingent truth, possible truth, and necessary truth. Necessary truths could not have been otherwise. The definitions of natural numbers and the addition function guarantee that in all possible worlds, \emph{2 + 2 = 4}. On a plane, the truths of Euclidean geometry are necessarily true. ``There is life on Saturn's moon Enceladus" is a possible truth. ``Enceladus has water on it" is a contingent truth. What about ``Water is H20"? Modal logic allows us to reason about necessary and possible truths, through the use of modal operators. What follows is a brief illustration of the concepts of modal logic.
 
 The modal logic for reasoning about metaphysical necessity is called $\mathit{S5}$. $\mathit{S5}$ is the modal logic that grounds our intuitive reasoning in the following examples and proofs. Suppose $p$ is the arithmetic expression ``2 + 2 = 4". Obviously, $p$ is true in the actual world. We can make the stronger claim that $p$ is necessarily true, but what does this mean? As informal shorthands, initial attempts to define necessary truths might appeal, as I did above, to the claim that they could not possibly have been false. But then what do we mean by ``possible"? The formal semantics for dealing with these questions comes from Saul Kripke, and we introduce that machinery in the next section. For now, we say a statement is necessarily true if and only if it is true in all possible worlds. The modal operator for necessity makes the formal statement: $\Box p$. Consider the following inference, where $\iimplies$ means ``implies": $\Box p \iimplies p$. This reads, ``Necessarily $p$ implies $p$," or equivalently, ``If $p$ is necessarily true, then $p$ is true." If $p$ is necessarily true, is $p$ true? Intuitively, the answer is `yes', and indeed a modal logic of metaphysical necessity includes this axiom for all formulas $\varphi$: $\Box \varphi \iimplies \varphi$. 
@@ -145,7 +148,7 @@ According to possible world semantics, $\Box \varphi$ is true at a world $w$, wr
 
 $\mathit{S5}$, while a very important modal logic, is not the only one. The way it is distinguished from other modal logics, and indeed that way any are distinguishable from each other, is based entirely on the definition of $R$. For $\mathit{S5}$, $R$ is a symmetric, transitive, reflexive binary relation on worlds. Thus, that is how ``possibility" is formally defined, and by extension, ``necessarily". We formally define these notions in the next section, along with the syntax and semantics of basic modal logic, sometimes call propositional modal logic.
 
-\section{Modal Logic Syntax and Semantics}~\label{molo_syn_sem}
+\subsection{Modal Logic Syntax and Semantics}~\label{sec:molo_syn_sem}
 This section formally defines the syntax, what the logic looks like, and the semantics, what the truth conditions are for the logic.
 
 Recall that Boolean logic is a simple logic for reasoning about basic propositions using the logical connectives `and', `or', `not', and `if...then'. It forms the foundation of most logics and has applications ranging from philosophy to circuit design. Propositions are represented as constants {\emph p,\ \emph q} and well-formed formulas of the language are constants and any proper combination of constants using the above logical connectives, represented symbolically as,
@@ -233,6 +236,7 @@ These axioms are firmly rooted in the literature of formal epistemology and epis
 Before presenting our relaxed axiom schema for knowledge, we acknowledge the appealing properties of the S5 knowledge operator. Logicians who adopt the S5 knowledge operator have good reasons for doing so, both technical and intuitive. The technical appeal lies in the fact that the S5 operator is well-behaved from a logical point of view. Epistemic logics with S5 operators are decidable because S5 operators have semantics that satisfy the finite model property, meaning that every invalid proposition has a finite counter-model. The S5 knowledge operator allows a formula prefixed by any arbitrary combination of $\Kns{i}$ and $\Poss{i}$ symbols to be reduced to a formula prefixed by at most two. This keeps the models small.
 
 On the intuitive side, the relations that define the semantics of an S5 knowledge operator are equivalence relations. They are defined as reflexive and Euclidean, which implies that they are also transitive and symmetric. Consider what it means for a world $v$ to be epistemically possible from the perspective of agent $i$ at world $w$.
+
 \section{Doxastic Logic}
 This section presents doxastic logic, the logic for reasoning about belief.
 %This is formalized in a couple different ways in the literature, sometimes as we did before mapping a proposition-world pair to a Boolean, sometimes defining propositions as sets of worlds, where $V(w)\in p$ if and only if $p$ is true at world $w$. The former convention will be followed here.
@@ -330,7 +334,7 @@ edge [<-, loop right] node {$Bob$} (v);
 
 We are concerned with an additional element: the \emph{safety} status of an action, and an agent's knowledge and belief about that. To capture this, we extend DEL and call the new logic Dynamic Agent Safety Logic (\DASL), which we introduce in the next chapter. The next section lays out the state of formal methods involving human-machine systems.
 
-%\section{Formal Methods}~\label{fm}
+\section{Formal Methods Tools}~\label{sec:fm}
 %The field of formal methods grew out of attempts to verify the correctness of hardware and software. It was normally confined to systems deemed mission- or safety-critical, due to its high cost. Arguments for the use of formal methods normally involve an anecdote in which a system fails due to some sort of error missed by traditional testing methods but that would have been caught and prevented were formal methods used.
 %Formal methods increase confidence that hardware and software components function correctly~\cite{RushbyFMbook}. They involve the application of mathematical techniques to the design and analysis of systems, usually the safety-critical components~\cite{johnson_butler_fm}. A standard approach is to develop an abstract specification of the software or hardware system, design the system to meet those specifications, and then use formal logic to prove that the designed system meets the desired safety specifications. 
 
