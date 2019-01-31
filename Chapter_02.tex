@@ -218,7 +218,7 @@ $\mathbf{Agency\  Model\  in\  Classical\  Game\  Theory}$.\\
 (3) $\Kns{i}\varphi \iimplies \Kns{i}\Kns{i}\varphi$\\
 (4) $\tlnot \Kns{i}\varphi \iimplies \Kns{i}\tlnot\Kns{i}\varphi$.
 
-These axioms make the knowledge operator an $\mathit{S5}$ modal operator. 
+These axioms make the knowledge operator an $\mathit{S5}$ modal operator. Strictly speaking, including (3) is unnecessary because it follows as a theorem from (2) and (4), but we include it so that the reader is not surprised when we refer to it.
 
 The first axiom holds for all \emph{normal} modal logics, and under the epistemic interpretation, it states that if an agent knows that $\varphi$ implies $\psi$, and she knows $\varphi$, then she knows $\psi$. This is intuitive enough on the first pass, but can lead to a problem of global skepticism. If $i$ knows that she is an embodied agent in the external world only if she knows that she is not a brain in a vat perceiving a simulated reality, then she knows she is an embodied agent only if she knows she is not a brain in a vat. It seems clear that she cannot know that she is not a brain in a vat, because her sensory experience is compatible with either the embodied scenario of the brain in a vat scenario. Therefore, she does not know she is an embodied agent in the external world. Thus, many philosophers question whether knowledge for human-like agents is closed under logical implication like this.
 
@@ -233,7 +233,9 @@ These axioms are firmly rooted in the literature of formal epistemology and epis
 \subsection{Why S5 Is Appealing} 
 Before presenting our relaxed axiom schema for knowledge, we acknowledge the appealing properties of the S5 knowledge operator. Logicians who adopt the S5 knowledge operator have good reasons for doing so, both technical and intuitive. The technical appeal lies in the fact that the S5 operator is well-behaved from a logical point of view. Epistemic logics with S5 operators are decidable because S5 operators have semantics that satisfy the finite model property, meaning that every invalid proposition has a finite counter-model. The S5 knowledge operator allows a formula prefixed by any arbitrary combination of $\Kns{i}$ and $\Poss{i}$ symbols to be reduced to a formula prefixed by at most two. This keeps the models small.
 
-On the intuitive side, the relations that define the semantics of an S5 knowledge operator are equivalence relations. They are defined as reflexive and Euclidean, which implies that they are also transitive and symmetric. Consider what it means for a world $v$ to be epistemically possible from the perspective of agent $i$ at world $w$.
+On the intuitive side, the relations that define the semantics of an S5 knowledge operator are equivalence relations. They are defined as reflexive and Euclidean, which implies that they are also transitive and symmetric. Equivalence relations capture a notion of indistinguishability because each world in the equivalence class is indistinguishable from each other. All the modal formulas true at one of the worlds in an equivalence relation are true at each of the other worlds in the relation, so from a modal perspective, they are indistinguishable. When the modality is knowledge, this means that relative to the agent's knowledge, the worlds are indistinguishable. 
+
+This property of \SFive\ epistemic logic is a strong point in its favor. We suppose that any formal system seeking to model human-like knowledge must surely represent the idea that an agent does not know \emph{whether} a proposition $\varphi$ is true or false just in case he cannot distinguish the world he is in from the possible worlds in which either is the case. Distinguishability seems to imply that there is some evidence possessed by the agent that allows her to rule out possibilities, and therefore gain knowledge.
 
 \section{Doxastic Logic}
 This section presents doxastic logic, the logic for reasoning about belief.
