@@ -256,6 +256,48 @@ The logic associated with these axioms is called $\mathcal{KD}\mathit{45}$. On t
 
 Knowledge involves a condition that is external to the agent's direct perception: the truth or falsity of the proposition. Belief, on the other hand, is entirely internal to the agent's perception. She can introspect on her evidence and deliberate on a proposition, and this is sufficient to see that she believes or disbelieves it, and this attitude is immediately available to her. For this reason, the positive and negative introspection axioms are more appropriate for belief than they are for knowledge. 
 
+In addition to developing a stand-alone axiomatization of the belief operator, Hintikka combined the knowledge and belief operators into a single multi-modal system. Other philosophers and logicians have constructed similar systems. Hintikka considers the following combined axioms, which he calls conditions, as options:
+
+$\mathbf{Hintikka\ Combinations\ Considered}$.\\
+(1) $\Kns{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$\\
+(2) $\Kns{i}\varphi \iimplies \Bels{i}\varphi$\\
+(3) $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$\\
+(4) $\Bels{i}\varphi \iimplies \Kns{i}\varphi$.
+
+He subsequently rejects (4) immediately, and through deliberation (3), while he accepts (1) and (2). Thus, Hintikka's combined logic of knowledge and belief is,
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{| l r |}
+			\hline
+			$\Kns{i}(\varphi \iimplies \psi) \iimplies (\Kns{i}\varphi \iimplies \Kns{i}\psi)$ & Distribution of $\Kns{i}$ \\
+			$\Kns{i}\varphi \iimplies \varphi$ & Truth Axiom \\
+			$\Kns{i}\varphi \iimplies \Kns{i}\Kns{i}\varphi$ & Positive Knowledge Introspection\\
+			$\Bels{i}(\varphi \iimplies \psi) \iimplies (\Bels{i}\varphi \iimplies \Bels{i}\psi)$ & Distribution of $\Bels{i}$\\
+			$\Bels{i}\varphi \iimplies \BPoss{i}\varphi$ & Belief Consistency Axiom\\
+			%			$\Bels{i}\varphi \iimplies \Bels{i}\Bels{i}\varphi$ & Positive Belief Introspection \\
+			$\tlnot\Bels{i}\varphi \iimplies \Bels{i}\tlnot\Bels{i}\varphi$ & Negative Belief Introspection\\
+			$\Kns{i}\varphi \iimplies \Bels{i}\varphi$ & Knowledge implies Belief \\
+			$\Kns{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ & Undeniable Knowledge\\
+			%			$\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$ & Beliefs are Known\\
+			From $\vdash \varphi$ and $\vdash \varphi \iimplies \psi$, infer $\vdash\psi$ & Modus Ponens\\
+			From $\vdash \varphi$, infer $\vdash \Kns{i}\varphi$ & Necessitation of $\Kns{i}$\\
+			\hline
+		\end{tabular}
+		\caption{Hintikka's Combined Logic of Knowledge and Belief}
+	\end{center}
+\end{table}
+
+We omit his defense of positive knowledge introspection, but point out that his defense of undeniable knowledge depends on his interpretation of the operators. Hintikka is concerned in his project with identifying statements about knowledge and belief that utterers cannot defensibly deny. Furthermore, his interpretation of knowledge and belief are not those propositions actively held in one's head, but those to which one could be led through a series of applications of \emph{Modus Ponens} from what one already knows or believes. We can think of knowledge, for Hintikka, as those propositions implied by what one already knows, and beliefs as those propositions that one is logically committed to by one's beliefs. This avoids the problem of logical omnicience for both modal operators. And it sets up an argument like the following, 
+\begin{enumerate}
+	\item $\varphi$ follows logically from what $i$ knows
+	\item If (1) is pointed out to $i$, it is indefensible for $i$ to deny that she believes that she knows $\varphi$.
+	\item Therefore, $\Kns{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$
+\end{enumerate}
+
+For Hintikka, this suffices to accept the formula as valid, as well as Knowledge implies Belief, for which a similar argument can be presented.
+
+Conversely, Hintikka rejects (3) because he does not find it plausible that $\Bels{i}\varphi \iimplies \Kns{i}\Poss{i}\varphi$, which (3) and the Truth Axiom jointly imply.
 
 %This is formalized in a couple different ways in the literature, sometimes as we did before mapping a proposition-world pair to a Boolean, sometimes defining propositions as sets of worlds, where $V(w)\in p$ if and only if $p$ is true at world $w$. The former convention will be followed here.
 
