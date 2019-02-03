@@ -136,7 +136,7 @@ The set of atomic propositions we are concerned with are those representing fact
 	\end{lstlisting}
 \end{tcolorbox}
 
-Next we follow Malikovi\'c and \v Cubrilo~\cite{delcoq1,delcoq2} in defining a set \emph{prop} of propositions in predicate calculus, distinct from Coq's built in type \emph{Prop}. The definition provides constructors for atomic propositions consisting of particular instrument reading predicate statements, implications, propositions beginning with a knowledge modality, and those beginning with a belief modality. Interestingly, modal logic cannot be directly represented in Coq's framework~\cite{lescanne}. We first define propositions in first-order logic, which we then use to define DASL. This appears to be the standard technique for mechanizing modal logics in Coq. 
+Next we  again follow Lescanne and Puiss\'egur \cite{lescanne, puislescanne} and Malikovi\'c and \v Cubrilo~\cite{delcoq1,delcoq2} in defining \emph{prop} of propositions of type $\mathtt{Prop}$, Coq's built in type for propositions. The definition provides constructors for atomic propositions consisting of particular instrument reading predicate statements, implications, propositions beginning with a knowledge modality, and those beginning with a belief modality. Interestingly, modal logic cannot be directly represented in Coq's framework~\cite{lescanne}. We first define propositions in first-order logic, which we then use to define DASL. This appears to be the standard technique for mechanizing modal logics in Coq. 
 
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]	

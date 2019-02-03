@@ -206,30 +206,46 @@ The Safety Precondition Function, $pre_s :: Actions \mapsto \varphi$, is a more 
 %$\mathbf{Definition}$. Safety Valuation Function.\\ $V^s :: Actions \mapsto W.$ The safety valuation function takes an action and maps it to the set of worlds satisfying that action's safety precondition:\\ $V^s (\laa) = \{w|w\models pre_s(\laa)\}$.
 %\\
 \subsection{Semantics}
-The logic \DASL has the following Kripke semantics.
-\begin{tcolorbox}
-	\begin{align*}
-	M,w \models p  &\iiff w \in V(p) \\
-	M,w \models \tlnot \varphi  &\iiff M,w \not\models \varphi \\ 
-	M,w \models \varphi \tland \psi &\iiff M,w \models \varphi \aand M,w \models \psi \\
-	M,w \models \Kns{i}\varphi &\iiff \forall v,\ w\Rel{k}^i v\ \timplies\ M,v \models \varphi \\
-	M,w \models \Bels{i}\varphi &\iiff \forall v,\ w\Rel{b}^i v\ \timplies\ M,v \models \varphi \\
-	M,w \models \Pal{A,\laa}\varphi &\iiff \forall M',w',\  (M,w) \llbracket (A,\laa) \rrbracket (M',w')\ \\&\timplies\ M',w' \models \varphi \\
-	M,w \models \SPal{A,\laa}\varphi &\iiff \forall M',w',\  (M,w) \llbracket (A,\laa) \rrbracket^S (M',w')\ \\&\timplies\ M',w' \models \varphi 
-	\end{align*}
-\end{tcolorbox}
+\DASL\ has the following relational semantics.
+
+\begin{table}[H]
+	\begin{center}
+	\begin{tabular}{| c |}
+		\hline	
+
+	$M,w \models p  \iiff w \in V(p)$ \\
+	$M,w \models \tlnot \varphi  \iiff M,w \not\models \varphi$ \\ 
+	$M,w \models \varphi \tland \psi \iiff M,w \models \varphi \aand M,w \models \psi$ \\
+	$M,w \models \Kns{i}\varphi \iiff \forall v,\ w\Rel{k}^i v\ \timplies\ M,v \models \varphi$ \\
+	$M,w \models \Bels{i}\varphi \iiff \forall v,\ w\Rel{b}^i v\ \timplies\ M,v \models \varphi$ \\
+	$M,w \models \Pal{A,\laa}\varphi \iiff \forall M',w',\  (M,w) \llbracket (A,\laa) \rrbracket (M',w')$ \\ $\timplies\ M',w' \models \varphi$ \\
+	$M,w \models \SPal{A,\laa}\varphi \iiff \forall M',w',\  (M,w) \llbracket (A,\laa) \rrbracket^S (M',w')$ \\ $\timplies\ M',w' \models \varphi$\\
+	\hline 
+	\end{tabular}
+	\caption{\DASL\ semantics}
+	\end{center}
+\end{table}
 The definitions of the dynamic modalities make use of a relation between two model-world pairs, which we now define.
-\begin{tcolorbox}
-	\begin{align*}
-	(M,w)\llbracket (A,\laa)\rrbracket (M',w') &\iiff M,w \models \pre(\laa) \\&\aand update(M,A,w,\laa,i) = (M',w') \\
-	(M,w)\llbracket (A,\laa) \rrbracket^S (M',w') &\iiff M,w \models pre_s(\laa) \\&\aand update(M,A,w,\laa, i) = (M',w') 
-	\end{align*}
-\end{tcolorbox}
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{|c|}
+	\hline
+	\\
+	$(M,w)\llbracket (A,\laa)\rrbracket (M',w') \iiff M,w \models \pre(\laa)$ \\ $\aand update(M,A,w,\laa,i) = (M',w')$ \\
+	\\
+	$(M,w)\llbracket (A,\laa) \rrbracket^S (M',w') \iiff M,w \models pre_s(\laa)$ \\ $\aand update(M,A,w,\laa, i) = (M',w')$\\
+	\\
+	\hline 
+		\end{tabular}
+	\caption{\DASL's dynamic model relations.}
+	\end{center}
+\end{table}
+
 
 
 
 \subsection{Hilbert System}
-\DASL is axiomatized by the following Hilbert system.\\
+\DASL\ is axiomatized by the following Hilbert system.\\
 
 %\begin{tcolorbox}All propositional tautologies are axioms.\\$\Kns{i}$ is T (knowledge relation is reflexive)\\
 %	$\Bels{i}$ is KD45 (belief relation is serial, transitive, and Euclidean)\\
@@ -249,31 +265,37 @@ The definitions of the dynamic modalities make use of a relation between two mod
 	\hline
     $\Kns{i}(\varphi \iimplies \psi) \iimplies (\Kns{i}\varphi \iimplies \Kns{i}\psi)$ & Distribution of $\Kns{i}$ \\
     $\Kns{i}\varphi \iimplies \varphi$ & Truth Axiom \\
+    &\\
     $\Bels{i}(\varphi \iimplies \psi) \iimplies (\Bels{i}\varphi \iimplies \Bels{i}\psi)$ & Distribution of $\Bels{i}$\\
     $\Bels{i}\varphi \iimplies \BPoss{i}\varphi$ & Belief Consistency Axiom\\
 %    $\Bels{i}\varphi \iimplies \Bels{i}\Bels{i}\varphi$ & Positive Belief Introspection \\
     $\tlnot\Bels{i}\varphi \iimplies \Bels{i}\tlnot\Bels{i}\varphi$ & Negative Belief Introspection\\
+    &\\
     $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ & Knowledge implies Belief \\
     $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ & Confidence in Belief\\
 %    $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$ & Beliefs are Known\\
+	&\\
     $\Pal{A,\laa}p \iiff (post(\laa, pre(\laa)) \iimplies p)$ & Atomic Consequence\\
     $\Pal{A,\laa}\tlnot \varphi \iiff (pre(\laa) \iimplies \tlnot \Pal{A,\laa}\varphi)$ & Action Negation\\
     $\Pal{A,\laa}(\varphi \tland \psi) \iiff (\Pal{A,\laa}\varphi \tland \Pal{A,\laa}\psi)$ & Action Conjunction\\
     $\Pal{A,\laa}\Kns{i}\varphi \iiff (pre(\laa)\iimplies \bigwedge_{\laa\chi_{k}^i\beta}\Kns{i}\Pal{A,\beta}\varphi)$ & Action and Knowledge\\
-    $\Pal{A,\laa}\Pal{A',\laa'}\varphi \iiff [(A,\laa);(A',\laa')]\varphi$ & Action Composition \\
+    &\\
+%    $\Pal{A,\laa}\Pal{A',\laa'}\varphi \iiff [(A,\laa);(A',\laa')]\varphi$ & Action Composition \\
     $\SPal{A,\laa}p \iiff (post_s(\laa, pre_s(\laa)) \iimplies p)$ & Safe Atomic Consequence\\
     $\SPal{A,\laa}\tlnot \varphi \iiff (pre_s(\laa) \iimplies \tlnot \SPal{A,\laa}\varphi)$ & Safe Action Negation\\
     $\SPal{A,\laa}(\varphi \tland \psi) \iiff (\SPal{A,\laa}\varphi \tland \SPal{A,\laa}\psi)$ & Safe Action Conjunction\\
     $\SPal{A,\laa}\Kns{i}\varphi \iiff (pre_s(\laa)\iimplies \bigwedge_{\laa\chi_{k}^i\beta}\Kns{i}\SPal{A,\beta}\varphi)$ & Safe Action and Knowledge\\
 %    $\SPal{A,\laa}\SPal{A',\laa'}\varphi \iiff [(A,\laa);(A',\laa')]\varphi$ & Safe Action Composition \\
+	&\\
     $\Pal{A,\laa}\varphi \iimplies \SPal{A,\laa}\varphi$ & Inevitability\\
     $\PalPos{A,\laa}\varphi \iimplies \Bels{i}\SPalPos{A,\laa}\varphi$ & Minimum Rationality\\
+    &\\
     From $\vdash \varphi$ and $\vdash \varphi \iimplies \psi$, infer $\vdash\psi$ & Modus Ponens\\
     From $\vdash \varphi$, infer $\vdash \Kns{i}\varphi$ & Necessitation of $\Kns{i}$\\
     From $\vdash \varphi$, infer $\vdash \Pal{A,\laa}\varphi$ & Necessitation of $\Pal{A,\laa}$\\
 	\hline
 \end{tabular}
-\caption{Hilbert System of Dynamic Agent Safety Logic}
+\caption{Hilbert System of \DASL}
 \end{center}
 \end{table}
 
@@ -284,9 +306,9 @@ The reduction axioms are recursively defined on $\varphi$, terminating with prop
  We proceed by defending the axiom schema for the static foundation, then continue with the dynamic extensions.
 
 \subsection{Static Base}~\label{static}
-Like other dynamic logics for knowledge and belief, \DASL consists of a static base of axiom schemas for the knowledge and belief operators. This section explains and defends \DASL's static base, as they represent a novel axiomatization of formal epistemology and a contribution to the literature by this thesis. 
+Like other dynamic logics for knowledge and belief, \DASL\ consists of a static base of axiom schemas for the knowledge and belief operators. This section explains and defends \DASL's static base, as they represent a novel axiomatization of formal epistemology and a contribution to the literature by this thesis. 
 
-The standard axiom schema for the knowledge operator, whether for a wholly static logic or for the static base of a dynamic system, is that of the S5 operator, described earlier in section~\ref{epistemic_logic}. This axiom schema for the knowledge operator was first formalized by Aumann in ~\cite{Aumann} as a logical foundation for the ideally rational agents of game theory and decision theory. Thus, we can consider that axiom schema to be the top tier of agent rationality axioms, where the belief operator is not even necessary.
+The standard axiom schema for the knowledge operator, whether for a wholly static logic or for the static base of a dynamic system, is that of the \SFive\ operator, described earlier in section~\ref{epistemic_logic}. This axiom schema for the knowledge operator was first formalized by Aumann in \cite{Aumann} as a logical foundation for the ideally rational agents of game theory and decision theory. Thus, we can consider that axiom schema to be the top tier of agent rationality axioms, where the belief operator is not even necessary.
 
 Lower tiers attempt to formalize axioms for \emph{boundedly rational} agents. An ideally rational agent has no limit to her ability to reason about higher order iterations of interactive epistemology. For example, common knowledge is formalized among agents $i$ and $j$ in the following way, where $i,j\in G$, the group:
 
@@ -298,7 +320,7 @@ Thus, an ideally rational agent can carry this to any arbitrary $\mathit{n^{th}}
 
 Bounding agents in this way allows for formal models that capture how a human agent might realistically deviate from optimal Nash equilibria of games. However, bounding rationality in this way does not allow for agents who act based on false beliefs. A lower tier rationality model might impose bounds on the epistemic depth of its agents and also allow for the agents to make decisions based on false beliefs.
 
-The static base of \DASL logic does not cover epistemic depth at all, and instead attends to the formalization of agents who can make decisions based on false beliefs, but whose beliefs are all justified. It is a very low tier of rationality.
+The static base of \DASL\ logic does not cover epistemic depth at all, and instead attends to the formalization of agents who can make decisions based on false beliefs, but whose beliefs are all justified. It is a very low tier of rationality.
 
 Recall the static base of \DASL.
 
@@ -308,26 +330,30 @@ Recall the static base of \DASL.
 			\hline
 			$\Kns{i}(\varphi \iimplies \psi) \iimplies (\Kns{i}\varphi \iimplies \Kns{i}\psi)$ & Distribution of $\Kns{i}$ \\
 			$\Kns{i}\varphi \iimplies \varphi$ & Truth Axiom \\
+			&\\
 			$\Bels{i}(\varphi \iimplies \psi) \iimplies (\Bels{i}\varphi \iimplies \Bels{i}\psi)$ & Distribution of $\Bels{i}$\\
 			$\Bels{i}\varphi \iimplies \BPoss{i}\varphi$ & Belief Consistency Axiom\\
 %			$\Bels{i}\varphi \iimplies \Bels{i}\Bels{i}\varphi$ & Positive Belief Introspection \\
 			$\tlnot\Bels{i}\varphi \iimplies \Bels{i}\tlnot\Bels{i}\varphi$ & Negative Belief Introspection\\
+			&\\
 			$\Kns{i}\varphi \iimplies \Bels{i}\varphi$ & Knowledge implies Belief \\
 			$\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ & Confidence in Belief\\
+			&\\
 %			$\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$ & Beliefs are Known\\
 			From $\vdash \varphi$ and $\vdash \varphi \iimplies \psi$, infer $\vdash\psi$ & Modus Ponens\\
 			From $\vdash \varphi$, infer $\vdash \Kns{i}\varphi$ & Necessitation of $\Kns{i}$\\
 			\hline
 		\end{tabular}
-		\caption{Static Base of Dynamic Agent Safety Logic}
+		\caption{Static Base of \DASL}
 	\end{center}
 \end{table}
 
-As far as we can tell, this axiom scheme is novel, and disagrees with other attempts to model the interaction of knowledge and belief. The primary point of departure is that the knowledge operator is no longer and S5 operator, but merely a T operator. Thus, it is severely weakened as a modal operator, but the corollary to this fact is that knowledge no longer has the imposing necessary conditions of positive and negative introspection. 
+As far as we can tell, this axiom scheme is novel, and disagrees with other attempts to model the interaction of knowledge and belief. The primary point of departure is that the knowledge operator is no longer and \SFive\ operator, but merely a T operator. Thus, it is severely weakened as a modal operator, but the corollary to this fact is that knowledge no longer has the imposing necessary conditions of positive and negative introspection. 
 
-Defense of S5 for knowledge rests on an interpretation of the knowledge operators not as capturing what agents \emph{actively} know at a moment, but rather what their knowledge allows them to potentially infer. Thus, the Distribution axiom is not a license for logical omniscience at a moment, but rather describes what is logically inferrable from what is known by an agent. Similarly for positive and negative introspection. We do not take this path in interpreting the knowledge operator. Instead, depart from the majority of formal epistemologists and interpret the knowledge operator as what is actively known by an agent at a moment.
+%Defense of \SFive\ for knowledge rests on an interpretation of the knowledge operators not as capturing what agents \emph{actively} know at a moment, but rather what their knowledge allows them to potentially infer. Thus, the Distribution axiom is not a license for logical omniscience at a moment, but rather describes what is logically inferrable from what is known by an agent. Similarly for positive and negative introspection. We do not take this path in interpreting the knowledge operator. Instead, depart from the majority of formal epistemologists and interpret the knowledge operator as what is actively known by an agent at a moment.
 
-We must justify this interpretation. While ours is a model that departs from those that appear in formal epistemology, we shall argue that it does a good job of capturing the prominent theories of knowledge espoused by non-formal epistemologists. Our model is also situated well on the rationality tier for modeling realistic human agents whose beliefs are justified, which is a dramatic improvement, from the perspective of realism, over the higher tiers with S5 common knowledge or S5 bounded rationality.
+%We must justify this interpretation. 
+While ours is a model that departs from those that appear in formal epistemology, we shall argue that it does a good job of capturing the prominent theories of knowledge espoused by non-formal epistemologists. Our model is also situated well on the rationality tier for modeling realistic human agents whose beliefs are justified, which is a dramatic improvement, from the perspective of realism, over the higher tiers with \SFive\ common knowledge or \SFive\ bounded rationality.
 
 \subsubsection{Desiderata of a Static Base}
 In constructing our static base, we must identify the desirable features to be achieved. A model of knowledge and belief for human-like agents can be assessed by how well it satisfies these desirable features. 
@@ -336,7 +362,7 @@ First, the model should be well-balanced in the trade off of normativity \emph{v
 
 Second, the model should make sense from an epistemological standpoint, \emph{viz.} the philosophical considerations of epistemologists. To construct a system of epistemic logic is to construct a formal theory of epistemology for \emph{some} type of agent, whether it is a perfect deductive reasoner like a computer over a relatively small database ontology or \emph{homo economicus} in well-structured strategic situations, or an imperfect reasoner like a human in the real world. So far, the latter type of agent has been neglected by formal efforts, because attention has been on properties of formal systems, see below, rather than primarily on their philosophical foundations. 
 
-Third, the model should be a sound and complete logical system to serve as a static foundation for an extension that treats actions. Just because attention must be paid to the philosophical foundations and motivations for a formal system does not mean that the formal system is off the hook for the standard desiderata of a logic. The logic must avert a collapse of belief and knowledge. The logic must abide by the principle of indistinguishability, where an agent cannot distinguish between possible worlds it cannot rule out. If the logic allows for any introspection, it must avoid the L\"obian Obstacle.
+Third, the model should be a sound and complete logical system to serve as a static foundation for an extension that treats actions. Just because attention must be paid to the philosophical foundations and motivations for a formal system does not mean that the formal system is off the hook for the standard desiderata of a logic. The logic must avert a collapse of belief and knowledge. The logic must abide by the principle of indistinguishability, where an agent cannot distinguish between possible worlds it cannot rule out. 
 
 \paragraph{1. Normative-Realism Trade-Off} 
 A model of rationality is situated in a spectrum trading off realism for normative evalutation and prescription. A totally idealized model like that of game theory or rational choice theory is entirely normative. There is no doubt that the agents being modeled are not anything like human beings. The model presumes normativity by showing that acting like an ideally rational agent results in optimal payoffs possible. So, for humans who want to optimize their decisions for payoffs, acting like ideally rational agents is best. However, ideally rational agents have properties that real humans lack, so unless a human can run a simulated agent on a correctly formalized model of a situation, she is unlikely to identify the correct action. After the fact, with a correctly formalized model of the situation, her decision can be analyzed in a post-mortem, but post-mortems never do any good for their subjects.
@@ -456,64 +482,64 @@ An offending theorem flagged in the literature as responsible for equivalence co
 \subparagraph{Indistinguishability}
 Many find it intuitive to speak of the epistemic relation as an equivalence or indistinguishability relation, which requires it to be symmetric, transitive, and reflexive. The epistemic relation in S5 is Euclidean and reflexive, which together yield symmetry and transitivity, and therefore an equivalence relation. Equivalence relations satisfy and indistinguishability relation because each world in the equivalence class is indistinguishable from each other relative to the relation defining the class. We must show that our axiom schema can satisfy the intuition behind epistemic indistinguishability.
 
-\subparagraph{L\"obian Obstacle}
-The L\"obian Obstacle is a problem facing any sufficiently powerful (formally-defined) reasoner. It refers to L\"ob's Theorem. The modal version of L\"ob's Theorem is
-\begin{center}
-\begin{eqnarray}~\label{modal_lob}
-	\Box(\Box\varphi \iimplies \varphi) \implies \Box\varphi,
-\end{eqnarray}
-\end{center}
-where the standard interpretation is that $\Box$ denotes provability in Peano Arithmetic. When~\ref{modal_lob} is included as a theorem of a normal modal logic, it can lead to undesirable results. For epistemic logics, or logics with reflective reasoners, the result is a reasoner who is guaranteed to conclude falsehoods, despite proving or knowing or believing (however one interprets the modal operator) that they do not conclude falsehoods. 
+%\subparagraph{L\"obian Obstacle}
+%The L\"obian Obstacle is a problem facing any sufficiently powerful (formally-defined) reasoner. It refers to L\"ob's Theorem. The modal version of L\"ob's Theorem is
+%\begin{center}
+%\begin{eqnarray}~\label{modal_lob}
+%	\Box(\Box\varphi \iimplies \varphi) \implies \Box\varphi,
+%\end{eqnarray}
+%\end{center}
+%where the standard interpretation is that $\Box$ denotes provability in Peano Arithmetic. When~\ref{modal_lob} is included as a theorem of a normal modal logic, it can lead to undesirable results. For epistemic logics, or logics with reflective reasoners, the result is a reasoner who is guaranteed to conclude falsehoods, despite proving or knowing or believing (however one interprets the modal operator) that they do not conclude falsehoods. 
+%
+%The theorem grew out of G\"odel's incompleteness results about self-referential true but unprovable statements in systems at least as strong as Peano Arithmentic. L\"ob addressed the question of self-referential statements asserting their own provability. When quantified over statements, the question concerns a system's ability to prove its own consistency. L\"ob's Theorem states that a system can prove its own consistency only if it can prove every well formed formula in its language, including contradictions. For agents who can reflect on their own reasoning, this is a disaster. This is the L\"obian Obstacle that systems must strive to avoid. Research at the foundations of artificial intelligence is actively engaged in this avoidance task, for if an artificial general intelligence, possessed of a reasoning system at least as powerful as Peano Arithmetic (which it likely shall possess), tries to establish that it can trust its own reasoning, it shall cease to reason consistently.
+%
+%The standard modal provability logic is \boldmath{GL}, for G\"odel L\"ob. It is a normal modal logic with~\ref{modal_lob} as an axiom. The conditions that lead to the derivation of L\"ob's Theorem for other modal logics are the following:
+%\begin{enumerate}
+%	\item The modal logic contains the Rule of Necessitation: From $\vdash \varphi$ infer $\vdash \Box \varphi$.
+%	\item The modal logic is normal: $\Box(\varphi \iimplies \psi) \iimplies (\Box \varphi \iimplies \Box \psi)$.
+%	\item The modal operator's relation is transitive, \emph{i.e.,} it is a theorem that $\Box \varphi \iimplies \Box \Box \varphi$.
+%	\item The modal logic contains modal fixpoints: $\vdash \psi \iiff F(\Box\psi)$, for some formula $F$ containing $\psi$ as a subformula.
+%%	 OR the logic contains reflexive agents: They can define a $\psi$ for every $\varphi$ such that $\psi \equiv \Box\psi \implies \varphi$.
+%\end{enumerate}
+%If these four conditions are met, the modal logic will include L\"ob's Theorem. For logic's of knowledge and belief, conditions (1)-(3) are almost unavoidable for at least one of the operators. Condition (4) is likewise challenging to avoid, as common knowledge and common belief explicitly introduce modal fixpoints, but more fundamentally, there's no principled reason to say the human-like agents being modeled are incapable of expressing a sentence $\psi \stackrel{def}{=}$ "If I know that $\psi$, then $\varphi$". Humans clearly \emph{can} articulate self-referential sentences, and at the very least, they can reason on the level of Peano Arithmetic, which is sufficient for the problem to occur. Such agents will encounter the L\"obian Obstacle, and come to know contradictions. This level of error is not desired in the model. Knowledge and belief serve as a foundation for action, so the potential to know and believe anything leads to the potential for any action to be executed in a way that seems rational to the agent.
+%
+%OLD BELOW\\
+%This system warrants defending, as John Rushby has recently challenged the decisions. His concerns can be summarized as follows:
+%\begin{enumerate}
+%	\item Belief is sufficient for reasoning about pilots' actions
+%	\item The axioms of Knowledge and Belief are nonstandard and seem contrived
+%\end{enumerate}
+%We will now address each concern and defend the axioms presented above. We note that the arguments below are our best attempts at charitably representing Rushby's arguments.
 
-The theorem grew out of G\"odel's incompleteness results about self-referential true but unprovable statements in systems at least as strong as Peano Arithmentic. L\"ob addressed the question of self-referential statements asserting their own provability. When quantified over statements, the question concerns a system's ability to prove its own consistency. L\"ob's Theorem states that a system can prove its own consistency only if it can prove every well formed formula in its language, including contradictions. For agents who can reflect on their own reasoning, this is a disaster. This is the L\"obian Obstacle that systems must strive to avoid. Research at the foundations of artificial intelligence is actively engaged in this avoidance task, for if an artificial general intelligence, possessed of a reasoning system at least as powerful as Peano Arithmetic (which it likely shall possess), tries to establish that it can trust its own reasoning, it shall cease to reason consistently.
+%\subsubsection*{Solely Belief?}
+%Rushby makes the following argument against including operators for knowledge and belief in a multi-modal system for reasoning about pilot error, and relying instead solely on an operator for belief.
+%\begin{enumerate}
+%	\item A model treating only a pilot's beliefs is simpler than a model treating a pilot's beliefs about her knowledge.
+%	\item If model A is simpler than model B, and A accurately models the phenomenon under investigation, then model A is preferable to model B.
+%	\item Rushby's model treats only pilot belief and accurately models the phenomenon under investigation.
+%	\item Therefore, the Rushby's model is preferable to the DASL model.
+%\end{enumerate}
 
-The standard modal provability logic is \boldmath{GL}, for G\"odel L\"ob. It is a normal modal logic with~\ref{modal_lob} as an axiom. The conditions that lead to the derivation of L\"ob's Theorem for other modal logics are the following:
-\begin{enumerate}
-	\item The modal logic contains the Rule of Necessitation: From $\vdash \varphi$ infer $\vdash \Box \varphi$.
-	\item The modal logic is normal: $\Box(\varphi \iimplies \psi) \iimplies (\Box \varphi \iimplies \Box \psi)$.
-	\item The modal operator's relation is transitive, \emph{i.e.,} it is a theorem that $\Box \varphi \iimplies \Box \Box \varphi$.
-	\item The modal logic contains modal fixpoints: $\vdash \psi \iiff F(\Box\psi)$, for some formula $F$ containing $\psi$ as a subformula.
-%	 OR the logic contains reflexive agents: They can define a $\psi$ for every $\varphi$ such that $\psi \equiv \Box\psi \implies \varphi$.
-\end{enumerate}
-If these four conditions are met, the modal logic will include L\"ob's Theorem. For logic's of knowledge and belief, conditions (1)-(3) are almost unavoidable for at least one of the operators. Condition (4) is likewise challenging to avoid, as common knowledge and common belief explicitly introduce modal fixpoints, but more fundamentally, there's no principled reason to say the human-like agents being modeled are incapable of expressing a sentence $\psi \stackrel{def}{=}$ "If I know that $\psi$, then $\varphi$". Humans clearly \emph{can} articulate self-referential sentences, and at the very least, they can reason on the level of Peano Arithmetic, which is sufficient for the problem to occur. Such agents will encounter the L\"obian Obstacle, and come to know contradictions. This level of error is not desired in the model. Knowledge and belief serve as a foundation for action, so the potential to know and believe anything leads to the potential for any action to be executed in a way that seems rational to the agent.
+%We argue that premise 3 is false. Specifically, we argue that Rushby's model does not accurately capture the relationship between the pilot's beliefs and unsafe action.
 
-OLD BELOW\\
-This system warrants defending, as John Rushby has recently challenged the decisions. His concerns can be summarized as follows:
-\begin{enumerate}
-	\item Belief is sufficient for reasoning about pilots' actions
-	\item The axioms of Knowledge and Belief are nonstandard and seem contrived
-\end{enumerate}
-We will now address each concern and defend the axioms presented above. We note that the arguments below are our best attempts at charitably representing Rushby's arguments.
-
-\subsubsection*{Solely Belief?}
-Rushby makes the following argument against including operators for knowledge and belief in a multi-modal system for reasoning about pilot error, and relying instead solely on an operator for belief.
-\begin{enumerate}
-	\item A model treating only a pilot's beliefs is simpler than a model treating a pilot's beliefs about her knowledge.
-	\item If model A is simpler than model B, and A accurately models the phenomenon under investigation, then model A is preferable to model B.
-	\item Rushby's model treats only pilot belief and accurately models the phenomenon under investigation.
-	\item Therefore, the Rushby's model is preferable to the DASL model.
-\end{enumerate}
-
-We argue that premise 3 is false. Specifically, we argue that Rushby's model does not accurately capture the relationship between the pilot's beliefs and unsafe action.
-
-In Rushby's alternative model, he discusses a pilot's discernment of the presence of instrument conflict, which he assumes for simplicity to be always accurate. Is this not an assumption of knowledge for simplicity? Similarly, when the pilot is aware of the autopilot status through observing an indicator on a display or through inference from the aircraft's behavior, it is not clear that this is not a case of knowing the autopilot's status. Rushby's description of the true belief seems to make it fit with any epistemologist's theory of knowledge. 
+%In Rushby's alternative model, he discusses a pilot's discernment of the presence of instrument conflict, which he assumes for simplicity to be always accurate. Is this not an assumption of knowledge for simplicity? Similarly, when the pilot is aware of the autopilot status through observing an indicator on a display or through inference from the aircraft's behavior, it is not clear that this is not a case of knowing the autopilot's status. Rushby's description of the true belief seems to make it fit with any epistemologist's theory of knowledge. 
 
 \subsubsection*{Knowledge and Belief Axioms}
 Knowledge is weaker here than in most epistemic logics~\cite{FHMV,DEL,Hintikka}. Knowledge is almost universally formalized as an S5 modal operator, including axiom schema for positive and negative introspection. Rushby suspects that because the analyses of aviation mishaps lays the blame on a failure of negative introspection in~\cite{AhrenbachGoodloe}, the decision to exclude the negative introspection axiom from the schema appears contrived. Rushby proves that to include the negative introspection axiom would cause a collapse of knowledge and belief into equivalence, due to the axiom \emph{Confidence in Belief}: $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$, which to our knowledge was first proved by Lenzen~\cite{Lenzen}. \emph{Confidence in Belief}, additionally, is the converse of Hintikka's choice for relating the two: $\Bels{i}\Kns{i}\varphi \iimplies \Bels{i}\varphi$. Axiom \emph{Confidence in Belief} will be defended below. Rushby's concern with the knowledge axioms, or lack thereof, can be summarized as follows.
+%
+%\begin{enumerate}
+%	\item Negative introspection is a standard axiom for epistemic logic.
+%	\item \emph{Confidence in Belief} is non-standard for multi-modal epistemic-doxastic logics.
+%	\item Including negative introspection and excluding \emph{Confidence in Belief} preserves an analysis based on false beliefs that is analytically sufficient.
+%	\item Standard axioms are preferable to non-standard axioms when standard axioms are analytically sufficient.
+%	\item Therefore, including negative introspection and excluding \emph{Confidence in Belief} is preferable to excluding and including respectively.
+%\end{enumerate}
 
-\begin{enumerate}
-	\item Negative introspection is a standard axiom for epistemic logic.
-	\item \emph{Confidence in Belief} is non-standard for multi-modal epistemic-doxastic logics.
-	\item Including negative introspection and excluding \emph{Confidence in Belief} preserves an analysis based on false beliefs that is analytically sufficient.
-	\item Standard axioms are preferable to non-standard axioms when standard axioms are analytically sufficient.
-	\item Therefore, including negative introspection and excluding \emph{Confidence in Belief} is preferable to excluding and including respectively.
-\end{enumerate}
+%Our representation of the argument here is based directly on Rushby's claims in CITE for premises 1 through 3, but premise 4 is inferred from context and was not explicitly mentioned. However, in order for the argument to be deductively valid, the premise must be included. We take it to be an unstated assumption behind Rushby's reasoning.
 
-Our representation of the argument here is based directly on Rushby's claims in CITE for premises 1 through 3, but premise 4 is inferred from context and was not explicitly mentioned. However, in order for the argument to be deductively valid, the premise must be included. We take it to be an unstated assumption behind Rushby's reasoning.
+%We shall argue that premise 4 is false. Rushby's preference for the standard axioms, based on their preservation of an analysis based on false beliefs, fails to account for a feature of the present axioms which we shall endeavor to establish, namely that they more accurately describe real human knowledge and belief relations, whereas the standard axioms do not. Thus, while it is true that the analytical strength of the standard axioms would be preserved based on a false belief analysis, it does not follow that these axioms are preferable, because they do not accurately model human agency.
 
-We shall argue that premise 4 is false. Rushby's preference for the standard axioms, based on their preservation of an analysis based on false beliefs, fails to account for a feature of the present axioms which we shall endeavor to establish, namely that they more accurately describe real human knowledge and belief relations, whereas the standard axioms do not. Thus, while it is true that the analytical strength of the standard axioms would be preserved based on a false belief analysis, it does not follow that these axioms are preferable, because they do not accurately model human agency.
-
-First, we defend the exclusion of negative introspection for the knowledge operator. Negative introspection, recall, holds that $\tlnot\Kns{i}\varphi\iimplies\Kns{i}\tlnot\Kns{i}\varphi$: If an agent, \emph{i} does not know $\varphi$, then \emph{i} knows that she does not know it. When it is phrased this way, it can seem at worst a bit confusing, but not obviously false. However, consider one's response when it is phrased the following equivalent way: An agent does not know $\varphi$ \emph{only if} she knows that she does not know $\varphi$. This deformalized version of the axiom makes it clear that knowledge of ignorance is being asserted as a \emph{necessary condition} for ignorance, or lack of knowledge. One would be hard pressed to find an epistemologist willing to defend this view. To further elaborate on the point, consider the contrapositive: $\tlnot\Kns{i}\tlnot\Kns{i}\varphi \iimplies \Kns{i}\varphi$: If \emph{i} does not know that she does not know $\varphi$, then she knows $\varphi$. The Pyrrhonian skeptics famously denied claims to all knowledge, even to the claim that they know nothing. Thus, for all formulas $\varphi$, $\tlnot\Kns{Pyrrhonian}\tlnot\Kns{Pyrrhonian}\varphi$. According to the negative introspection axiom, then, $\Kns{Pyrrhonian}\varphi$ for arbitrary $\varphi$, certainly a result they would be disturbed by.
+%First, we defend the exclusion of negative introspection for the knowledge operator. Negative introspection, recall, holds that $\tlnot\Kns{i}\varphi\iimplies\Kns{i}\tlnot\Kns{i}\varphi$: If an agent, \emph{i} does not know $\varphi$, then \emph{i} knows that she does not know it. When it is phrased this way, it can seem at worst a bit confusing, but not obviously false. However, consider one's response when it is phrased the following equivalent way: An agent does not know $\varphi$ \emph{only if} she knows that she does not know $\varphi$. This deformalized version of the axiom makes it clear that knowledge of ignorance is being asserted as a \emph{necessary condition} for ignorance, or lack of knowledge. One would be hard pressed to find an epistemologist willing to defend this view. To further elaborate on the point, consider the contrapositive: $\tlnot\Kns{i}\tlnot\Kns{i}\varphi \iimplies \Kns{i}\varphi$: If \emph{i} does not know that she does not know $\varphi$, then she knows $\varphi$. The Pyrrhonian skeptics famously denied claims to all knowledge, even to the claim that they know nothing. Thus, for all formulas $\varphi$, $\tlnot\Kns{Pyrrhonian}\tlnot\Kns{Pyrrhonian}\varphi$. According to the negative introspection axiom, then, $\Kns{Pyrrhonian}\varphi$ for arbitrary $\varphi$, certainly a result they would be disturbed by.
 
 Many find it intuitive to speak of the epistemic relation as an equivalence or indistinguishability relation, which requires it be symmetric. Symmetry, combined with the reflexivity underlying the Truth Axiom and transitivity of positive introspection, yields such an equivalence relation. It makes sense to say that world $v$ is epistemically possible from world $w$ for agent $i$ if $i$ cannot tell the two worlds apart, \emph{i.e.} they are indistinguishable. The power of this intuitive appeal presents a challenge for us. We must show that our axiom schema can satisfy the intuition behind epistemic indistinguishability without imposing symmetry on the epistemic relation.
 
@@ -571,23 +597,23 @@ If the actual world is in its own doxastic relation, we have the following.
 
 So, when $i$ has no false beliefs, her belief and knowledge collapse into an S5 modal operator. When this condition holds, she makes decisions on par with those of an ideally rational agent who does not make mistakes. However, she is not guaranteed to remain in this state, as the model (world) might change in such a way that the doxastic relation comes to exclude the actual world, in which case $i$ will have false beliefs again.
 
-Thus, in the static epistemic-doxastic logic of DASL, the intuitively appealing property of indistinguishability is maintained from a subjective, internal standpoint, \emph{i.e.,} from $i$'s own perspective. This should be all that is needed, because the motivating intuition behind the indistinguishability requirement is that an agent should not be able to tell which of her possible worlds she is in, and that is the case here with respect to her subjective evidence.
+Thus, in the static epistemic-doxastic logic of \DASL, the intuitively appealing property of indistinguishability is maintained from a subjective, internal standpoint, \emph{i.e.,} from $i$'s own perspective. This should be all that is needed, because the motivating intuition behind the indistinguishability requirement is that an agent should not be able to tell which of her possible worlds she is in, and that is the case here with respect to her subjective evidence.
 
-BELOW NEEDS WORK.
-TODO. Belief is standard~\cite{FHMV}. They are related logically by EP(1-3), which hold that knowledge entails belief, belief entails that one believes that one knows, and belief entails than one knows that one believes. Finally, actions and safe actions are logically related by SP and PR, which hold that necessary consequences of \emph{mere} action are also necessary consequences of \emph{safe} actions, and that a pilot can execute an action only if he believes that he is executing a safe action. 
+%BELOW NEEDS WORK.
+%TODO. Belief is standard~\cite{FHMV}. They are related logically by EP(1-3), which hold that knowledge entails belief, belief entails that one believes that one knows, and belief entails than one knows that one believes. Finally, actions and safe actions are logically related by SP and PR, which hold that necessary consequences of \emph{mere} action are also necessary consequences of \emph{safe} actions, and that a pilot can execute an action only if he believes that he is executing a safe action. 
 
 Below are the axioms characterizing the reduction laws from the dynamic logic to a purely static logic through recursive application.\\
 \begin{table}[H]
 	\begin{center}
     \begin{tabular}{| l r |}
     \hline & \\
-	$\Pal{A,\laa}p \Leftrightarrow (pre(\laa)\iimplies(post(A,p) \iimplies p))$ & Aprop \\
+	$\Pal{A,\laa}p \Leftrightarrow (post(\laa,pre(\laa)) \iimplies p)$ & Aprop \\
 	$\Pal{A,\laa}\tlnot\varphi \Leftrightarrow (pre(\laa) \iimplies \tlnot \Pal{A,\laa}\varphi)$ & AN\\
 	$\Pal{A,\laa}(\varphi \tland \psi) \Leftrightarrow (\Pal{A,\laa}\varphi \tland \Pal{A,\laa}\psi)$ & AC\\
 	$\Pal{A,\laa}\Kns{i}\varphi \Leftrightarrow (pre(\laa) \iimplies \bigwedge_{\laa\chi_{k}^i \lbb}\Kns{i}\Pal{A,\lbb}\varphi)$ & AK\\
 	$\Pal{A,\laa}\Bels{i}\varphi \Leftrightarrow (pre(\laa) \iimplies \bigwedge_{\laa\chi_{b}^i \lbb}\Bels{i}\Pal{A,\lbb}\varphi)$ & AB\\ & \\
 	\hline & \\
-	$\SPal{A,\laa}p \Leftrightarrow (pre_s(\laa) \iimplies (post(A,p) \iimplies p))$ & Sprop\\
+	$\SPal{A,\laa}p \Leftrightarrow (post_s(\laa,pre_s(\laa)) \iimplies p)$ & Sprop\\
 	$\SPal{A,\laa}\tlnot\varphi \Leftrightarrow (pre_s(\laa) \iimplies \tlnot \SPal{A,\laa}\varphi)$ & SN\\
 	$\SPal{A,\laa}(\varphi \tland \psi) \Leftrightarrow (\SPal{A,\laa}\varphi \tland \SPal{A,\laa}\psi)$ & SC\\
 	$\SPal{A,\laa}\Kns{i}\varphi \Leftrightarrow (pre_s(\laa) \iimplies \bigwedge_{\laa\Rel{k}'^{i}\lbb}\Kns{i}\SPal{A,\lbb}\varphi)$ & SK\\
@@ -604,9 +630,9 @@ Below are the axioms characterizing the reduction laws from the dynamic logic to
 
 \section{Soundness and Completeness}
 
-This section establishes the soundness and completeness of the logic.  We present mechanized formalizations of each proof in the Coq Proof Assistant. The proof of soundness shows that axioms of \DASL are each valid for all \DASL frames. The proof of completeness shows that each axiom schema is a Sahlqvist formula, and therefore forms a complete logic built by adding them to the axiom K of the minimal modal logic, by Sahlqvist's Theorem~\cite{sahlqvist}.
+This section establishes the soundness and completeness of the logic.  We present mechanized formalizations of each proof in the Coq Proof Assistant. The proof of soundness shows that axioms of \DASL\ are each valid for all \DASL\ frames. The proof of completeness shows that each axiom schema is a Sahlqvist formula, and therefore forms a complete logic built by adding them to the axiom K of the minimal modal logic, by Sahlqvist's Theorem~\cite{sahlqvist}.
 
-Both proofs make use of a special property of modal logics. Every modal logic formula is equivalent to a first- or second-order logic formula, in the sense that it is valid on the same frames as the \emph{corresponding} first- or second order formula. The frame conditions of \DASL are first order logic formulas, and they each correspond to an axiom schema of the modal logic. This correspondence suffices for soundness. When the modal formulas correspond to first order formulas, and the formulas have a certain special structure, the resulting logic is guaranteed to be complete with respect to the first order frame relations.
+Both proofs make use of a special property of modal logics. Every modal logic formula is equivalent to a first- or second-order logic formula, in the sense that it is valid on the same frames as the \emph{corresponding} first- or second order formula. The frame conditions of \DASL\ are first order logic formulas, and they each correspond to an axiom schema of the modal logic. This correspondence suffices for soundness. When the modal formulas correspond to first order formulas, and the formulas have a certain special structure, the resulting logic is guaranteed to be complete with respect to the first order frame relations.
 
 We begin this section with the soundness proof, and follow up with the completeness proof. 
 
@@ -862,178 +888,178 @@ For soundness and completeness, it suffices to show that each DASL axiom is a Sa
 
 
 
-OLD BELOW
-
-\begin{tcolorbox}
-	\begin{theorem}[Soundness]
-		Dynamic Agent Safety Logic is sound for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, transitive, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$.
-	\end{theorem}
-\end{tcolorbox}
-$\mathbf{Proof}.$ $(1)\  and\  (2)$ correspond to the axioms that $\Kns{i}$ is a T modality and $\Bels{i}$ is a KD45 modality in the usual way. $(3)$ corresponds to EP1, EP2, and EP3. Axioms AP through SB are reduction axioms. This leaves $(4)$, corresponding to SP, and $(5)$ which corresponds to PR. Here we will prove $(5)$. Let $M$ be a Kripke structure satisfying the five conditions above. Let $A$ be an Action structure with $\laa$ and $i$ as its actual action token and agent. 
-
-We prove $(5)$ via the contrapositive of PR: $\BPoss{i}\SPal{A,\laa}\varphi \iimplies \Pal{ A,\laa}\varphi$.
-Assume $M,w \models \BPoss{i}\SPal{A,\laa}\varphi$. By the semantics of $\BPoss{i}$, there exists a $v$, such that $w\Rel{b}^i v$ and $v \models \SPal{A,\laa}\varphi$. From the semantics, it follows that forall $M',v'$, if $(M,v)\llbracket (A,\laa) \rrbracket^S (M',v')$ then $M',v' \models \varphi$. By slightly abusing the notation, and letting $(W,w)\Rel{b}^i (W,v)$ be equivalent to $w\Rel{b}^i v$, we can create the composed relation $(\llbracket (A,\laa) \rrbracket^S \circ \Rel{b}^i)$. It then holds, by condition $(5)$, that $(M,w) (\llbracket (A,\laa) \rrbracket^S \circ \Rel{b}^i) (M',v')$ implies $(M,w)\llbracket (A,\laa) \rrbracket (M',v')$. So, for all $M',v'$, if $(M,w)\llbracket (A,\laa) \rrbracket (M',v')$, then $M',v' \models \varphi$. So, $M,w \models \Pal{A,\laa}\varphi$. $\Box$
-
-%We leave out proofs of the reduction axioms for space.
-$\mathbf{Aprop: \iimplies}$. Assume $M,w \models \Pal{A,\laa}p$. We must show that $M,w \models pre(\laa)\iimplies (post(A,p) \iimplies p)$. By the semantics of $\Pal{A,\laa}$, for all $(M',w')$, if $M,w \models pre(\laa)$ and $update(M,A,w,\laa,i)= (M',w')$, then $M',w' \models p$. By definition of $post(A,p)$, if $update(M,A,w,\laa,i)=(M',w')$ and $M',w' \models p$, then $post(A,p)=p$. So, if $M,w \models pre(\laa)$, then $post(A,p) = p$, and thus $post(A,p)\iimplies p$. 
-
-$\Leftarrow$. Assume $M,w \models pre(\laa) \iimplies (post(A,p)\iimplies p)$. By the definition of $post(A,p)$, if $post(A,p)=p$ then $update(M,A,w,\laa,i)\models p$. So, if $M,w \models pre(\laa)$, then $update(M,A,w,\laa,i)\models p$. Therefore, $M,w\models \Pal{i,(A,\laa)}p$.
-
-$\mathbf{AN: \iimplies}$. Assume $M,w \models \Pal{i,(A,\laa)}\tlnot \varphi$. It suffices to show that $M,w \models pre(\laa) \iimplies \PalPos{i}{(A,\laa)}\tlnot \varphi$. From the assumption and the semantics, for all $(W',w')$, if $(M,w)\llbracket (A,\laa) \rrbracket(M',w')$ then $M',w' \models \tlnot \varphi$. So, if $M,w \models pre(\laa)$ and $update(\\M,A,w,\laa,i)=(M',w')$, then $M',w' \models \tlnot \varphi$. Assume $M,w \models pre(\laa)$, and it follows that $update(M,A,w,\laa,i)$ is defined, so there exists a $M',w'$ such that $(M,w)\llbracket (A,\laa) \rrbracket(M',w')$ and $update(M,A,i)=(M',w')$ and $M',w' \models \tlnot \varphi$. Therefore, $M,w \models pre(\laa) \iimplies \PalPos{A,\laa}\tlnot \varphi$.
-
-$\Leftarrow$. Assume $M,w \models pre(\laa) \iimplies \tlnot \Pal{A,\laa}\varphi$. This is equivalent to $M,w \models pre(\laa) \iimplies \PalPos{A,\laa}\tlnot \varphi$.  By the semantics, if $M,w \models pre(\laa)$, then there exists a $(M',w')$ such that $(M,w)\llbracket (A,\laa)\rrbracket (M',w') \aand M',w' \models \tlnot \varphi$. The relation $\llbracket (A,\laa)\rrbracket$ is functional, so $\exists$ implies $\forall$. So, for all $(M',w')$, if $(M,w)\llbracket (A,\laa)\rrbracket (M',w')$, then $M',w' \models \tlnot \varphi$, and therefore $M,w\models \Pal{A,\laa}\tlnot \varphi$.
-
-$\mathbf{AC}$ is obvious.
-
-$\mathbf{AK}$. For this proof, assume for simplicity, without loss of generality, that $Actions = \{\laa\}$.
-
-$\iimplies$. Assume $M,w \models \Pal{A,\laa}\Kns{i}\varphi$. Unfolding the semantics, for all $(M',w')$, if $(M,w)\models pre(\laa)$ and $update(M,A,w,\laa,\\i)=(M',v')$, then $M',w'\models\Kns{i}\varphi$. $M',w'\models \Kns{i}\varphi$ iff for all $v\in W$, if $w\Rel{k}^iv$ and $M,v\models pre(\laa)$ and $update(M,A,v,\laa,i)=(M',v')$ and  $\laa\chi_{k}^i\laa$, then $M',v'\models\varphi$. That is, $M,w\models \Kns{i}\Pal{A,\laa}\varphi$. 
-
-$\Leftarrow$. Assume $M,w \models pre(\laa) \iimplies \Kns{i}\Pal{i,(A,\laa)}\varphi$. We must show $M,w \models \Pal{i,(A,\laa)}\\\Kns{i}\varphi$. Thus, we must show $M,w \models pre(\laa)$ and $update(M,A,w,\laa,i)=(M',w')$ implies $M',w' \models \Kns{i}\varphi$. So it suffices to show that if $update(M,A,w,\laa,i)=(M',w')$ and $M,w\models \Kns{i}\Pal{i,(A,\laa)}\varphi$, then $M',w'\models \Kns{i}\varphi$. Assume $update(M,A,w,\\\laa,i)=(M',w')$ and $M,w\models\Kns{i}\Pal{i,(A,\laa)}\varphi$. Then for all $v$, if $w\Rel{k}^iv$, then $M,v\models\Pal{i,(A,\laa)}\varphi$. It follows that $M,v\models pre(\laa)$ and $update(M,A,v,\laa,i)=(M',v')$ implies $M',v'\models\varphi$. Since $w\Rel{k}^iv$ and $\laa\chi_{k}^i\laa$, it holds that $w'\Rel{k}^{i'}v'$. Thus, $M',w'\models\Kns{i}\varphi$.
-
-Proofs for $\mathbf{AB}$ through $\mathbf{SB}$ follow the above proofs exactly analogously. $\Box$ 
-
-Assume $M,w \models \PalPos{A,\laa}true.$ By the semantics of $\PalPos{A,\laa},$ $M,w \models pre(\laa)$ and $update(M,w,\chi)\models true$. Let $(M',w') = update(M,w,\chi)$. Then $M',w' \models true$. From $(5)$ above, it holds that $\Rel{b}^i (w) \subseteq V^s (\laa)$. $\Rel{b}$ is serial, so there is at least one such $v \in \Rel{b}^i$. Then $M,v \models pre_s(\laa)$. From (4), $M,v \models pre(\laa)$, so $update(M,v,\chi)$ is defined, call it $(M'',v')$. Because $(M'',v')$ is defined, $M'',v' \models true$. So, $M,v \models pre_s(\laa)$ and $update(M,v,\chi)\models true$. This holds for all $v$, such that $w\Rel{b}v$. Thus, $M,w \models \Bels{i}\SPalPos{A,\laa}true$. Therefore, $M,w \models \PalPos{A,\laa}true \iimplies \Bels{i}\SPalPos{A,\laa}true$. $\square$ 
-
-Next we turn to completeness.
-
-\subsection{Completeness}
-
-Completeness proofs in contemporary modal logic research follow the following format. First, a \emph{canonical model} is defined such that it belongs to the Kripke frames for which the logic under investigation is sound. The model combines validity and deducibility so that the former entails the latter. The worlds of the canonical model are sets of formulas from the language. If a formula is a member of a such a set, then it is true at the world. We define this formally below. The objective is to show that all formulas valid for the relevant Kripke frames are likewise deducible in the logic. The key is to construct the sets in a particular way, to be discussed below.
-
-The previous section proved soundness of DASL with respect to frames with a reflexive $\Rel{k}^i$ relation, a serial, transitive, Euclidean $\Rel{b}^i$ relation, which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, and with action relations  $\llbracket (A,\laa)\rrbracket \subseteq \llbracket (A,\laa)\rrbracket^S$, and $(\llbracket (A,\laa)\rrbracket^S \circ \Rel{b}^i) \subseteq \llbracket (A,\laa)\rrbracket$. The canonical model we proceed to define will belong to this frame. Because it belongs to this frame, the logical closure of a set of formulas will consist of valid DASL deductions. This allows us to infer deducibility from validity. First we must define the notion of a maximal consistent set.
- 
-Informally, a maximal consistent set of formulas is one that is a subset of the well-formed formulas of the language $\mathcal{L}_{DASL}$ according to the syntax presented earlier, whose members are consistent with each other, such that the set has no consistent extension. \\
-$\mathbf{Definition}$. Maximal Consistent Set.\\
-For a set of formulas $\Gamma \subseteq \mathcal{L}_{DASL}$, $\Gamma$ is maximal consistent iff\\
-1. $\Gamma$ is consistent: $\Gamma \not \vdash \bot$.\\
-2. $\Gamma$ is maximal: there is no $\Gamma'\subseteq\mathcal{L}_{DASL}$ such that $\Gamma \subset \Gamma'$ and $\Gamma'\not\vdash\bot$.\\
-
-A canonical model is a Kripke model of $\mathcal{L}_{DASL}$ with a set of worlds $W^C$ that collectively satisfy all formulas from a maximal consistent set. For our formalism here, we treat worlds as identical to sets of formulas.
-\\
-$\mathbf{Definition}$. Canonical Model. A canonical model $M^C = \langle W^C,\ \Rel{k,i}^C,\ \Rel{b,i}^C,\ w,\ V^C\rangle$ is defined:\\
-1. $W^C = \{\Gamma | \Gamma$ is maximal consistent relative to $\mathcal{L}_{DASL} \}$\\
-2. $\Gamma \Rel{k,i}^C \Delta$ iff $\Kns{i}\varphi \in \Gamma$ implies $\varphi \in \Delta$\\
-3. $\Gamma \Rel{b,i}^C \Delta$ iff $\Bels{i}\varphi \in \Gamma$ implies $\varphi \in \Delta$\\
-4. $V^C(p) = \{\Gamma \in W^C\ |\ p \in \Gamma\}$\\
-
-
-\begin{tcolorbox}
-	\begin{theorem}[Completeness]
-		The language of Dynamic Agent Safety Logic, $\mathcal{L}_{DASL}$, is complete for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, transitive, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, \\(4) $\llbracket (A,\laa)\rrbracket \subseteq \llbracket (A,\laa)\rrbracket^S$%for all $\laa,\  V^s(\laa) \subseteq V^p(\laa),$ [Questionable]
-		and\\ (5) $(\llbracket (A,\laa)\rrbracket^S \circ \Rel{b}^i) \subseteq \llbracket (A,\laa)\rrbracket$.
-	\end{theorem}
-\end{tcolorbox}
-
-$\mathbf{Proof}.$ Completeness states that if a formula $\varphi$ is valid, then it is deducible. The sketch for this proceeds proceeds by contraposition. So we must show that for every formula $\varphi$ in the language $\mathcal{L}_{DASL}$, $\not\vdash\varphi \timplies \not\models\varphi.$\\
-The proof appeals to the following lemmas, proven also in~\cite{DEL,negri}:
-\begin{lemma}[Lindenbaum]
-Every consistent set of formulas is a subset of a maximal consistent set of formulas.
-\end{lemma}
-\begin{proof}
-	
-If we begin with a consistent set of $\mathcal{L}_{DASL}$ formulas $\beta$, we construct a maximal consistent set $\Gamma$ as follows:
-\begin{enumerate}
-	\item enumerate the formulas of $\mathcal{L}_{DASL}$ $\varphi_0$, $\dots \varphi_n$, $\dots$
-	\item $\Gamma_0 \equiv \beta$
-	\item $\Gamma_{n+1} \equiv \{\varphi_n\}$ if $\Gamma_{n} \vdash \varphi_n$ 
-	\item $\Gamma_{n+1} \equiv \{\tlnot \varphi_n\}$ otherwise
-	\item $\Gamma \equiv \bigcup_{n\geq0}\Gamma_n$
-\end{enumerate}
-
-We now show that $\Gamma$ is consistent. $\Gamma$ is consistent if and only if $\forall \Gamma_n \subset \Gamma$, $\Gamma_n \not\vdash \bot$. The base set $\Gamma_0$ is consistent because it is equivalent to $\beta$, which is consistent by assumption. The induction hypothesis is if $\Gamma_{n+1}$ is consistent then so is $\Gamma_{n}$. There are two ways to construct $\Gamma_{n+1}$: via step (3), or via step (4). If via (3), then the added formula $\varphi_n$ logically follows from $\Gamma_n$, and $\mathcal{L}_{DASL}$ is sound, so $\Gamma_{n+1}$ is consistent. Otherwise, if via (4), then $\varphi_n$ does not logically follow from $\Gamma_n$. Because the formulas are enumerated and examined in order, $\varphi_n$ is not in $\Gamma_n$. Thus, $\Gamma_n \cup \{\tlnot\varphi_n\} \not\vdash \bot$. Therefore, $\Gamma$ is consistent.
-
-We show $\Gamma$ is maximal by contradiction, assuming there is a $\Gamma' \subset \mathcal{L}_{DASL}$ such that $\Gamma \subset \Gamma'$ and $\Gamma'\not\vdash\bot$. Let $\varphi_n\in\Gamma'$ and $\varphi_n\not\in\Gamma$ be an arbitrary extension of $\Gamma$. We show $\Gamma' \cup \{\varphi_n\} \vdash \bot$. When constructing $\Gamma$, the procedure examined $\varphi_n$ because it is a formula of $\mathcal{L}_{DASL}$. Since $\varphi_n\not\in\Gamma$, it must be the case that $\Gamma_n\not\vdash\varphi_n$. In step (4) we set $\Gamma_{n+1}\equiv\Gamma_n\cup\tlnot\varphi_n$. Since $\tlnot\varphi_n \in \Gamma$, we would have $\Gamma\cup\varphi_n\vdash\bot$, and so $\Gamma'\vdash\bot$, contradicting the assumption. Therefore, $\Gamma$ is maximal.  
-\end{proof}
-
-%{Lindenbaum}$: Every consistent set of formulas is a subset of a maximal consistent set of formulas.\\
-\begin{lemma}[Properties]~\label{properties}
-
-If $\Gamma$ and $\Delta$ are maximal consistent sets and $\beta$ a consistent set, then:
-\begin{enumerate}
-	\item $\Gamma$ and $\Delta$ are deductively closed.
-	\item $\varphi \in \Gamma$ iff $\tlnot \varphi \not\in \Gamma$.
-%	\item $(\varphi \tland \psi) \in \Gamma$ iff $\varphi \in \Gamma$ and $\psi \in \Gamma$.
-%	\item $\Gamma \Rel{k,i}^C\Delta$ iff $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma\} \subseteq \Delta$.
-%	\item $\Gamma \Rel{b,i}^C\Delta$ iff $\{\Bels{i}\varphi | \Bels{i}\varphi \in \Gamma\} \subseteq \Delta$.
-%	\item $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma \} \vdash \psi$ iff $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma\} \vdash \Kns{i}\psi$.
-    \item If $\beta \not \vdash \varphi$, then there exists a maximal consistent set $\Gamma$ such that $\beta \subset \Gamma$ but $\varphi \not \in \Gamma$
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-	$(1)$ clearly follows from the construction of the maximal consistent sets as seen in the proof of Lindenbaum, specifically step (3) of the process. $(2)$ holds because each formula of $\mathcal{L}_{DASL}$ was enumerated and considered, and either it or its negation is added to the growing set at steps (3) and (4). $(3)$ follows from step (4) of the construction process of maximal consistent sets in the Lindenbaum proof.  
-\end{proof}
-\begin{lemma}[Truth]~\label{truth}
-For every $\varphi \in \mathcal{L}_{DASL}$, and every maximal consistent set $\Gamma$:
-\begin{eqnarray}
-	\varphi \in \Gamma \ \mathit{iff}\ (M^C,\Gamma)\models\varphi
-\end{eqnarray}
-\end{lemma}
-\begin{proof}
-	By induction on $\varphi$, all the non-modal formulas follow straight-forwardly from the definition of $V^C(p) = \{\Gamma \in W^C\ |\ p \in \Gamma\}$. The modal formulas require some explanation. For the left to right direction, assume we have a formula $\Kns{i}\varphi \in \Gamma$. We must show that $(M^C, \Gamma) \models \Kns{i}\varphi$. The definition of $\Gamma\Rel{k,i}^C\Delta$ is that $\Kns{i}\varphi \in \Gamma$ implies $\varphi \in \Delta$. Thus, for all $\Delta \in W^C$, if $\Gamma \Rel{k,i}^C \Delta$, then $\varphi \in \Delta$. Therefore, by the semantics of $\Kns{i}$, $(M^C, \Gamma) \models \Kns{i}\varphi$.
-	
-	We prove the right to left direction by its contrapositive, and assume $\Kns{i}\varphi\not\in\Gamma$. We show $(M^C,\Gamma)\not\models\Kns{i}\varphi$. Since $\Kns{i}\varphi\not\in\Gamma$, from property (2) of Lemma~\ref{properties} it follows that $\tlnot\Kns{i}\varphi\in\Gamma$. From the semantics of $\Kns{i}$, there is some $\Delta\in W^C$ such that $\Gamma\Rel{k,i}^C\Delta$ and $(M^C,\Delta)\models\tlnot\varphi$. Therefore, $(M^C,\Gamma)\models\tlnot\Kns{i}\varphi$, and equivalently, $(M^C,\Gamma)\not\models\Kns{i}\varphi$. 	
-	
-	
-	A similar proof shows the $\Bels{i}\varphi \in \Gamma$ case, and the dynamic modalities follow from the reduction axioms.
-	%In the right to left direction, we assume $(M^C, \Gamma) \models \Kns{i}\varphi$, and must show $\Kns{i}\varphi \in \Gamma$. From the reflexivity of $\Rel{k,i}^C$, and the semantics of $\Kns{i}$, it follows that $(M^C,\Gamma)\models \varphi$, and for all $\Delta\in W^C$, if $\Gamma\Rel{k,i}^C\Delta$, then $(M^C,\Delta)\models\varphi$. By the induction hypothesis, $\varphi \in \Gamma$. Let us assume for proof by contradiction that $\Kns{i}\varphi \not \in \Gamma$. Then $\tlnot\Kns{i}\varphi\in\Gamma$, from (2) in Lemma~\ref{properties}. By the semantics of $\Kns{i}$, there is some maximal consistent set $\Delta\in W^C$ such that $\Gamma\Rel{k,i}^C\Delta$ and $(M^C,\Delta)\models\tlnot\varphi$. Thus, $(M^C,\Gamma)\models\tlnot\Kns{i}\varphi$, contradicting the assumption. 
-\end{proof}
-
-\begin{lemma}[Canonicity]~\label{canon}
-The canonical model satisfies the frame conditions of the $\mathcal{L}_{DASL}$ semantics.\\
-\end{lemma}
-\begin{proof}
-	We must show that
-	\begin{enumerate}
-	\item $\Rel{k,i}^C$ relation is reflexive,
-	\item $\Rel{b,i}^C$ relation is serial, transitive, and Euclidean,
-	\item $\Rel{b,i}^C \subseteq \Rel{k,i}^C$,
-	\item $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, 
-	\item $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$,
-	\item $\llbracket (A,\laa)\rrbracket^S \subseteq \llbracket (A,\laa)\rrbracket$, and 	
-	\item  $(\llbracket (A,\laa)\rrbracket^S \circ \Rel{b}^i) \subseteq \llbracket (A,\laa)\rrbracket$.
-	\end{enumerate}
-	
-	We prove these by appealing to the fact that the worlds in the canonical model $M^C$ are maximal consistent sets that each contains all of the theorems of $\mathcal{L}_{DASL}$. Therefore, each of the axiom schemas of the DASL Hilbert system is true at each world. We use this to prove that the doxastic, belief, and dynamic relations on $M^C$ satisfy the above properties, thereby placing $M^C$ in the appropriate class of Kripke frames.
-	
-	For (1), we appeal to the fact that all instances of the axiom schema $\Kns{i}\varphi \iimplies \varphi$ are elements of each world in $W^C$, the set of maximal consistent sets in $M^C$. Assume an arbitrary world $(M^C, \Gamma)\models \Kns{i}\varphi$. By the axiom schema just noted, it follows that $(M^C, \Gamma)\models \varphi$. Thus, $(M^C, \Gamma)\models\Kns{i}\varphi$ implies $(M^C, \Gamma)\models\varphi$. From the definition of the canonical model above, it follows that $\Gamma\Rel{ki,}^C\Gamma$. This holds for all $\Gamma$, and so $\Rel{k,i}^C$ is reflexive.
-	
-	Condition (2) depends on the axiom schemas of the doxastic operator. 
-	
-	The schema $\Bels{i}\varphi\iimplies \BPoss{i}\varphi$ establishes that $\Rel{b,i}^C$ is serial. We assume an arbitrary world $(M^C, \Gamma)\models\BPoss{i}\varphi$. By the schema, it follows that $(M^C,\Gamma)\models\BPoss{i}\varphi$. By the semantics of $\BPoss{i}$, there exists a world $(M^C,\Delta)\models\varphi$ such that $\Gamma\Rel{b,i}^C\Delta$. Thus, for all $\Gamma\in W^C$, $\exists \Delta \in W^C$ such that $\Gamma\Rel{b,i}^C\Delta$, which is what it means to be serial.
-	
-	The schema $\Bels{i}\varphi\iimplies\Bels{i}\Bels{i}\varphi$ establishes transitivity of $\Rel{b,i}^C$.
-	
-	The schema $\BPoss{i}\varphi\iimplies\Bels{i}\BPoss{i}\varphi$.
-	
-	Condition (3) follows from the axiom schema $\Kns{i}\varphi \iimplies \Bels{i}\varphi$.
-	
-Recall the defintion of two relations $S$ and $R$ \emph{composing}:
-	\begin{eqnarray}
-	 S \circ R \equiv \{(x,z)\in X\times Z\ |\ \exists y \in Y \colon (x,y)\in R \tland (y,z) \in S\}
-	\end{eqnarray}
-	
-	Condition (4) follows from the axiom schema $\Bels{i}\varphi\iimplies\Bels{i}\Kns{i}\varphi$.
-	
-	Condition (5) follows from the axiom schema $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$.
-	
-	Condition (6) follows from the axiom schema $\Pal{A,\laa}\varphi\iimplies\SPal{A,\laa}\varphi$.
-	
-	Condition (7) follows from the axiom schema \\
-	$\llbracket (A,\laa) \rrbracket^S \circ \Rel{b,i}^C \equiv \{(\Gamma,\Delta')\in W^C\times W^C\ |\ \exists \Delta \in W^C \colon (\Gamma,\Delta)\in \Rel{b,i}^C \tland (\Delta,\Delta') \in \llbracket(A,\laa) \rrbracket^S\}$
-	
-	
-	Must show: $\{(\Gamma,\Delta')\}\subset \llbracket (A,\laa) \rrbracket$.
-	
-	$\PalPos{iA,\laa}\varphi\iimplies\Bels{i}\SPalPos{A,\laa}\varphi$. Assume an arbitrary world $(M^C,\Gamma)\models\PalPos{A,\laa}\varphi$. By the axiom schema, it follows that $(M^C,\Gamma)\models\Bels{i}\SPalPos{A,\laa}\varphi$. By the semantics of $\Bels{i}$, it follows that $\forall \Delta\in W^C$, if $\Gamma\Rel{b,i}^C\Delta$, then $(M^C,\Delta)\models\SPalPos{A,\laa}\varphi$. We use the reduction law $SN$: $\SPal{A,\laa}\tlnot\varphi \Leftrightarrow (pre_s(\laa) \iimplies \tlnot \SPal{A,\laa}\varphi)$ to deduce the equivalent if $\Gamma\Rel{b,i}^C\Delta$, then $(M^C,\Delta)\models pre_s(\laa)$ and $(M^C,\Delta) \llbracket (A,\laa) \rrbracket^S (M^C,\Delta')$ implies $(M^C,\Delta'\models\varphi)$, which implies $update(M^C,A,\Delta,a,i)=(M^C,\Delta')$.
-	
-	
-	The semantics of $\SPal{A,\laa}$ yield $update(M^C, A, \Delta,\laa, i)=(M'^C,\Delta')$. From the assumption that $(M^C,\Gamma)\models\PalPos{A,\laa}\varphi$ and the semantics of $\PalPos{A,\laa}$, it is true that $(M^C,\Gamma) \llbracket (A,\laa) \rrbracket (M'^C,\Gamma')$ and $(M'^C,\Gamma') \models \varphi$. 
-\end{proof}
-%With these lemmas, we assume $(M^C,\Gamma)\models\varphi$ and show that $\Gamma\vdash\varphi$. From Lemma~\ref{truth}, it follows from the assumption that $\varphi\in\Gamma$. 
-With these lemmas, we assume $\not\vdash\varphi$, and show that $\not\models\varphi$. Since $\not\vdash\varphi$, the set $\{\tlnot\varphi\}$ is consistent. From Lindenbaum, $\{\tlnot\varphi\}$ is part of a maximal consistent set, call it $\Gamma$. From the Truth Lemma, $(M^C,\Gamma)\models\tlnot\varphi$. Therefore, $\not\models\varphi$.$\Box$
-
-Because the static logic is complete and we have translation axioms that convert the dynamic formulas to equivalent static ones, we can conclude that the entirety of \DASL is complete. In the next chapter we examine case studies and a mechanization of the logic.
+%OLD BELOW
+%
+%\begin{tcolorbox}
+%	\begin{theorem}[Soundness]
+%		Dynamic Agent Safety Logic is sound for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, transitive, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$.
+%	\end{theorem}
+%\end{tcolorbox}
+%$\mathbf{Proof}.$ $(1)\  and\  (2)$ correspond to the axioms that $\Kns{i}$ is a T modality and $\Bels{i}$ is a KD45 modality in the usual way. $(3)$ corresponds to EP1, EP2, and EP3. Axioms AP through SB are reduction axioms. This leaves $(4)$, corresponding to SP, and $(5)$ which corresponds to PR. Here we will prove $(5)$. Let $M$ be a Kripke structure satisfying the five conditions above. Let $A$ be an Action structure with $\laa$ and $i$ as its actual action token and agent. 
+%
+%We prove $(5)$ via the contrapositive of PR: $\BPoss{i}\SPal{A,\laa}\varphi \iimplies \Pal{ A,\laa}\varphi$.
+%Assume $M,w \models \BPoss{i}\SPal{A,\laa}\varphi$. By the semantics of $\BPoss{i}$, there exists a $v$, such that $w\Rel{b}^i v$ and $v \models \SPal{A,\laa}\varphi$. From the semantics, it follows that forall $M',v'$, if $(M,v)\llbracket (A,\laa) \rrbracket^S (M',v')$ then $M',v' \models \varphi$. By slightly abusing the notation, and letting $(W,w)\Rel{b}^i (W,v)$ be equivalent to $w\Rel{b}^i v$, we can create the composed relation $(\llbracket (A,\laa) \rrbracket^S \circ \Rel{b}^i)$. It then holds, by condition $(5)$, that $(M,w) (\llbracket (A,\laa) \rrbracket^S \circ \Rel{b}^i) (M',v')$ implies $(M,w)\llbracket (A,\laa) \rrbracket (M',v')$. So, for all $M',v'$, if $(M,w)\llbracket (A,\laa) \rrbracket (M',v')$, then $M',v' \models \varphi$. So, $M,w \models \Pal{A,\laa}\varphi$. $\Box$
+%
+%%We leave out proofs of the reduction axioms for space.
+%$\mathbf{Aprop: \iimplies}$. Assume $M,w \models \Pal{A,\laa}p$. We must show that $M,w \models pre(\laa)\iimplies (post(A,p) \iimplies p)$. By the semantics of $\Pal{A,\laa}$, for all $(M',w')$, if $M,w \models pre(\laa)$ and $update(M,A,w,\laa,i)= (M',w')$, then $M',w' \models p$. By definition of $post(A,p)$, if $update(M,A,w,\laa,i)=(M',w')$ and $M',w' \models p$, then $post(A,p)=p$. So, if $M,w \models pre(\laa)$, then $post(A,p) = p$, and thus $post(A,p)\iimplies p$. 
+%
+%$\Leftarrow$. Assume $M,w \models pre(\laa) \iimplies (post(A,p)\iimplies p)$. By the definition of $post(A,p)$, if $post(A,p)=p$ then $update(M,A,w,\laa,i)\models p$. So, if $M,w \models pre(\laa)$, then $update(M,A,w,\laa,i)\models p$. Therefore, $M,w\models \Pal{i,(A,\laa)}p$.
+%
+%$\mathbf{AN: \iimplies}$. Assume $M,w \models \Pal{i,(A,\laa)}\tlnot \varphi$. It suffices to show that $M,w \models pre(\laa) \iimplies \PalPos{i}{(A,\laa)}\tlnot \varphi$. From the assumption and the semantics, for all $(W',w')$, if $(M,w)\llbracket (A,\laa) \rrbracket(M',w')$ then $M',w' \models \tlnot \varphi$. So, if $M,w \models pre(\laa)$ and $update(\\M,A,w,\laa,i)=(M',w')$, then $M',w' \models \tlnot \varphi$. Assume $M,w \models pre(\laa)$, and it follows that $update(M,A,w,\laa,i)$ is defined, so there exists a $M',w'$ such that $(M,w)\llbracket (A,\laa) \rrbracket(M',w')$ and $update(M,A,i)=(M',w')$ and $M',w' \models \tlnot \varphi$. Therefore, $M,w \models pre(\laa) \iimplies \PalPos{A,\laa}\tlnot \varphi$.
+%
+%$\Leftarrow$. Assume $M,w \models pre(\laa) \iimplies \tlnot \Pal{A,\laa}\varphi$. This is equivalent to $M,w \models pre(\laa) \iimplies \PalPos{A,\laa}\tlnot \varphi$.  By the semantics, if $M,w \models pre(\laa)$, then there exists a $(M',w')$ such that $(M,w)\llbracket (A,\laa)\rrbracket (M',w') \aand M',w' \models \tlnot \varphi$. The relation $\llbracket (A,\laa)\rrbracket$ is functional, so $\exists$ implies $\forall$. So, for all $(M',w')$, if $(M,w)\llbracket (A,\laa)\rrbracket (M',w')$, then $M',w' \models \tlnot \varphi$, and therefore $M,w\models \Pal{A,\laa}\tlnot \varphi$.
+%
+%$\mathbf{AC}$ is obvious.
+%
+%$\mathbf{AK}$. For this proof, assume for simplicity, without loss of generality, that $Actions = \{\laa\}$.
+%
+%$\iimplies$. Assume $M,w \models \Pal{A,\laa}\Kns{i}\varphi$. Unfolding the semantics, for all $(M',w')$, if $(M,w)\models pre(\laa)$ and $update(M,A,w,\laa,\\i)=(M',v')$, then $M',w'\models\Kns{i}\varphi$. $M',w'\models \Kns{i}\varphi$ iff for all $v\in W$, if $w\Rel{k}^iv$ and $M,v\models pre(\laa)$ and $update(M,A,v,\laa,i)=(M',v')$ and  $\laa\chi_{k}^i\laa$, then $M',v'\models\varphi$. That is, $M,w\models \Kns{i}\Pal{A,\laa}\varphi$. 
+%
+%$\Leftarrow$. Assume $M,w \models pre(\laa) \iimplies \Kns{i}\Pal{i,(A,\laa)}\varphi$. We must show $M,w \models \Pal{i,(A,\laa)}\\\Kns{i}\varphi$. Thus, we must show $M,w \models pre(\laa)$ and $update(M,A,w,\laa,i)=(M',w')$ implies $M',w' \models \Kns{i}\varphi$. So it suffices to show that if $update(M,A,w,\laa,i)=(M',w')$ and $M,w\models \Kns{i}\Pal{i,(A,\laa)}\varphi$, then $M',w'\models \Kns{i}\varphi$. Assume $update(M,A,w,\\\laa,i)=(M',w')$ and $M,w\models\Kns{i}\Pal{i,(A,\laa)}\varphi$. Then for all $v$, if $w\Rel{k}^iv$, then $M,v\models\Pal{i,(A,\laa)}\varphi$. It follows that $M,v\models pre(\laa)$ and $update(M,A,v,\laa,i)=(M',v')$ implies $M',v'\models\varphi$. Since $w\Rel{k}^iv$ and $\laa\chi_{k}^i\laa$, it holds that $w'\Rel{k}^{i'}v'$. Thus, $M',w'\models\Kns{i}\varphi$.
+%
+%Proofs for $\mathbf{AB}$ through $\mathbf{SB}$ follow the above proofs exactly analogously. $\Box$ 
+%
+%Assume $M,w \models \PalPos{A,\laa}true.$ By the semantics of $\PalPos{A,\laa},$ $M,w \models pre(\laa)$ and $update(M,w,\chi)\models true$. Let $(M',w') = update(M,w,\chi)$. Then $M',w' \models true$. From $(5)$ above, it holds that $\Rel{b}^i (w) \subseteq V^s (\laa)$. $\Rel{b}$ is serial, so there is at least one such $v \in \Rel{b}^i$. Then $M,v \models pre_s(\laa)$. From (4), $M,v \models pre(\laa)$, so $update(M,v,\chi)$ is defined, call it $(M'',v')$. Because $(M'',v')$ is defined, $M'',v' \models true$. So, $M,v \models pre_s(\laa)$ and $update(M,v,\chi)\models true$. This holds for all $v$, such that $w\Rel{b}v$. Thus, $M,w \models \Bels{i}\SPalPos{A,\laa}true$. Therefore, $M,w \models \PalPos{A,\laa}true \iimplies \Bels{i}\SPalPos{A,\laa}true$. $\square$ 
+%
+%Next we turn to completeness.
+%
+%\subsection{Completeness}
+%
+%Completeness proofs in contemporary modal logic research follow the following format. First, a \emph{canonical model} is defined such that it belongs to the Kripke frames for which the logic under investigation is sound. The model combines validity and deducibility so that the former entails the latter. The worlds of the canonical model are sets of formulas from the language. If a formula is a member of a such a set, then it is true at the world. We define this formally below. The objective is to show that all formulas valid for the relevant Kripke frames are likewise deducible in the logic. The key is to construct the sets in a particular way, to be discussed below.
+%
+%The previous section proved soundness of DASL with respect to frames with a reflexive $\Rel{k}^i$ relation, a serial, transitive, Euclidean $\Rel{b}^i$ relation, which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, and with action relations  $\llbracket (A,\laa)\rrbracket \subseteq \llbracket (A,\laa)\rrbracket^S$, and $(\llbracket (A,\laa)\rrbracket^S \circ \Rel{b}^i) \subseteq \llbracket (A,\laa)\rrbracket$. The canonical model we proceed to define will belong to this frame. Because it belongs to this frame, the logical closure of a set of formulas will consist of valid DASL deductions. This allows us to infer deducibility from validity. First we must define the notion of a maximal consistent set.
+% 
+%Informally, a maximal consistent set of formulas is one that is a subset of the well-formed formulas of the language $\mathcal{L}_{DASL}$ according to the syntax presented earlier, whose members are consistent with each other, such that the set has no consistent extension. \\
+%$\mathbf{Definition}$. Maximal Consistent Set.\\
+%For a set of formulas $\Gamma \subseteq \mathcal{L}_{DASL}$, $\Gamma$ is maximal consistent iff\\
+%1. $\Gamma$ is consistent: $\Gamma \not \vdash \bot$.\\
+%2. $\Gamma$ is maximal: there is no $\Gamma'\subseteq\mathcal{L}_{DASL}$ such that $\Gamma \subset \Gamma'$ and $\Gamma'\not\vdash\bot$.\\
+%
+%A canonical model is a Kripke model of $\mathcal{L}_{DASL}$ with a set of worlds $W^C$ that collectively satisfy all formulas from a maximal consistent set. For our formalism here, we treat worlds as identical to sets of formulas.
+%\\
+%$\mathbf{Definition}$. Canonical Model. A canonical model $M^C = \langle W^C,\ \Rel{k,i}^C,\ \Rel{b,i}^C,\ w,\ V^C\rangle$ is defined:\\
+%1. $W^C = \{\Gamma | \Gamma$ is maximal consistent relative to $\mathcal{L}_{DASL} \}$\\
+%2. $\Gamma \Rel{k,i}^C \Delta$ iff $\Kns{i}\varphi \in \Gamma$ implies $\varphi \in \Delta$\\
+%3. $\Gamma \Rel{b,i}^C \Delta$ iff $\Bels{i}\varphi \in \Gamma$ implies $\varphi \in \Delta$\\
+%4. $V^C(p) = \{\Gamma \in W^C\ |\ p \in \Gamma\}$\\
+%
+%
+%\begin{tcolorbox}
+%	\begin{theorem}[Completeness]
+%		The language of Dynamic Agent Safety Logic, $\mathcal{L}_{DASL}$, is complete for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, transitive, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$, \\(4) $\llbracket (A,\laa)\rrbracket \subseteq \llbracket (A,\laa)\rrbracket^S$%for all $\laa,\  V^s(\laa) \subseteq V^p(\laa),$ [Questionable]
+%		and\\ (5) $(\llbracket (A,\laa)\rrbracket^S \circ \Rel{b}^i) \subseteq \llbracket (A,\laa)\rrbracket$.
+%	\end{theorem}
+%\end{tcolorbox}
+%
+%$\mathbf{Proof}.$ Completeness states that if a formula $\varphi$ is valid, then it is deducible. The sketch for this proceeds proceeds by contraposition. So we must show that for every formula $\varphi$ in the language $\mathcal{L}_{DASL}$, $\not\vdash\varphi \timplies \not\models\varphi.$\\
+%The proof appeals to the following lemmas, proven also in~\cite{DEL,negri}:
+%\begin{lemma}[Lindenbaum]
+%Every consistent set of formulas is a subset of a maximal consistent set of formulas.
+%\end{lemma}
+%\begin{proof}
+%	
+%If we begin with a consistent set of $\mathcal{L}_{DASL}$ formulas $\beta$, we construct a maximal consistent set $\Gamma$ as follows:
+%\begin{enumerate}
+%	\item enumerate the formulas of $\mathcal{L}_{DASL}$ $\varphi_0$, $\dots \varphi_n$, $\dots$
+%	\item $\Gamma_0 \equiv \beta$
+%	\item $\Gamma_{n+1} \equiv \{\varphi_n\}$ if $\Gamma_{n} \vdash \varphi_n$ 
+%	\item $\Gamma_{n+1} \equiv \{\tlnot \varphi_n\}$ otherwise
+%	\item $\Gamma \equiv \bigcup_{n\geq0}\Gamma_n$
+%\end{enumerate}
+%
+%We now show that $\Gamma$ is consistent. $\Gamma$ is consistent if and only if $\forall \Gamma_n \subset \Gamma$, $\Gamma_n \not\vdash \bot$. The base set $\Gamma_0$ is consistent because it is equivalent to $\beta$, which is consistent by assumption. The induction hypothesis is if $\Gamma_{n+1}$ is consistent then so is $\Gamma_{n}$. There are two ways to construct $\Gamma_{n+1}$: via step (3), or via step (4). If via (3), then the added formula $\varphi_n$ logically follows from $\Gamma_n$, and $\mathcal{L}_{DASL}$ is sound, so $\Gamma_{n+1}$ is consistent. Otherwise, if via (4), then $\varphi_n$ does not logically follow from $\Gamma_n$. Because the formulas are enumerated and examined in order, $\varphi_n$ is not in $\Gamma_n$. Thus, $\Gamma_n \cup \{\tlnot\varphi_n\} \not\vdash \bot$. Therefore, $\Gamma$ is consistent.
+%
+%We show $\Gamma$ is maximal by contradiction, assuming there is a $\Gamma' \subset \mathcal{L}_{DASL}$ such that $\Gamma \subset \Gamma'$ and $\Gamma'\not\vdash\bot$. Let $\varphi_n\in\Gamma'$ and $\varphi_n\not\in\Gamma$ be an arbitrary extension of $\Gamma$. We show $\Gamma' \cup \{\varphi_n\} \vdash \bot$. When constructing $\Gamma$, the procedure examined $\varphi_n$ because it is a formula of $\mathcal{L}_{DASL}$. Since $\varphi_n\not\in\Gamma$, it must be the case that $\Gamma_n\not\vdash\varphi_n$. In step (4) we set $\Gamma_{n+1}\equiv\Gamma_n\cup\tlnot\varphi_n$. Since $\tlnot\varphi_n \in \Gamma$, we would have $\Gamma\cup\varphi_n\vdash\bot$, and so $\Gamma'\vdash\bot$, contradicting the assumption. Therefore, $\Gamma$ is maximal.  
+%\end{proof}
+%
+%%{Lindenbaum}$: Every consistent set of formulas is a subset of a maximal consistent set of formulas.\\
+%\begin{lemma}[Properties]~\label{properties}
+%
+%If $\Gamma$ and $\Delta$ are maximal consistent sets and $\beta$ a consistent set, then:
+%\begin{enumerate}
+%	\item $\Gamma$ and $\Delta$ are deductively closed.
+%	\item $\varphi \in \Gamma$ iff $\tlnot \varphi \not\in \Gamma$.
+%%	\item $(\varphi \tland \psi) \in \Gamma$ iff $\varphi \in \Gamma$ and $\psi \in \Gamma$.
+%%	\item $\Gamma \Rel{k,i}^C\Delta$ iff $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma\} \subseteq \Delta$.
+%%	\item $\Gamma \Rel{b,i}^C\Delta$ iff $\{\Bels{i}\varphi | \Bels{i}\varphi \in \Gamma\} \subseteq \Delta$.
+%%	\item $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma \} \vdash \psi$ iff $\{\Kns{i}\varphi | \Kns{i}\varphi \in \Gamma\} \vdash \Kns{i}\psi$.
+%    \item If $\beta \not \vdash \varphi$, then there exists a maximal consistent set $\Gamma$ such that $\beta \subset \Gamma$ but $\varphi \not \in \Gamma$
+%\end{enumerate}
+%\end{lemma}
+%\begin{proof}
+%	$(1)$ clearly follows from the construction of the maximal consistent sets as seen in the proof of Lindenbaum, specifically step (3) of the process. $(2)$ holds because each formula of $\mathcal{L}_{DASL}$ was enumerated and considered, and either it or its negation is added to the growing set at steps (3) and (4). $(3)$ follows from step (4) of the construction process of maximal consistent sets in the Lindenbaum proof.  
+%\end{proof}
+%\begin{lemma}[Truth]~\label{truth}
+%For every $\varphi \in \mathcal{L}_{DASL}$, and every maximal consistent set $\Gamma$:
+%\begin{eqnarray}
+%	\varphi \in \Gamma \ \mathit{iff}\ (M^C,\Gamma)\models\varphi
+%\end{eqnarray}
+%\end{lemma}
+%\begin{proof}
+%	By induction on $\varphi$, all the non-modal formulas follow straight-forwardly from the definition of $V^C(p) = \{\Gamma \in W^C\ |\ p \in \Gamma\}$. The modal formulas require some explanation. For the left to right direction, assume we have a formula $\Kns{i}\varphi \in \Gamma$. We must show that $(M^C, \Gamma) \models \Kns{i}\varphi$. The definition of $\Gamma\Rel{k,i}^C\Delta$ is that $\Kns{i}\varphi \in \Gamma$ implies $\varphi \in \Delta$. Thus, for all $\Delta \in W^C$, if $\Gamma \Rel{k,i}^C \Delta$, then $\varphi \in \Delta$. Therefore, by the semantics of $\Kns{i}$, $(M^C, \Gamma) \models \Kns{i}\varphi$.
+%	
+%	We prove the right to left direction by its contrapositive, and assume $\Kns{i}\varphi\not\in\Gamma$. We show $(M^C,\Gamma)\not\models\Kns{i}\varphi$. Since $\Kns{i}\varphi\not\in\Gamma$, from property (2) of Lemma~\ref{properties} it follows that $\tlnot\Kns{i}\varphi\in\Gamma$. From the semantics of $\Kns{i}$, there is some $\Delta\in W^C$ such that $\Gamma\Rel{k,i}^C\Delta$ and $(M^C,\Delta)\models\tlnot\varphi$. Therefore, $(M^C,\Gamma)\models\tlnot\Kns{i}\varphi$, and equivalently, $(M^C,\Gamma)\not\models\Kns{i}\varphi$. 	
+%	
+%	
+%	A similar proof shows the $\Bels{i}\varphi \in \Gamma$ case, and the dynamic modalities follow from the reduction axioms.
+%	%In the right to left direction, we assume $(M^C, \Gamma) \models \Kns{i}\varphi$, and must show $\Kns{i}\varphi \in \Gamma$. From the reflexivity of $\Rel{k,i}^C$, and the semantics of $\Kns{i}$, it follows that $(M^C,\Gamma)\models \varphi$, and for all $\Delta\in W^C$, if $\Gamma\Rel{k,i}^C\Delta$, then $(M^C,\Delta)\models\varphi$. By the induction hypothesis, $\varphi \in \Gamma$. Let us assume for proof by contradiction that $\Kns{i}\varphi \not \in \Gamma$. Then $\tlnot\Kns{i}\varphi\in\Gamma$, from (2) in Lemma~\ref{properties}. By the semantics of $\Kns{i}$, there is some maximal consistent set $\Delta\in W^C$ such that $\Gamma\Rel{k,i}^C\Delta$ and $(M^C,\Delta)\models\tlnot\varphi$. Thus, $(M^C,\Gamma)\models\tlnot\Kns{i}\varphi$, contradicting the assumption. 
+%\end{proof}
+%
+%\begin{lemma}[Canonicity]~\label{canon}
+%The canonical model satisfies the frame conditions of the $\mathcal{L}_{DASL}$ semantics.\\
+%\end{lemma}
+%\begin{proof}
+%	We must show that
+%	\begin{enumerate}
+%	\item $\Rel{k,i}^C$ relation is reflexive,
+%	\item $\Rel{b,i}^C$ relation is serial, transitive, and Euclidean,
+%	\item $\Rel{b,i}^C \subseteq \Rel{k,i}^C$,
+%	\item $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, 
+%	\item $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$,
+%	\item $\llbracket (A,\laa)\rrbracket^S \subseteq \llbracket (A,\laa)\rrbracket$, and 	
+%	\item  $(\llbracket (A,\laa)\rrbracket^S \circ \Rel{b}^i) \subseteq \llbracket (A,\laa)\rrbracket$.
+%	\end{enumerate}
+%	
+%	We prove these by appealing to the fact that the worlds in the canonical model $M^C$ are maximal consistent sets that each contains all of the theorems of $\mathcal{L}_{DASL}$. Therefore, each of the axiom schemas of the DASL Hilbert system is true at each world. We use this to prove that the doxastic, belief, and dynamic relations on $M^C$ satisfy the above properties, thereby placing $M^C$ in the appropriate class of Kripke frames.
+%	
+%	For (1), we appeal to the fact that all instances of the axiom schema $\Kns{i}\varphi \iimplies \varphi$ are elements of each world in $W^C$, the set of maximal consistent sets in $M^C$. Assume an arbitrary world $(M^C, \Gamma)\models \Kns{i}\varphi$. By the axiom schema just noted, it follows that $(M^C, \Gamma)\models \varphi$. Thus, $(M^C, \Gamma)\models\Kns{i}\varphi$ implies $(M^C, \Gamma)\models\varphi$. From the definition of the canonical model above, it follows that $\Gamma\Rel{ki,}^C\Gamma$. This holds for all $\Gamma$, and so $\Rel{k,i}^C$ is reflexive.
+%	
+%	Condition (2) depends on the axiom schemas of the doxastic operator. 
+%	
+%	The schema $\Bels{i}\varphi\iimplies \BPoss{i}\varphi$ establishes that $\Rel{b,i}^C$ is serial. We assume an arbitrary world $(M^C, \Gamma)\models\BPoss{i}\varphi$. By the schema, it follows that $(M^C,\Gamma)\models\BPoss{i}\varphi$. By the semantics of $\BPoss{i}$, there exists a world $(M^C,\Delta)\models\varphi$ such that $\Gamma\Rel{b,i}^C\Delta$. Thus, for all $\Gamma\in W^C$, $\exists \Delta \in W^C$ such that $\Gamma\Rel{b,i}^C\Delta$, which is what it means to be serial.
+%	
+%	The schema $\Bels{i}\varphi\iimplies\Bels{i}\Bels{i}\varphi$ establishes transitivity of $\Rel{b,i}^C$.
+%	
+%	The schema $\BPoss{i}\varphi\iimplies\Bels{i}\BPoss{i}\varphi$.
+%	
+%	Condition (3) follows from the axiom schema $\Kns{i}\varphi \iimplies \Bels{i}\varphi$.
+%	
+%Recall the defintion of two relations $S$ and $R$ \emph{composing}:
+%	\begin{eqnarray}
+%	 S \circ R \equiv \{(x,z)\in X\times Z\ |\ \exists y \in Y \colon (x,y)\in R \tland (y,z) \in S\}
+%	\end{eqnarray}
+%	
+%	Condition (4) follows from the axiom schema $\Bels{i}\varphi\iimplies\Bels{i}\Kns{i}\varphi$.
+%	
+%	Condition (5) follows from the axiom schema $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$.
+%	
+%	Condition (6) follows from the axiom schema $\Pal{A,\laa}\varphi\iimplies\SPal{A,\laa}\varphi$.
+%	
+%	Condition (7) follows from the axiom schema \\
+%	$\llbracket (A,\laa) \rrbracket^S \circ \Rel{b,i}^C \equiv \{(\Gamma,\Delta')\in W^C\times W^C\ |\ \exists \Delta \in W^C \colon (\Gamma,\Delta)\in \Rel{b,i}^C \tland (\Delta,\Delta') \in \llbracket(A,\laa) \rrbracket^S\}$
+%	
+%	
+%	Must show: $\{(\Gamma,\Delta')\}\subset \llbracket (A,\laa) \rrbracket$.
+%	
+%	$\PalPos{iA,\laa}\varphi\iimplies\Bels{i}\SPalPos{A,\laa}\varphi$. Assume an arbitrary world $(M^C,\Gamma)\models\PalPos{A,\laa}\varphi$. By the axiom schema, it follows that $(M^C,\Gamma)\models\Bels{i}\SPalPos{A,\laa}\varphi$. By the semantics of $\Bels{i}$, it follows that $\forall \Delta\in W^C$, if $\Gamma\Rel{b,i}^C\Delta$, then $(M^C,\Delta)\models\SPalPos{A,\laa}\varphi$. We use the reduction law $SN$: $\SPal{A,\laa}\tlnot\varphi \Leftrightarrow (pre_s(\laa) \iimplies \tlnot \SPal{A,\laa}\varphi)$ to deduce the equivalent if $\Gamma\Rel{b,i}^C\Delta$, then $(M^C,\Delta)\models pre_s(\laa)$ and $(M^C,\Delta) \llbracket (A,\laa) \rrbracket^S (M^C,\Delta')$ implies $(M^C,\Delta'\models\varphi)$, which implies $update(M^C,A,\Delta,a,i)=(M^C,\Delta')$.
+%	
+%	
+%	The semantics of $\SPal{A,\laa}$ yield $update(M^C, A, \Delta,\laa, i)=(M'^C,\Delta')$. From the assumption that $(M^C,\Gamma)\models\PalPos{A,\laa}\varphi$ and the semantics of $\PalPos{A,\laa}$, it is true that $(M^C,\Gamma) \llbracket (A,\laa) \rrbracket (M'^C,\Gamma')$ and $(M'^C,\Gamma') \models \varphi$. 
+%\end{proof}
+%%With these lemmas, we assume $(M^C,\Gamma)\models\varphi$ and show that $\Gamma\vdash\varphi$. From Lemma~\ref{truth}, it follows from the assumption that $\varphi\in\Gamma$. 
+%With these lemmas, we assume $\not\vdash\varphi$, and show that $\not\models\varphi$. Since $\not\vdash\varphi$, the set $\{\tlnot\varphi\}$ is consistent. From Lindenbaum, $\{\tlnot\varphi\}$ is part of a maximal consistent set, call it $\Gamma$. From the Truth Lemma, $(M^C,\Gamma)\models\tlnot\varphi$. Therefore, $\not\models\varphi$.$\Box$
+%
+%Because the static logic is complete and we have translation axioms that convert the dynamic formulas to equivalent static ones, we can conclude that the entirety of \DASL is complete. In the next chapter we examine case studies and a mechanization of the logic.
 %We can proceed by case analysis on the frame conditions and axioms in conjunction with the rules of Modus Ponens and Necessitation. For brevity, we appeal to the well-known theorems establishing that the axioms of the static fragment of DASL are complete for system T and KD45. It remains to show that EP1, EP2, EP3, SP, and PR are complete for the frame conditions. For each frame condition, we assume that there exists a valid formula that is not deducible, and derive a contradiction. 
 %
 %For $(3)$, assume $\varphi$ is valid for all frames with partially-ordered relations $\Rel{b}^i \subseteq \Rel{k}^i$, but that $\varphi$ is not deducible. The relation states that for all $w,v$, if $w\Rel{k}^iv$ then $w\Rel{b}^iv$. Since $\varphi$ is valid for such frames, for all $v$, if $w\Rel{k}^iv$, $v\models\varphi$, in which case $w\models\Kns{i}\varphi$. But since the knowledge relation implies the belief relation, it follows that for all $v$, $w\Rel{b}^iv$ implies $v\models \varphi$, and therefore that $w\models\Bels{i}\varphi$. Thus, the axiom EP1 is valid for such frames. Since $\varphi$ is not deducible, and the axiom EP1 is valid for all such frames, it must be that EP1 and $\tlnot \varphi$ are consistent.
