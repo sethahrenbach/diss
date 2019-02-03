@@ -287,7 +287,7 @@ To illustrate the flexibility of this approach, we now formalize additional case
 Copa flight 201 departed Panama City, Panama for Cali, Colombia in June, 1992. Due to faulty wiring in the captain's Attitude Indicator, he incorrectly believed he was in a left bank position. In response to this, he directed the plane into an 80 degree roll to the right, which caused the plane to enter a steep dive. A correctly functioning backup indicator was available to the captain, and investigators believe that the captain intended to direct the backup indicator's readings to his own, but due to an outdated training module, the flip he switched actually sent his own faulty readings to the co-pilot's indicator. Approximately 29 minutes after takeoff, the plane crashed into the jungle and all passengers and crew perished. We formalize the moment at which the pilot provides the hard right roll input.
 \begin{tcolorbox}	
 	\begin{enumerate}
-		\item $\mathit{(Left AI HorLeft2)} \tland \tlnot\mathit{(Middle AI HorLeft2)} \dots$----------- configuration.
+		\item $\mathit{(Left AI HorLeft2)} \tland \tlnot\mathit{(Middle AI HorLeft2)} \tland \dots$----------- configuration.
 		\item $\PalPos{\mathit{pilot}}{\mathit{hardwingright}}\mathit{true}$---------------------------------- pilot input.
 		\item $\Bels{\mathit{pilot}}(\mathit{Middle AI HorLeft2})$-------------------------- from axiom PR, $\mathit{pre_s}$.
 		\item $\tlnot \Kns{\mathit{pilot}}(\mathit{Middle AI HorLeft2})$-------------------- from axiom K-Reflexive.

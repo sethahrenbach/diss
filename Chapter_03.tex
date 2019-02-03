@@ -862,32 +862,68 @@ Fixpoint s_a_component (phi : formula) : Prop :=
 	Every Sahlqvist formula $\varphi$ defines a complete modal logic when added as an axiom to the minimal modal logic defined by the axiom K, with respect to the first order frame relation corresponding to $\varphi$,  $\mathnormal{FO}(\varphi)$.
 \end{theorem}
 
-For soundness and completeness, it suffices to show that each DASL axiom is a Sahlqvist formula. In order to make use of Theorem \ref{thm:sahlqvist}, we characterize the Negative Belief Introspection axiom as the equivalent contrapositive $\BPoss{i}\Bels{i}\varphi \iimplies \Bels{i}\varphi$, as in below:
+For completeness, it suffices to show that each \DASL\ axiom is a Sahlqvist formula. 
 
-\begin{table}[H]
-	\begin{center}
-		\begin{tabular}{| l r |}
-			\hline
-			$\Kns{i}(\varphi \iimplies \psi) \iimplies (\Kns{i}\varphi \iimplies \Kns{i}\psi)$ & Distribution of $\Kns{i}$ \\
-			$\Kns{i}\varphi \iimplies \varphi$ & Truth Axiom \\
-			$\Bels{i}(\varphi \iimplies \psi) \iimplies (\Bels{i}\varphi \iimplies \Bels{i}\psi)$ & Distribution of $\Bels{i}$\\
-			$\Bels{i}\varphi \iimplies \BPoss{i}\varphi$ & Belief Consistency Axiom\\
-			%			$\Bels{i}\varphi \iimplies \Bels{i}\Bels{i}\varphi$ & Positive Belief Introspection \\
-			$\BPoss{i}\Bels{i}\varphi \iimplies \Bels{i}\varphi$ & (Sahlqvist) Negative Belief Introspection\\
-			$\Kns{i}\varphi \iimplies \Bels{i}\varphi$ & Knowledge implies Belief \\
-			$\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ & Confidence in Belief\\
-			%			$\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$ & Beliefs are Known\\
-			From $\vdash \varphi$ and $\vdash \varphi \iimplies \psi$, infer $\vdash\psi$ & Modus Ponens\\
-			From $\vdash \varphi$, infer $\vdash \Kns{i}\varphi$ & Necessitation of $\Kns{i}$\\
-			\hline
-		\end{tabular}
-		\caption{Equivalent Static Base with Sahlqvist-friendly Negative Belief Introspection.}
-	\end{center}
-\end{table}
+%In order to make use of Theorem \ref{thm:sahlqvist}, we characterize the Negative Belief Introspection axiom as the equivalent contrapositive $\BPoss{i}\Bels{i}\varphi \iimplies \Bels{i}\varphi$, as in below:
 
+%\begin{table}[H]
+%	\begin{center}
+%		\begin{tabular}{| l r |}
+%			\hline
+%			$\Kns{i}(\varphi \iimplies \psi) \iimplies (\Kns{i}\varphi \iimplies \Kns{i}\psi)$ & Distribution of $\Kns{i}$ \\
+%			$\Kns{i}\varphi \iimplies \varphi$ & Truth Axiom \\
+%			$\Bels{i}(\varphi \iimplies \psi) \iimplies (\Bels{i}\varphi \iimplies \Bels{i}\psi)$ & Distribution of $\Bels{i}$\\
+%			$\Bels{i}\varphi \iimplies \BPoss{i}\varphi$ & Belief Consistency Axiom\\
+%			%			$\Bels{i}\varphi \iimplies \Bels{i}\Bels{i}\varphi$ & Positive Belief Introspection \\
+%			$\BPoss{i}\Bels{i}\varphi \iimplies \Bels{i}\varphi$ & (Sahlqvist) Negative Belief Introspection\\
+%			$\Kns{i}\varphi \iimplies \Bels{i}\varphi$ & Knowledge implies Belief \\
+%			$\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ & Confidence in Belief\\
+%			%			$\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$ & Beliefs are Known\\
+%			From $\vdash \varphi$ and $\vdash \varphi \iimplies \psi$, infer $\vdash\psi$ & Modus Ponens\\
+%			From $\vdash \varphi$, infer $\vdash \Kns{i}\varphi$ & Necessitation of $\Kns{i}$\\
+%			\hline
+%		\end{tabular}
+%		\caption{Equivalent Static Base with Sahlqvist-friendly Negative Belief Introspection.}
+%	\end{center}
+%\end{table}
 
+We mechanize this in Coq with the following $\mathtt{Definition}$ of \DASL\ axiom schemas.
 
+\begin{tcolorbox}
+		\begin{lstlisting}[language=Coq]
+	Definition DASL_Axioms (p q r : prop) (a : DASL.Agents) := 
+	(FK a (FProp p) =f=> FK a ((FProp p) =f=> (FProp q)) =f=> FK a (FProp q))
+	:: (FK a (FProp p) =f=> (FProp p))
+	:: (FB a (FProp p) =f=> FB a ((FProp p) =f=> (FProp q)) =f=> FB a (FProp q))
+	:: (FB a (FProp p) =f=> \ (FB a (\ (FProp p))))
+	:: (\ (FB a (\ (FB a (FProp p)))) =f=> FB a (FProp p))
+	:: (FK a (FProp p) =f=> FB a (FProp p))
+	:: (FB a (FProp p) =f=> FB a (FK a (FProp p)))
+	:: nil.
+	\end{lstlisting}
+\end{tcolorbox}
 
+With this formulation of \DASL, we can iterate over each schema and prove that it is a Sahlqvist implication, which we do in the following $\mathtt{Theorem}$:
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+Theorem DASL_Axioms_Complete : forall (p q r : prop) (a : DASL.Agents),
+		Complete_via_Sahlqvist (DASL_Axioms p q r a).
+	\end{lstlisting}
+\end{tcolorbox}
+
+The above theorem makes use of the following function,
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Fixpoint Complete_via_Sahlqvist (l : list formula) : Prop :=  
+		match l with
+			| nil => True
+			| (l' :: els) => sahlqvist_formula (l') /\ 
+				Complete_via_Sahlqvist (els)
+		end.
+	\end{lstlisting}
+\end{tcolorbox}
 %OLD BELOW
 %
 %\begin{tcolorbox}
