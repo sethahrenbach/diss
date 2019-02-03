@@ -64,21 +64,21 @@ state/.style ={ circle ,top color =white , bottom color = white ,
 
 The above figure illustrates the relationship between static epistemic models and dynamic logic models. As a purely dynamic model, the figure shows the action $``p?"$ transitioning between nodes $M1$ and $M2$. If we were to zoom in on the nodes, we would see their structure as epistemic models, with their own nodes and edges, representing possible worlds and epistemic relations.
 
-We are concerned with an additional element: the \emph{safety} status of an action, and an agent's knowledge and belief about that. To capture this, we extend DEL and call the new logic Dynamic Agent Safety Logic (DASL). The remainder of this section presents DASL's syntax, semantics, and proves its soundness. 
+We are concerned with an additional element: the \emph{safety} status of an action, and an agent's knowledge and belief about that. To capture this, we extend DEL and call the new logic Dynamic Agent Safety Logic (\DASL). The remainder of this section presents \DASL's syntax, semantics, and proves its soundness. 
 \section{Syntax and Semantics}
 \subsection{Syntax}
-The Dynamic Agent Safety Logic (DASL) used in this paper has the following syntax.
+\DASL\  has the following syntax.
 %, combining elements of Dynamic Epistemic Logic (DEL) and Agent Safety Logic (ASL).
-\begin{tcolorbox}
+
 	$$ \varphi \ ::=\   \lpp  \bnf \tlnot \varphi \bnf \varphi \tland \varphi  \bnf \Kns{i} \varphi \bnf \Bels{i}\varphi \bnf \Pal{A,\laa}\varphi \bnf\SPal{A,\laa}\varphi,$$
-\end{tcolorbox}
+
 where $\lpp \in AtProp$ is an atomic proposition, $\mathbf{i}$ refers to $i \in Agents$, $\mathbf{\laa}$ is the name of an action, called an action token, belong to a set of such tokens, $Actions$, and $\mathbf{A}$ refers to an action model. The knowledge operator $\Kns{i}$ indicates that ``agent \emph{i} knows that ..." Similarly, the operator for belief, $\Bels{i}$ can be read, ``agent \emph{i} believes that..." The notion of action tokens and structures will be defined in the semantics. The operators $\Pal{A,\laa}$ and $\SPal{A,\laa}$ are the dynamic operators for action $\laa$ from action structure $A$ occurring in the former case, and happening safely in the latter case. One can read the action operators as ``after $\laa$ from $A$ occurs (\emph{safely}), $\varphi$ holds in all resulting worlds.' We define the dual modal operators $\Poss{i}$, $\BPoss{i}$, $\PalPos{A,\laa}$, and $\SPalPos{A,\laa}$ in the usual way. 
 
-The semantics of \DASL involve two structures that are defined simultaneously, one for epistemic models, and one for action structures capturing the transition relation among epistemic models. Additionally, we define numerous helper functions that straddle the division between metalanguage and object language. 
+The semantics of \DASL\ involve two structures that are defined simultaneously, one for epistemic models, and one for action structures capturing the transition relation among epistemic models. Additionally, we define numerous helper functions that straddle the division between metalanguage and object language. 
 
 \subsection{Metalanguage}
 
-The metalanguage defining \DASL consists of traditional Kripke structures, called models, and action models, with functions for action pre- and post-conditions and the product update of Kripke and action models~\cite{DEL}.
+The metalanguage defining \DASL\ consists of traditional Kripke models, and action models, with functions for action pre- and post-conditions and the product update of Kripke and action models~\cite{DEL}.
 
 \subsubsection{Kripke (Relational) Structure}%$\mathbf{Definition}$. Kripke Model.\\ 
 A Kripke structure, called model $M$, is a tuple $\langle W, \Rel{k}^i, \Rel{b}^i, w, V \rangle$. It is a set of worlds $W$, epistemic and doxastic relations on worlds for agents, a world denoting the actual world, and a valuation function \emph{V} mapping atomic propositions to the set of worlds satisfying them.
@@ -194,7 +194,7 @@ $4.\  W' = \{(w,\laa) | w\in W,\laa \in Actions,\ \aand\ w\models pre(\laa)\}$\\
 $5.\  \Rel{k}'^{i} = \{((w,\laa),(v,\lbb))|w\Rel{k}^i v \aand \laa \chi_{k}^i \lbb \}$\\
 $6.\  \Rel{b}'^{i} = \{((w,\laa),(v,\lbb))|w\Rel{b}^i v \aand \laa \chi_{b}^i \lbb \}$\\
 $7.\  w' = (w,\laa)$\\ 
-$8.\  V'(p) = post(A,p)$
+$8.\  V'(p) = post(\laa,p)$
 
 \subsubsection{Safety Precondition Function}
 %$\mathbf{Definition}$. 
@@ -251,21 +251,21 @@ The definitions of the dynamic modalities make use of a relation between two mod
     $\Kns{i}\varphi \iimplies \varphi$ & Truth Axiom \\
     $\Bels{i}(\varphi \iimplies \psi) \iimplies (\Bels{i}\varphi \iimplies \Bels{i}\psi)$ & Distribution of $\Bels{i}$\\
     $\Bels{i}\varphi \iimplies \BPoss{i}\varphi$ & Belief Consistency Axiom\\
-    $\Bels{i}\varphi \iimplies \Bels{i}\Bels{i}\varphi$ & Positive Belief Introspection \\
+%    $\Bels{i}\varphi \iimplies \Bels{i}\Bels{i}\varphi$ & Positive Belief Introspection \\
     $\tlnot\Bels{i}\varphi \iimplies \Bels{i}\tlnot\Bels{i}\varphi$ & Negative Belief Introspection\\
     $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ & Knowledge implies Belief \\
     $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ & Confidence in Belief\\
 %    $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$ & Beliefs are Known\\
-    $\Pal{A,\laa}p \iiff (post(\laa) \iimplies p)$ & Atomic Consequence\\
+    $\Pal{A,\laa}p \iiff (post(\laa, pre(\laa)) \iimplies p)$ & Atomic Consequence\\
     $\Pal{A,\laa}\tlnot \varphi \iiff (pre(\laa) \iimplies \tlnot \Pal{A,\laa}\varphi)$ & Action Negation\\
     $\Pal{A,\laa}(\varphi \tland \psi) \iiff (\Pal{A,\laa}\varphi \tland \Pal{A,\laa}\psi)$ & Action Conjunction\\
     $\Pal{A,\laa}\Kns{i}\varphi \iiff (pre(\laa)\iimplies \bigwedge_{\laa\chi_{k}^i\beta}\Kns{i}\Pal{A,\beta}\varphi)$ & Action and Knowledge\\
     $\Pal{A,\laa}\Pal{A',\laa'}\varphi \iiff [(A,\laa);(A',\laa')]\varphi$ & Action Composition \\
-    $\SPal{A,\laa}p \iiff (post_s(\laa) \iimplies p)$ & Safe Atomic Consequence\\
+    $\SPal{A,\laa}p \iiff (post_s(\laa, pre_s(\laa)) \iimplies p)$ & Safe Atomic Consequence\\
     $\SPal{A,\laa}\tlnot \varphi \iiff (pre_s(\laa) \iimplies \tlnot \SPal{A,\laa}\varphi)$ & Safe Action Negation\\
     $\SPal{A,\laa}(\varphi \tland \psi) \iiff (\SPal{A,\laa}\varphi \tland \SPal{A,\laa}\psi)$ & Safe Action Conjunction\\
     $\SPal{A,\laa}\Kns{i}\varphi \iiff (pre_s(\laa)\iimplies \bigwedge_{\laa\chi_{k}^i\beta}\Kns{i}\SPal{A,\beta}\varphi)$ & Safe Action and Knowledge\\
-    $\SPal{A,\laa}\SPal{A',\laa'}\varphi \iiff [(A,\laa);(A',\laa')]\varphi$ & Safe Action Composition \\
+%    $\SPal{A,\laa}\SPal{A',\laa'}\varphi \iiff [(A,\laa);(A',\laa')]\varphi$ & Safe Action Composition \\
     $\Pal{A,\laa}\varphi \iimplies \SPal{A,\laa}\varphi$ & Inevitability\\
     $\PalPos{A,\laa}\varphi \iimplies \Bels{i}\SPalPos{A,\laa}\varphi$ & Minimum Rationality\\
     From $\vdash \varphi$ and $\vdash \varphi \iimplies \psi$, infer $\vdash\psi$ & Modus Ponens\\
@@ -277,7 +277,11 @@ The definitions of the dynamic modalities make use of a relation between two mod
 \end{center}
 \end{table}
 
-Above are the axioms characterizing the logic. We proceed by defending the axiom schema for the static foundation, then continue with the dynamic extensions.
+Above are the axioms characterizing the logic, including the reduction axioms translating formulas with dynamic modalities into purely static formulas.
+
+The reduction axioms are recursively defined on $\varphi$, terminating with propositional atoms. When a dynamic operator, either $\Pal{A,\laa}$ or $\SPal{A,\laa}$, applied to a propositional atom $p$, is translated to a static formula, first the $pre$ (or $pre_s$) function is called on the action $\laa$, which if defined, is then passed through the $post$ (or $post_s$) function to substitute the atoms that change as a result of the action. If this translation process results in an implication that $p$, then the dynamic formula is true; otherwise, false.
+
+ We proceed by defending the axiom schema for the static foundation, then continue with the dynamic extensions.
 
 \subsection{Static Base}~\label{static}
 Like other dynamic logics for knowledge and belief, \DASL consists of a static base of axiom schemas for the knowledge and belief operators. This section explains and defends \DASL's static base, as they represent a novel axiomatization of formal epistemology and a contribution to the literature by this thesis. 
