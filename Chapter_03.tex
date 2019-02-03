@@ -858,11 +858,44 @@ Fixpoint s_a_component (phi : formula) : Prop :=
 	
 \end{tcolorbox}
 
+Next, we define what it is for a subformula to be a Sahlqvist antecedent.
+
+\begin{tcolorbox}
+\begin{lstlisting}[language=Coq]
+Fixpoint sahlqvist_antecedent (phi : formula) : Prop :=
+	s_a_component (normal_form phi).
+\end{lstlisting}
+\end{tcolorbox}
+
+We combine the above components to define what is is for a formula to be a Sahlqvist implication.
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+
+Fixpoint sahlqvist_formula (phi : formula) : Prop :=
+	match phi with
+		| FProp phi'=> True
+		| FAnd phi1 phi2 => (sahlqvist_antecedent phi1) 
+			/\ (sahlqvist_antecedent phi2)
+		| FOr phi1 phi2 => not (sahlqvist_antecedent phi1) 
+			/\ (positive_formula phi2)
+		| FImp phi1 phi2 => (sahlqvist_antecedent phi1) 
+			/\ (positive_formula (normal_form phi2))
+		| FNeg phi' => sahlqvist_antecedent phi'
+		| FK a phi' => boxed_formula phi'
+		| FB a phi' => boxed_formula phi'
+	end.
+
+\end{lstlisting}
+\end{tcolorbox}
+
+To prove that \DASL\ is complete, we use the following theorem, which we have not mechanized in Coq.
+
 \begin{theorem}[Sahlqvist's Theorem]~\label{thm:sahlqvist}
 	Every Sahlqvist formula $\varphi$ defines a complete modal logic when added as an axiom to the minimal modal logic defined by the axiom K, with respect to the first order frame relation corresponding to $\varphi$,  $\mathnormal{FO}(\varphi)$.
 \end{theorem}
 
-For completeness, it suffices to show that each \DASL\ axiom is a Sahlqvist formula. 
+For completeness, it suffices to show that each static \DASL\ axiom schema is a Sahlqvist formula. 
 
 %In order to make use of Theorem \ref{thm:sahlqvist}, we characterize the Negative Belief Introspection axiom as the equivalent contrapositive $\BPoss{i}\Bels{i}\varphi \iimplies \Bels{i}\varphi$, as in below:
 
