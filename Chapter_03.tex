@@ -72,7 +72,7 @@ We are concerned with an additional element: the \emph{safety} status of an acti
 
 	$$ \varphi \ ::=\   \lpp  \bnf \tlnot \varphi \bnf \varphi \tland \varphi  \bnf \Kns{i} \varphi \bnf \Bels{i}\varphi \bnf \Pal{A,\laa}\varphi \bnf\SPal{A,\laa}\varphi,$$
 
-where $\lpp \in AtProp$ is an atomic proposition, $\mathbf{i}$ refers to $i \in Agents$, $\mathbf{\laa}$ is the name of an action, called an action token, belong to a set of such tokens, $Actions$, and $\mathbf{A}$ refers to an action model. The knowledge operator $\Kns{i}$ indicates that ``agent \emph{i} knows that ..." Similarly, the operator for belief, $\Bels{i}$ can be read, ``agent \emph{i} believes that..." The notion of action tokens and structures will be defined in the semantics. The operators $\Pal{A,\laa}$ and $\SPal{A,\laa}$ are the dynamic operators for action $\laa$ from action structure $A$ occurring in the former case, and happening safely in the latter case. One can read the action operators as ``after $\laa$ from $A$ occurs (\emph{safely}), $\varphi$ holds in all resulting worlds.' We define the dual modal operators $\Poss{i}$, $\BPoss{i}$, $\PalPos{A,\laa}$, and $\SPalPos{A,\laa}$ in the usual way. 
+where $\lpp \in AtProp$ is an atomic proposition letter drawn from a finite set of such letters , $\mathbf{i}$ refers to $i \in Agents$, $\mathbf{\laa}$ is the name of an action, called an action token, belong to a set of such tokens, $Actions$, and $\mathbf{A}$ refers to an action model. The knowledge operator $\Kns{i}$ indicates that ``agent \emph{i} knows that ..." Similarly, the operator for belief, $\Bels{i}$ can be read, ``agent \emph{i} believes that..." The notion of action tokens and structures will be defined in the semantics. The operators $\Pal{A,\laa}$ and $\SPal{A,\laa}$ are the dynamic operators for action $\laa$ from action structure $A$ occurring in the former case, and happening safely in the latter case. One can read the action operators as ``after $\laa$ from $A$ occurs (\emph{safely}), $\varphi$ holds in all resulting worlds.' We define the dual modal operators $\Poss{i}$, $\BPoss{i}$, $\PalPos{A,\laa}$, and $\SPalPos{A,\laa}$ in the usual way. 
 
 The semantics of \DASL\ involve two structures that are defined simultaneously, one for epistemic models, and one for action structures capturing the transition relation among epistemic models. Additionally, we define numerous helper functions that straddle the division between metalanguage and object language. 
 
@@ -85,9 +85,9 @@ A Kripke structure, called model $M$, is a tuple $\langle W, \Rel{k}^i, \Rel{b}^
 
 \subsubsection{Action Model}
 %$\mathbf{Definition}$. Action Structure.\\ 
-An action structure $\mathbf{A}$ is a tuple $\langle Actions,\chi_{k}^i, \chi_{b}^i, pre, pre_s, post, post_s \rangle$. It is a set of action tokens, sets of epistemic and doxastic relations on action tokens for agents, action pre- and post-conditions, and safe action pre- and post-conditions. 
+An action structure $\mathbf{A}$ is a tuple $\langle Actions,\chi_{k}^i, \chi_{b}^i, pre, post \rangle$. It is a set of action tokens, sets of epistemic and doxastic relations on action tokens for agents, action pre- and post-condition functions, and safe action pre-condition functions.  
 
-An action model captures the agents' subjective perspectives of an event's occurrence. For example, consider a situation in which Alice flips a coin and Bob calls whether it is \emph{heads} or \emph{tails}. The action model imposes no precondition for occurring, represented by the value $\top$, and each action token's post-condition maps $\top$ to \emph{heads} or \emph{tails} respectively. Before Alice peeks to see what it is, the Action Model $\mathbf{A}$ looks like (omitting the safety pre- and post-conditions, and doxastic relations, for simplicity):
+An action model captures the agents' subjective perspectives of an event's occurrence. For example, consider a situation in which Alice flips a coin and Bob calls whether it is \emph{heads} or \emph{tails}. The action model imposes no precondition for occurring, represented by the value $\top$, and each action token's post-condition maps $\top$ to \emph{heads} or \emph{tails} respectively. Before Alice peeks to see what it is, the Action Model $\mathbf{A}$ looks like (omitting the safety pre-conditions and doxastic relations, for simplicity):
 \begin{figure}[H]
 \begin{center}
 \begin {tikzpicture}[auto ,node distance =7 cm and 7cm ,on grid ,
@@ -164,26 +164,28 @@ In Figure~\ref{fig: secret_peek}, Alice knows the state of the coin, Bob has the
 
 \subsubsection{Model Relation}
 %$\mathbf{Definition}$. Model Relation.\\ 
-Just as $\Rel{k}^i$ denotes a relation on worlds, $\llbracket (A,\laa) \rrbracket$ denotes a relation on Kripke model-world pairs. It represents the relation that holds between $M,w$ and $M',w'$ when action $(A,\laa)$ at $M,w$ and causes the world to transition to $M',w'$.
+Just as $\Rel{k}^i$ denotes a relation on worlds, $\llbracket (A,\laa)_i \rrbracket$ denotes a relation on Kripke model-world pairs. It represents the relation that holds between $M,w$ and $M',w'$ when agent $i$ engages in action $(A,\laa)$ at $M,w$ and causes the world to transition to $M',w'$.
 
 
 \subsubsection{Precondition Function}
 %$\mathbf{Definition}$. 
-The Precondition function, $pre :: Actions \mapsto \varphi$, maps an action to the formula capturing the conditions under which the action can occur. For example, if we assume agents tell the truth, then an announcement action has as a precondition that the announced proposition is true, as with regular Public Announcement Logic. 
+The Precondition function, $pre :: Actions \mapsto \varphi$, maps an action to the formula capturing the conditions under which the action can occur. For example, if we assume agents tell the truth, then an announcement action has as a precondition that the announced proposition is true, as with regular Public Announcement Logic \cite{PAL}. Compare this function with the weakest precondition from Hoare logic \cite{Hoare}. It returns a formula that must be true prior to an action's execution, just as the weakest precondition of Hoare logic is a formula that must be true prior to a program's execution. 
 
 
 %$\mathbf{Definition}$. Postcondition Function.\\ $post :: A \times Agents \mapsto \varphi$. The postcondition function assigns a conjunction of atomic propositions to actions performed by an agent, representing the atomic facts of the world that are true after the action occurs:\\ $post(\laa) = \bigwedge_{p\in AtProp}\{p| \forall w,\ update(M,A,w,\laa,i)\models p\}$.
 
 \subsubsection{Postcondition Function}
 %$\mathbf{Definition}$. 
-The Postcondition function, $post :: A \times AtProp \mapsto AtProp$, takes an action structure and an atomic proposition, and maps to the corresponding atomic proposition after the action occurs.
+The Postcondition function, $post :: Actions \times AtProp \mapsto AtProp$, takes an action token and an atomic proposition, and maps to the corresponding atomic proposition after the action occurs.
 \begin{align*}
-post(A,p)= p\ \mbox{if}\ update(M,A,w,\laa,i)\models p,\  \mbox{else}\ \tlnot p.
+post(\laa,p)= p\ \mbox{if}\ update(M,A,w,\laa,i)\models p,\  \mbox{else}\ \tlnot p.
 \end{align*} 
+
+A similarity is again seen in the strongest postcondition of Hoare logic.
 
 \subsubsection{Update Function}
 %$\mathbf{Definition}$.
-The Update function, $update :: (Model \times ActionStruct \times W \times Actions \times Agents) \mapsto (Model \times W)$, takes a Kripke model $M$, an action structure $A$, a world from the Kripke model, an action token from the Action structure, and an agent executing the action, and returns a new Kripke model-world pair. It represents the effect actions have on models, and is more complicated than other DEL semantics in that actions can change the facts on the ground in addition to the knowledge and belief relations. It is a partial function that is defined iff a model-world pair satisfies the action's preconditions.
+The Update function, $update :: (Model \times ActionStruct \times W \times Actions \times Agents) \mapsto (Model \times W)$, takes a Kripke model $M$, an action structure $A$, a world from the Kripke model, an action token from the action structure, and an agent $i$ from $Agents$, and returns a new Kripke model-world pair. It represents the effect actions have on models, and is more complicated than other DEL semantics in that actions can change the facts on the ground in addition to the knowledge and belief relations. It is a partial function that is defined iff a model-world pair satisfies the action's preconditions.
 \\
 
 $update(M,A,w,\laa,i) = (M',w')\ where:\\$
@@ -198,7 +200,7 @@ $8.\  V'(p) = post(\laa,p)$
 
 \subsubsection{Safety Precondition Function}
 %$\mathbf{Definition}$. 
-The Safety Precondition Function, $pre_s :: Actions \mapsto \varphi$, is a more restrictive function than $pre$. Where $pre$ returns the conditions that dictate whether the action is possible, $pre_s$ returns the conditions that dictate whether the action is safely permissible. This function is the key reason the dynamic approach allows for easy inference from action to safety-critical information.
+The Safety Precondition Function, $pre_s :: Actions \mapsto \varphi$, is a more restrictive function than $pre$. Where $pre$ returns the conditions that dictate whether the action is possible, $pre_s$ returns the conditions that dictate whether the action is safely permissible. This function is the key reason the dynamic approach allows for easy inference from action to safety-critical information. It represents an innovation in dynamic logic that this thesis introduces, because it introduces modality to the transition relation among models. Just as in static modal logics two worlds can be related by an epistemic relation but not by a doxastic relation, one static model can dynamically transition to another via a \emph{mere} action even if it cannot do so \emph{safely}. One could extend the analogy to Hoare logic and introduce a weakest secure precondition in addition to a weakest precondition. The weakest secure precondition is stronger than the weakest precondition, because it imposes more restrictions on the state of the system prior to a program's execution.
 
 %$\mathbf{Definition}$. Possibility Valuation Function.\\ $V^p :: Actions \mapsto W.$ The possibility valuation function takes an action and maps it to the set of worlds satisfying that action's precondition:\\ $V^p (\laa) = \{w|w\models pre(\laa)\}$.
 %\\
@@ -218,8 +220,8 @@ The Safety Precondition Function, $pre_s :: Actions \mapsto \varphi$, is a more 
 	$M,w \models \varphi \tland \psi \iiff M,w \models \varphi \aand M,w \models \psi$ \\
 	$M,w \models \Kns{i}\varphi \iiff \forall v,\ w\Rel{k}^i v\ \timplies\ M,v \models \varphi$ \\
 	$M,w \models \Bels{i}\varphi \iiff \forall v,\ w\Rel{b}^i v\ \timplies\ M,v \models \varphi$ \\
-	$M,w \models \Pal{A,\laa}\varphi \iiff \forall M',w',\  (M,w) \llbracket (A,\laa) \rrbracket (M',w')$ \\ $\timplies\ M',w' \models \varphi$ \\
-	$M,w \models \SPal{A,\laa}\varphi \iiff \forall M',w',\  (M,w) \llbracket (A,\laa) \rrbracket^S (M',w')$ \\ $\timplies\ M',w' \models \varphi$\\
+	$M,w \models \Pal{A,\laa}\varphi \iiff \forall M',w',\  (M,w) \llbracket (A,\laa)_i \rrbracket (M',w')$ \\ $\timplies\ M',w' \models \varphi$ \\
+	$M,w \models \SPal{A,\laa}\varphi \iiff \forall M',w',\  (M,w) \llbracket (A,\laa)_i \rrbracket^S (M',w')$ \\ $\timplies\ M',w' \models \varphi$\\
 	\hline 
 	\end{tabular}
 	\caption{\DASL\ semantics}
@@ -231,9 +233,9 @@ The definitions of the dynamic modalities make use of a relation between two mod
 		\begin{tabular}{|c|}
 	\hline
 	\\
-	$(M,w)\llbracket (A,\laa)\rrbracket (M',w') \iiff M,w \models \pre(\laa)$ \\ $\aand update(M,A,w,\laa,i) = (M',w')$ \\
+	$(M,w)\llbracket (A,\laa)_i\rrbracket (M',w') \iiff M,w \models \pre(\laa)$ \\ $\aand update(M,A,w,\laa,i) = (M',w')$ \\
 	\\
-	$(M,w)\llbracket (A,\laa) \rrbracket^S (M',w') \iiff M,w \models pre_s(\laa)$ \\ $\aand update(M,A,w,\laa, i) = (M',w')$\\
+	$(M,w)\llbracket (A,\laa)_i \rrbracket^S (M',w') \iiff M,w \models pre_s(\laa)$ \\ $\aand update(M,A,w,\laa,i) = (M',w')$\\
 	\\
 	\hline 
 		\end{tabular}
@@ -279,12 +281,14 @@ The definitions of the dynamic modalities make use of a relation between two mod
     $\Pal{A,\laa}\tlnot \varphi \iiff (pre(\laa) \iimplies \tlnot \Pal{A,\laa}\varphi)$ & Action Negation\\
     $\Pal{A,\laa}(\varphi \tland \psi) \iiff (\Pal{A,\laa}\varphi \tland \Pal{A,\laa}\psi)$ & Action Conjunction\\
     $\Pal{A,\laa}\Kns{i}\varphi \iiff (pre(\laa)\iimplies \bigwedge_{\laa\chi_{k}^i\beta}\Kns{i}\Pal{A,\beta}\varphi)$ & Action and Knowledge\\
+    $\Pal{A,\laa}\Bels{i}\varphi \iiff (pre(\laa)\iimplies \bigwedge_{\laa\chi_{b}^i\beta}\Bels{i}\Pal{A,\beta}\varphi)$ & Action and Belief\\    
     &\\
 %    $\Pal{A,\laa}\Pal{A',\laa'}\varphi \iiff [(A,\laa);(A',\laa')]\varphi$ & Action Composition \\
-    $\SPal{A,\laa}p \iiff (post_s(\laa, pre_s(\laa)) \iimplies p)$ & Safe Atomic Consequence\\
+    $\SPal{A,\laa}p \iiff (post(\laa, pre_s(\laa)) \iimplies p)$ & Safe Atomic Consequence\\
     $\SPal{A,\laa}\tlnot \varphi \iiff (pre_s(\laa) \iimplies \tlnot \SPal{A,\laa}\varphi)$ & Safe Action Negation\\
     $\SPal{A,\laa}(\varphi \tland \psi) \iiff (\SPal{A,\laa}\varphi \tland \SPal{A,\laa}\psi)$ & Safe Action Conjunction\\
     $\SPal{A,\laa}\Kns{i}\varphi \iiff (pre_s(\laa)\iimplies \bigwedge_{\laa\chi_{k}^i\beta}\Kns{i}\SPal{A,\beta}\varphi)$ & Safe Action and Knowledge\\
+    $\SPal{A,\laa}\Bels{i}\varphi \iiff (pre_s(\laa)\iimplies \bigwedge_{\laa\chi_{b}^i\beta}\Bels{i}\Pal{A,\beta}\varphi)$ & Safe Action and Belief\\ 
 %    $\SPal{A,\laa}\SPal{A',\laa'}\varphi \iiff [(A,\laa);(A',\laa')]\varphi$ & Safe Action Composition \\
 	&\\
     $\Pal{A,\laa}\varphi \iimplies \SPal{A,\laa}\varphi$ & Inevitability\\
@@ -301,9 +305,9 @@ The definitions of the dynamic modalities make use of a relation between two mod
 
 Above are the axioms characterizing the logic, including the reduction axioms translating formulas with dynamic modalities into purely static formulas.
 
-The reduction axioms are recursively defined on $\varphi$, terminating with propositional atoms. When a dynamic operator, either $\Pal{A,\laa}$ or $\SPal{A,\laa}$, applied to a propositional atom $p$, is translated to a static formula, first the $pre$ (or $pre_s$) function is called on the action $\laa$, which if defined, is then passed through the $post$ (or $post_s$) function to substitute the atoms that change as a result of the action. If this translation process results in an implication that $p$, then the dynamic formula is true; otherwise, false.
+The reduction axioms are recursively defined on $\varphi$, terminating with propositional atoms. When a dynamic operator, either $\Pal{A,\laa}$ or $\SPal{A,\laa}$, applied to a propositional atom $p$, is translated to a static formula, first the $pre$ (or $pre_s$) function is called on the action $\laa$, which if defined, is then passed through the $post$ function to substitute the atoms that change as a result of the action. If this translation process results in an implication that $p$, then the dynamic formula is true; otherwise, false.
 
- We proceed by defending the axiom schema for the static foundation, then continue with the dynamic extensions.
+We proceed by defending the axiom schema for the static foundation, then continue with the dynamic extensions.
 
 \subsection{Static Base}~\label{static}
 Like other dynamic logics for knowledge and belief, \DASL\ consists of a static base of axiom schemas for the knowledge and belief operators. This section explains and defends \DASL's static base, as they represent a novel axiomatization of formal epistemology and a contribution to the literature by this thesis. 
@@ -595,37 +599,15 @@ If the actual world is in its own doxastic relation, we have the following.
 	Suppose for an arbitrary $w,v\in W$ that $w\Rel{b}^iw$ and $w\Rel{b}^iv$. By definition, both are in $dc(w)$, which establishes the bimodal equivalence relation.
 \end{proof}
 
-So, when $i$ has no false beliefs, her belief and knowledge collapse into an S5 modal operator. When this condition holds, she makes decisions on par with those of an ideally rational agent who does not make mistakes. However, she is not guaranteed to remain in this state, as the model (world) might change in such a way that the doxastic relation comes to exclude the actual world, in which case $i$ will have false beliefs again.
+So, when $i$ has no false beliefs, her belief and knowledge collapse into an \SFive\ modal operator. When this condition holds, she makes decisions on par with those of an ideally rational agent who does not make mistakes. However, she is not guaranteed to remain in this state, as the model (world) might change in such a way that the doxastic relation comes to exclude the actual world, in which case $i$ will have false beliefs again.
 
 Thus, in the static epistemic-doxastic logic of \DASL, the intuitively appealing property of indistinguishability is maintained from a subjective, internal standpoint, \emph{i.e.,} from $i$'s own perspective. This should be all that is needed, because the motivating intuition behind the indistinguishability requirement is that an agent should not be able to tell which of her possible worlds she is in, and that is the case here with respect to her subjective evidence.
 
 %BELOW NEEDS WORK.
 %TODO. Belief is standard~\cite{FHMV}. They are related logically by EP(1-3), which hold that knowledge entails belief, belief entails that one believes that one knows, and belief entails than one knows that one believes. Finally, actions and safe actions are logically related by SP and PR, which hold that necessary consequences of \emph{mere} action are also necessary consequences of \emph{safe} actions, and that a pilot can execute an action only if he believes that he is executing a safe action. 
 
-Below are the axioms characterizing the reduction laws from the dynamic logic to a purely static logic through recursive application.\\
-\begin{table}[H]
-	\begin{center}
-    \begin{tabular}{| l r |}
-    \hline & \\
-	$\Pal{A,\laa}p \Leftrightarrow (post(\laa,pre(\laa)) \iimplies p)$ & Aprop \\
-	$\Pal{A,\laa}\tlnot\varphi \Leftrightarrow (pre(\laa) \iimplies \tlnot \Pal{A,\laa}\varphi)$ & AN\\
-	$\Pal{A,\laa}(\varphi \tland \psi) \Leftrightarrow (\Pal{A,\laa}\varphi \tland \Pal{A,\laa}\psi)$ & AC\\
-	$\Pal{A,\laa}\Kns{i}\varphi \Leftrightarrow (pre(\laa) \iimplies \bigwedge_{\laa\chi_{k}^i \lbb}\Kns{i}\Pal{A,\lbb}\varphi)$ & AK\\
-	$\Pal{A,\laa}\Bels{i}\varphi \Leftrightarrow (pre(\laa) \iimplies \bigwedge_{\laa\chi_{b}^i \lbb}\Bels{i}\Pal{A,\lbb}\varphi)$ & AB\\ & \\
-	\hline & \\
-	$\SPal{A,\laa}p \Leftrightarrow (post_s(\laa,pre_s(\laa)) \iimplies p)$ & Sprop\\
-	$\SPal{A,\laa}\tlnot\varphi \Leftrightarrow (pre_s(\laa) \iimplies \tlnot \SPal{A,\laa}\varphi)$ & SN\\
-	$\SPal{A,\laa}(\varphi \tland \psi) \Leftrightarrow (\SPal{A,\laa}\varphi \tland \SPal{A,\laa}\psi)$ & SC\\
-	$\SPal{A,\laa}\Kns{i}\varphi \Leftrightarrow (pre_s(\laa) \iimplies \bigwedge_{\laa\Rel{k}'^{i}\lbb}\Kns{i}\SPal{A,\lbb}\varphi)$ & SK\\
-	$\SPal{A,\laa}\Bels{i}\varphi \Leftrightarrow (pre_s(\laa) \iimplies \bigwedge_{\laa\Rel{b}'^{i}\lbb}\Bels{i}\SPal{A,\lbb}\varphi)$ & SB\\ & \\
-	\hline
-	\end{tabular}
-	\caption{The reduction axioms of \DASL.}
-	\end{center}
-\end{table}
 
 %\PalPos{i}{\laa}\varphi \iimplies \Bels{i}\SPalPos{i}{\laa}\varphi$\\
-
 
 
 \section{Soundness and Completeness}
@@ -1263,3 +1245,84 @@ Our mechanization of $\mathtt{prop}$ is discussed in the following chapter, wher
 %induction on the structure of $\varphi$.\\
 %$p$: Suppose $\tlnot p$ is consistent. Then any $M,w$ such that $w \not\in V(p)$ serve as a model/world pair for $M,w \models \tlnot p$.
 %$\varphi \tland \psi$: We suppose $\tlnot (\varphi \tland \psi)$ is consistent, which is the case when $(\tlnot \varphi \tlor \tlnot \psi)$ is consistent.
+
+\section{Dynamic Extension}~\label{sec:dynamic_ext}
+
+The previous section established \DASL\ as a sound and complete logic, which is a desirable formal property of the static base, since the dynamic extension is reducible to the static base in finitely many steps, it is also sound and complete.
+
+Below are the axioms characterizing the reduction laws from the dynamic logic to a purely static logic through recursive application.\\
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{| l r |}
+			\hline & \\
+			$\Pal{A,\laa}p \iiff (post(\laa, pre(\laa)) \iimplies p)$ & Atomic Consequence\\
+			$\Pal{A,\laa}\tlnot \varphi \iiff (pre(\laa) \iimplies \tlnot \Pal{A,\laa}\varphi)$ & Action Negation\\
+			$\Pal{A,\laa}(\varphi \tland \psi) \iiff (\Pal{A,\laa}\varphi \tland \Pal{A,\laa}\psi)$ & Action Conjunction\\
+			$\Pal{A,\laa}\Kns{i}\varphi \iiff (pre(\laa)\iimplies \bigwedge_{\laa\chi_{k}^i\beta}\Kns{i}\Pal{A,\beta}\varphi)$ & Action and Knowledge\\
+			$\Pal{A,\laa}\Bels{i}\varphi \iiff (pre(\laa)\iimplies \bigwedge_{\laa\chi_{b}^i\beta}\Bels{i}\Pal{A,\beta}\varphi)$ & Action and Belief\\ 
+			&\\
+			%    $\Pal{A,\laa}\Pal{A',\laa'}\varphi \iiff [(A,\laa);(A',\laa')]\varphi$ & Action Composition \\
+			$\SPal{A,\laa}p \iiff (post(\laa, pre_s(\laa)) \iimplies p)$ & Safe Atomic Consequence\\
+			$\SPal{A,\laa}\tlnot \varphi \iiff (pre_s(\laa) \iimplies \tlnot \SPal{A,\laa}\varphi)$ & Safe Action Negation\\
+			$\SPal{A,\laa}(\varphi \tland \psi) \iiff (\SPal{A,\laa}\varphi \tland \SPal{A,\laa}\psi)$ & Safe Action Conjunction\\
+			$\SPal{A,\laa}\Kns{i}\varphi \iiff (pre_s(\laa)\iimplies \bigwedge_{\laa\chi_{k}^i\beta}\Kns{i}\SPal{A,\beta}\varphi)$ & Safe Action and Knowledge\\
+			$\SPal{A,\laa}\Bels{i}\varphi \iiff (pre_s(\laa)\iimplies \bigwedge_{\laa\chi_{b}^i\beta}\Bels{i}\SPal{A,\beta}\varphi)$ & Safe Action and Belief\\ 
+			%    $\SPal{A,\laa}\SPal{A',\laa'}\varphi \iiff [(A,\laa);(A',\laa')]\varphi$ & Safe Action Composition \\
+			&\\
+			\hline
+		\end{tabular}
+		\caption{The reduction axioms of \DASL.}
+	\end{center}
+\end{table}
+
+\begin{theorem}
+	Translating a dynamic formula from the dynamic extension of \DASL\ via the reduction axiom schemas terminates in finitely many steps with an equivalent static formula
+\end{theorem}
+\begin{proof}
+	It is clear from observing each of the reduction axiom schemas that they result in formulas with smaller dynamic components, \emph{i.e.} smaller parse trees for those components. Eventually an iterative application of the reduction axiom schemas results in a purely static formula that has preserved the truth of the original formula.
+\end{proof}
+
+The truth-preservation of the reduction axiom schemas has not yet been established, and we do so here.
+
+\begin{proof}
+$\mathbf{Atomic\ Consequence: \iimplies}$. Assume $M,w \models \Pal{A,\laa}p$. We must show that \\$M,w \models (post(\laa, pre(\laa)) \iimplies p)$. By the semantics of $\Pal{A,\laa}$, for all $(M',w')$, if $M,w \models pre(\laa)$ and $update(M,A,w,\laa)= (M',w')$, then $M',w' \models p$. By definition of $post(\laa,p)$, if $update(M,A,w,\laa)=(M',w')$ and $M',w' \models p$, then $post(\laa,p)=p$. So, if $M,w \models pre(\laa)$ is defined, then $post(\laa, pre(\laa)) = p$, and thus $post(A,p)\iimplies p$. 
+
+$\Leftarrow$. Assume $M,w \models (post(\laa, pre(\laa))\iimplies p)$. By the definition of $post(\laa,p)$, if $post(\laa,p)=p$ then $update(M,A,w,\laa)\models p$. So, if $M,w \models pre(\laa)$, then $update(M,A,w,\laa)\models p$. Therefore, $M,w\models \Pal{A,\laa}p$.
+
+$\mathbf{Atomic\ Negation: \iimplies}$. Assume $M,w \models \Pal{A,\laa}\tlnot \varphi$. It suffices to show that $M,w \models pre(\laa) \iimplies \PalPos{A,\laa}\tlnot \varphi$. From the assumption and the semantics, for all $(W',w')$, if $(M,w)\llbracket (A,\laa)_i \rrbracket(M',w')$ then $M',w' \models \tlnot \varphi$. So, if $M,w \models pre(\laa)$ and $update(M,A,w,\laa)=(M',w')$, then $M',w' \models \tlnot \varphi$. Assume $M,w \models pre(\laa)$, and it follows that $update(M,A,w,\laa)$ is defined, so there exists a $M',w'$ such that $(M,w)\llbracket (A,\laa)_i \rrbracket(M',w')$ and $update(M,A w,\laa)=(M',w')$ and $M',w' \models \tlnot \varphi$. Therefore, $M,w \models pre(\laa) \iimplies \PalPos{A,\laa}\tlnot \varphi$.
+
+$\Leftarrow$. Assume $M,w \models pre(\laa) \iimplies \tlnot \Pal{A,\laa}\varphi$. This is equivalent to $M,w \models pre(\laa) \iimplies \PalPos{A,\laa}\tlnot \varphi$.  By the semantics, if $M,w \models pre(\laa)$, then there exists a $(M',w')$ such that $(M,w)\llbracket (A,\laa)\rrbracket (M',w') \aand M',w' \models \tlnot \varphi$. The relation $\llbracket (A,\laa)\rrbracket$ is functional, so $\exists$ implies $\forall$. So, for all $(M',w')$, if $(M,w)\llbracket (A,\laa)\rrbracket (M',w')$, then $M',w' \models \tlnot \varphi$, and therefore $M,w\models \Pal{A,\laa}\tlnot \varphi$.
+
+$\mathbf{Action\ Conjunction}$ is obvious.
+
+$\mathbf{Action\ and\ Knowledge}$. For this proof, assume for simplicity, without loss of generality, that $Actions = \{\laa\}$.
+
+$\iimplies$. Assume $M,w \models \Pal{A,\laa}\Kns{i}\varphi$. Unfolding the semantics, for all $(M',w')$, if $(M,w)\models pre(\laa)$ and $update(M,A,w,\laa)=(M',v')$, then $M',w'\models\Kns{i}\varphi$. $M',w'\models \Kns{i}\varphi$ iff for all $v\in W$, if $w\Rel{k}^iv$ and $M,v\models pre(\laa)$ and $update(M,A,v,\laa)=(M',v')$ and  $\laa\chi_{k}^i\laa$, then $M',v'\models\varphi$. That is, $M,w\models \Kns{i}\Pal{A,\laa}\varphi$. 
+
+$\Leftarrow$. Assume $M,w \models pre(\laa) \iimplies \Kns{i}\Pal{A,\laa}\varphi$. We must show $M,w \models \Pal{A,\laa}\Kns{i}\varphi$. Thus, we must show $M,w \models pre(\laa)$ and $update(M,A,w,\laa)=(M',w')$ implies $M',w' \models \Kns{i}\varphi$. So it suffices to show that if $update(M,A,w,\laa)=(M',w')$ and $M,w\models \Kns{i}\Pal{A,\laa}\varphi$, then $M',w'\models \Kns{i}\varphi$. Assume $update(M,A,w,\laa)=(M',w')$ and $M,w\models\Kns{i}\Pal{A,\laa}\varphi$. Then for all $v$, if $w\Rel{k}^iv$, then $M,v\models\Pal{A,\laa}\varphi$. It follows that $M,v\models pre(\laa)$ and $update(M,A,v,\laa)=(M',v')$ implies $M',v'\models\varphi$. Since $w\Rel{k}^iv$ and $\laa\chi_{k}^i\laa$, it holds that $w'\Rel{k}^{i'}v'$. Thus, $M',w'\models\Kns{i}\varphi$.
+
+Proofs for $\mathbf{Action\ and\ Belief}$ through $\mathbf{Safe\ Action\ and\ Belief}$ follow the above proofs exactly analogously.
+
+\end{proof}
+
+Thus, the dynamic extension inherits soundness and completeness from those of the static base. We proceed now to the philosophical justification of the dynamic extension, specifically the axiom schemas of \emph{Inevitability} and \emph{Minimum Rationality}.
+
+\subsection{Inevitability and Minimum Rationality}\label{sec:dyn_ext}
+
+Recall the two axiom schemas under consideration.
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{| l r |}
+			\hline 
+&\\
+$\Pal{A,\laa}\varphi \iimplies \SPal{A,\laa}\varphi$ & Inevitability\\
+$\PalPos{A,\laa}\varphi \iimplies \Bels{i}\SPalPos{A,\laa}\varphi$ & Minimum Rationality\\ & \\
+\hline
+\end{tabular}
+\caption{\DASL\ axiom schemas of dynamic non-reductive character.}
+\end{center}
+\end{table}
+
+The axiom schema for \emph{Inevitability} states that if engaging in action $\laa$ from action structure $A$ guarantees that $\varphi$ is true as a result, then safely engaging in that action also guarantees that $\varphi$ will result. One way to think about this is that the postcondition of a mere action is the same function as the postcondition for a safe action. The converse of \emph{Inevitability} does not hold, however, because $\pre$ is defined on a subset of worlds on which $\pre_s$ is defined for a given action, representing the notion that it is \emph{easier} to merely engage in an action than to do so safely. The subset relation here represents number of constraints. Thus there may be worlds on which the safety precondition for an action is undefined but on which the precondition is defined. When the safety precondition is undefined it is trivially true that engaging in the action safely guarantees $\varphi$, for all $\varphi$. However, $\varphi$ may not be guaranteed given mere engagement in the action.
+
+The axiom schema for \emph{Minimum Rationality} states that if after engaging in $\laa$ $\varphi$ results, then $i$ believes that after safely engaging in $\laa$ $\varphi$ results. It is more intuitive when the implication is read as an ``only if".
