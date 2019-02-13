@@ -711,20 +711,77 @@ A theorem type is defined in Coq so as to include all propositional tautologies,
 	
 \end{tcolorbox}
 
-We denote the $\mathtt{theorem}$ type judgment with $\mathtt{|--}$. 
+We denote the $\mathtt{theorem}$ type judgment with $\mathtt{|--}$.  Our mechanical proof strategy is to follow closely what a pen-and-paper proof of soundness consists in. We will define the frame conditions of \DASL's relations, and we will prove that each is sufficient for deriving that its corresponding modal formula is valid for frames with that condition. An example will illustrate this.
 
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]
-	Theorem DASL_Soundness : forall (phi : prop) (F : frame) (a : DASL.Agents),
-		DASL_Frame F ->
-		|-- phi ->
-		F ||= phi.
+	Definition reflexive_Rk_frame (F : frame) : Prop := 
+		forall (w : (W F)) (ags : DASL.Agents), (Rk F ags w w).
+	\end{lstlisting}	
+	
+\end{tcolorbox}
+First we define the property of epistemic reflexivity on a frame. We then prove a lemma showing it is sufficient for the Truth Axiom's being valid on reflexive frames.
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Lemma K_is_refl : forall (phi : prop) (F : frame) (a : DASL.Agents),
+		(reflexive_Rk_frame F) ->
+		F ||= ((K a phi) ==> phi).
+	Proof.
+		intros.
+			unfold reflexive_Rk_frame in H.
+				unfold Frame_validity. 
+				intros.
+					unfold Model_satisfies. 
+					intros. pose proof H w; clear H. pose proof H0 a; clear H0.
+						unfold satisfies.
+						intros. pose proof H0 w; clear H0. 
+						simpl in H1. pose proof H1 H; clear H1.
+		auto.
+	Qed.
 	\end{lstlisting}	
 	
 \end{tcolorbox}
 
+We add this lemma to our $\mathtt{hints}$ so that Coq's engine will automatically try to use it on calls to $\mathtt{auto}$.
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+Hint Resolve K_is_refl.
+	\end{lstlisting}	
 	
-The proof can be found in the appendix.
+\end{tcolorbox}
+
+We define a \DASL\ frame as a simple conjunction over the above properties.
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Definition DASL_Frame (F : frame) : Prop :=
+		reflexive_Rk_frame F /\
+		serial_Rb_frame F /\
+		euclidean_Rb_frame F /\
+		Rb_subset_Rk F /\
+		Rb_subset_Rb_compose_Rk F.
+	\end{lstlisting}	
+	
+\end{tcolorbox}
+
+Through similar definitions and lemmas of the remaining frame conditions and axiom schemas, the soundness theorem is stated and proven as follows.
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+	Theorem DASL_Soundness : forall (phi : prop) (F : frame) (a : DASL.Agents),
+	DASL_Frame F ->
+		|-- phi ->
+		F ||= phi.
+	Proof.
+		intros phi F.
+		unfold DASL_Frame.
+		intros. destruct H; destruct H1; destruct H2; destruct H3. 
+		induction H0; eauto.  
+	Qed. 
+	\end{lstlisting}	
+	
+\end{tcolorbox}
 
 \subsection{Completeness}~\label{sec:completeness}
 For completeness, our proof depends on the notion of a Sahlqvist formula, which itself depends on syntactical properties of modal formulas, which we must also define. 
