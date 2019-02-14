@@ -783,8 +783,10 @@ Through similar definitions and lemmas of the remaining frame conditions and axi
 	
 \end{tcolorbox}
 
+The proof proceeds by instantiating $\mathtt{phi}$, $\mathtt{F}$, $\mathtt{a}$, unfolding the definition of $\mathtt{DASL\_Frame}$ into its constituent frame conditions, and running and induction over $\mathtt{|-- phi}$. The call to $\mathtt{eauto}$ suffices due to each of the helper lemmas added to the $\mathtt{hints}$. We turn now to mechanizing completenss.
+
 \subsection{Completeness}~\label{sec:completeness}
-For completeness, our proof depends on the notion of a Sahlqvist formula, which itself depends on syntactical properties of modal formulas, which we must also define. 
+For completeness, our proof depends on the notion of a Sahlqvist formula, which itself depends on syntactical properties of modal formulas, which we must also define. The completeness proof is only \emph{mostly} mechanized. The overall theme of the proof is to rely on the \emph{Sahlqvist Theorem} of modal logic. This states that modal formulas with a particular structure can serve as axioms that correspond first order frame conditions in a way that guarantees soundness and completeness. We mechanized the component of the proof that establishes that the axiom schemas of \DASL\ are such \emph{Sahlqvist formulas}. 
 
 A \emph{Sahlqvist implication} is a formula with a \emph{Sahlqvist antecedent} and a \emph{positive consequent}.
 
@@ -911,7 +913,7 @@ Next, we define what it is for a subformula to be a Sahlqvist antecedent.
 \begin{tcolorbox}
 \begin{lstlisting}[language=Coq]
 Fixpoint sahlqvist_antecedent (phi : schema) : Prop :=
-	s_a_component (normal_form phi).
+	s_a_component phi.
 \end{lstlisting}
 \end{tcolorbox}
 
@@ -956,13 +958,34 @@ According to Blackburn \etal\cite{modal}, a Sahlqvist formula is built up from `
 	\end{lstlisting}
 \end{tcolorbox}
 
+
+
 To prove that \DASL\ is complete, we use the following theorem, which we have not mechanized in Coq.
 
 \begin{theorem}[Sahlqvist's Theorem]~\label{thm:sahlqvist}
 	Every Sahlqvist formula $\varphi$ defines a complete modal logic when added as an axiom to the minimal modal logic defined by the axiom K, with respect to the first order frame relation corresponding to $\varphi$,  $\mathnormal{FO}(\varphi)$.
 \end{theorem}
 
-For completeness, it suffices to show that each static \DASL\ axiom schema is a Sahlqvist formula. 
+With these components, we define a Sahlqvist formula as follows.
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+Fixpoint sahlqvist_formula (phi : schema) : Prop :=
+	match phi with
+		| SProp phi'=> True
+		| SAnd phi1 phi2 => (sahlqvist_formula phi1)
+			 /\ (sahlqvist_formula phi2)
+		| SOr phi1 phi2 => not (share_prop_letter phi1 phi2)
+			 /\ (sahlqvist_formula phi1) /\ (sahlqvist_formula phi2)
+		| SImp phi1 phi2 => (sahlqvist_implication phi1 phi2)
+		| SNeg phi' => ~ (positive_formula phi')
+		| SK a phi' => sahlqvist_formula phi'
+		| SB a phi' => sahlqvist_formula phi'
+	end.
+	\end{lstlisting}
+\end{tcolorbox}
+ 
+For completeness, it suffices to show that each static \DASL\ axiom schema is a Sahlqvist formula. Because in our soundess proof we mechanically proved that the \DASL\ frame conditions correspond to the axiom schemas of \DASL, and because this correspondence consists of unique pairs per the theorem, it follows that those frame conditions are the ones for which the axioms schemas are complete.
 
 %In order to make use of Theorem \ref{thm:sahlqvist}, we characterize the Negative Belief Introspection axiom as the equivalent contrapositive $\BPoss{i}\Bels{i}\varphi \iimplies \Bels{i}\varphi$, as in below:
 
@@ -1034,7 +1057,22 @@ Of course, this theorem is not in the expected form of $\models \varphi \timplie
 	See \cite{modal} chapter 3.
 \end{proof}
 
-Since $c_\chi(x)$ defines the frame, $\chi$ is valid for that class of frames. So, by our proof of soundess where we show that the corresponding modal formulas are sound for their corresponding first order frame conditions, we can infer that these are the frame conditions for which the \DASL\ axioms are complete via the Sahlqvist theorem (\ref{thm:sahlqvist}). We leave the mechanization of these steps to future work.
+Since $c_\chi(x)$ defines the frame, $\chi$ is valid for that class of frames. So, by our proof of soundess where we show that the corresponding modal formulas are sound for their corresponding first order frame conditions, we can infer that these are the frame conditions for which the \DASL\ axioms are complete via the Sahlqvist theorem (\ref{thm:sahlqvist}). We leave the mechanization of these steps to future work. However, we do mechanize the preservation of completeness from $\mathtt{schema}$s to $\mathtt{prop}$s:
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+Lemma schema_to_prop_completeness : forall (phi : schema),
+	|s- phi ->
+	|-- schema_to_prop phi.
+Proof.
+	intros.
+	induction H; simpl; try constructor.
+	simpl in IHStheorem1.
+	simpl in IHStheorem2. pose proof MP p q IHStheorem1; auto.
+	simpl in IHStheorem; auto.
+Qed.
+	\end{lstlisting}
+\end{tcolorbox}
 
 To help validate our mechanization of the $\mathtt{sahlqvist\_formula}$ function in Coq, we run it against some modal formulas whose status as Sahlqvist formulas, in the positive and negative cases, is known.
 
