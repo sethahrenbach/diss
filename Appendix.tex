@@ -5,7 +5,61 @@
 \chapter{Title of first appendix}
 	\label{AP_01}
 
-\section{Section title}
-Here is some additional information which would have detracted from the point being made in the main article.
-\subsection{Subsection title}
-This section even has subtitles
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+(* This is heavily inspired by Paulien de Wind's 
+	M.Sc. Thesis: "Modal Logic in Coq", University of Amsterdam, 2001.
+*)
+	
+Record frame : Type := {
+	W : Set;
+	Rk : DASL.Agents -> W -> W -> Prop;
+	Rb : DASL.Agents -> W -> W -> Prop
+}.
+	
+Record model : Type := {
+	F : frame;
+	Val : (W F) -> Atoms -> Prop;
+	Agents: DASL.Agents
+}.
+	\end{lstlisting}	
+
+\end{tcolorbox}
+
+\begin{tcolorbox}
+	\begin{lstlisting}[language=Coq]
+Fixpoint satisfies (M : model) (x : (W (F M))) (phi : prop) {struct phi} : Prop :=
+	match phi with
+		| _|_ => False
+		| (atm atom) => (Val M x atom)
+		| (imp phi1 phi2) => 
+			(satisfies M x phi1) -> (satisfies M x phi2)
+		| (negp phi') => (~ (satisfies M x phi'))
+		| (K a phi') => (forall y : 
+			(W (F M)), (Rk (F M) a x y) -> (satisfies M y phi'))
+		| (B a phi') => (forall y :
+			(W (F M)), (Rb (F M) a x y) -> (satisfies M y phi'))
+	end.
+		
+Notation "M x |== phi" := (satisfies M x phi) (at level 80).
+	\end{lstlisting}	
+
+\end{tcolorbox}
+
+\begin{tcolorbox}
+\begin{lstlisting}[language=Coq]
+Definition Model_satisfies (M : model) (phi : prop) := 
+	forall (w : (W (F M))),
+		satisfies M w phi .
+		
+Notation "M |= phi" := (Model_satisfies M phi) (at level 80).
+
+Definition Frame_validity (F : frame) (phi : prop) := 
+forall (Val : (W F) -> Atoms -> Prop) (Ags : DASL.Agents),
+	(Model_satisfies (Build_model F Val Ags) phi).
+
+Notation "F ||= phi" := (Frame_validity F phi) (at level 80).
+	\end{lstlisting}	
+
+\end{tcolorbox}
+
