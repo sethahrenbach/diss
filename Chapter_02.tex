@@ -1,13 +1,16 @@
 \chapter{Background}
 	\label{CH_02}
 
-This chapter describes the context in which my research makes advances. Section~\ref{gametheory} lays out the basics of game theory. Section~\ref{logic_foundation} introduces Dynamic Epistemic Logic, upon which the logic presented in this thesis is based. Section~\ref{fm} describes the state of formal methods.
+This chapter describes the context in which this dissertation makes advances. Section~\ref{sec:gametheory} lays out the basics of game theory, which provides a model of agency that we target and make more realistic. Section~\ref{sec:logic_foundation} introduces Dynamic Epistemic Logic, upon which the logic presented in this thesis is based, with axioms corresponding to the more realistic model of agency we develop. Section~\ref{sec:fm} describes the formal tools we use to mechanically check that \DASL\ is sound and complete, that its application to aviation safety is without errors, and to encode the inference of safety-critical information. Coq is both a programming language and a tool for verifying proofs, based on the Calculus of Inductive Constructions. We explain the basics of each of these to the reader in this section, since Coq is the tool we use for proof and application checking. Z3 is a theorem prover and model checker, which interract with solely for its SMT solving abilities. We encode the actual instrument readings as a first order formula, and we encode the safety precondition of an action as formulas comprising the constraining theory. We then check whether the formula is satisfiable modulo that theory. This tells us whether the intrument readings are consistent with the safety preconditions for an action, and if not, where the conflict lies. There is some additional complexity here, but we describe this in more detail in Chapter \ref{CH_05}.
 
 %Section 2.3 describes related work involving logical approaches to agents in system verification. Section 2.4 describes the Coq Proof Assistant, a tool for constructing mechanically checked mathematical proofs, to be used in this research.
 
 
 
-\section{Game Theory}~\label{gametheory}
+\section{Game Theory}~\label{sec:gametheory}
+
+This section presents the basics of game theory in order to motivate the model of agency that \DASL\ seeks to formally capture. However, this dissertation does not seek to make advances in game theory itself. Future research could take the resulting logic and use it as a new foundation for game theoretic reasoning among more realistic agents, but that task is not taken on in the present work. We begin this section with a brief overview and an example game, and then present the model of agency required for the standard solution to the game.
+
 Game theory is a mathematical model for strategic reasoning. Strategic reasoning refers to the way an agent reasons in situations where her payoffs depend on the actions of other agents in addition to her own, and in which she knows about these dependencies. For turn-based games, the mathematical structure employed is a \emph{game tree}, where each node represents a player's turn, and each edge the transition via a player's action. The leaves of the tree represent the payoffs each player receives at the end of the game. This paper is not concerned with the games themselves, but rather with the underlying assumptions about agency that entail their solutions. We briefly illustrate these underlying assumptions with the following example.
 
 %Prisoner's Dilemma Matrix
@@ -105,12 +108,12 @@ Recent work at the intersection of game theory and logic focuses on the informat
 
 The proceeding sections introduce the various logical systems that form a foundation for the work of this thesis, starting with modal logic in its traditional philosophical interpretation, and expanding to epistemic and doxastic logic. Then, we introduce dynamic logic, and its expansion into Dynamic Epistemic Logic and Public Announcement Logic.
 
-\section{Modal Logic}
-Philosophers going back to Aristotle have noted a distinction between contingent truth, possible truth, and necessary truth. Necessary truths could not have been otherwise. The definitions of natural numbers and the addition function guarantee that in all possible worlds, \emph{2 + 2 = 4}. On a plane, the truths of Euclidean geometry are necessarily true. ``There is life on Saturn's moon Enceladus" is a possible truth. ``Enceladus has water on it" is a contingent truth. What about ``Water is H20"? Modal logic allows us to reason about necessary and possible truths, through the use of modal operators. What follows is a brief illustration of the concepts of modal logic.
+\section{Modal Logic}\label{sec:logic_foundation}
+Aristotle noted a distinction between contingent truth and necessary truth, and some Medieval philosophers continued this line of inquiry. Necessary truths could not have been otherwise. The definitions of natural numbers and the addition function guarantee that in all possible worlds, \emph{2 + 2 = 4}. On a plane, the truths of Euclidean geometry are necessarily true. ``There is life on Saturn's moon Enceladus" is a possible truth. ``Enceladus has water on it" is a contingent truth. What about ``Water is H20"? Modal logic was formalized in the early 1900's by C. I. Lewis and has recently had a resurgence in multidisciplinary interest~\cite{VB_MLOM}. At its core, modal logic allows us to reason about necessary and possible truths through the use of modal operators. What follows is a brief illustration of modal logic's concepts and formalisms.
 
-The modal logic for reasoning about metaphysical necessity is called $\mathit{S5}$. $\mathit{S5}$ is the modal logic that grounds our intuitive reasoning in the following examples and proofs. Suppose $p$ is the arithmetic expression ``2 + 2 = 4". Obviously, $p$ is true in the actual world. We can make the stronger claim that $p$ is necessarily true, but what does this mean? As informal shorthands, initial attempts to define necessary truths might appeal, as I did above, to the claim that they could not possibly have been false. But then what do we mean by ``possible"? The formal semantics for dealing with these questions comes from Saul Kripke, and we introduce that machinery in the next section. For now, we say a statement is necessarily true if and only if it is true in all possible worlds. The modal operator for necessity makes the formal statement: $\Box p$. Consider the following inference, where $\iimplies$ means ``implies": $\Box p \iimplies p$. This reads, ``Necessarily $p$ implies $p$," or equivalently, ``If $p$ is necessarily true, then $p$ is true." If $p$ is necessarily true, is $p$ true? Intuitively, the answer is `yes', and indeed a modal logic of metaphysical necessity includes this axiom for all formulas $\varphi$: $\Box \varphi \iimplies \varphi$. 
+When philosophers talk about necessity they usually mean \emph{metaphysical} necessity. In addition to formalizing this notion for systematic reasoning, modal logic is used for clarifying what exactly this means~\cite{Williamson}. Simple and intuitive examples are those from mathematics and notions of identity. Suppose $p$ is the arithmetic expression ``2 + 2 = 4". Obviously, $p$ is true in the actual world. We can make the stronger claim that $p$ is necessarily true, but what does this mean? As informal shorthands, initial attempts to define necessary truths might appeal, as I did above, to the claim that they could not possibly have been false. But then what do we mean by ``possible"? The formal semantics for dealing with these questions comes from Arthur Prior and Saul Kripke, and we introduce that machinery in the next section~\cite{Prior,Kripke}. For now, we say a statement is necessarily true if and only if it is true in all worlds we consider possible. The modal operator for necessity makes the formal statement: $\Box p$. Consider the following inference, where $\iimplies$ means ``implies": $\Box p \iimplies p$. This reads, ``Necessarily $p$ implies $p$," or equivalently, ``If $p$ is necessarily true, then $p$ is true." If $p$ is necessarily true, is $p$ true? Intuitively, the answer is `yes', and indeed a modal logic of metaphysical necessity includes this axiom for all formulas $\varphi$: $\Box \varphi \iimplies \varphi$. 
 
-What other inferences can we make, based on our intuitive notion of necessity and possibility? What about ``if $p$ is true, then $p$ is possibly true"? To formalize this, we need the modal operator for possibility: $\Diamond$. So, the modal formula would be $p \iimplies \Diamond p$. This seems true as well, and indeed it is an axiom: $\varphi \iimplies \Diamond \varphi$. 
+What other inferences can we make, based on our intuitive notion of necessity and possibility? What about ``if $p$ is true, then $p$ is possibly true"? To formalize this, we need the modal operator for possibility: $\Diamond$. So, the modal formula would be $p \iimplies \Diamond p$. This seems true as well, and indeed it is a theorem for metaphysical modal logic: $\varphi \iimplies \Diamond \varphi$. 
 %In fact, those two axioms are equivalent. The definition of $\Diamond \equiv \tlnot \Box \tlnot$. This states that something is possible if and only if it is not necessarily false. It can also be said that something is necessary if and only if it is not possibly false: $\Box \equiv \tlnot \Diamond \tlnot$. We can now prove that the two axioms are equivalent.
 
 %\begin{proof}
@@ -119,9 +122,9 @@ What other inferences can we make, based on our intuitive notion of necessity an
 %	Next we prove that $\varphi \iimplies \Diamond \varphi$ implies $\Box \varphi \iimplies \varphi$, for arbitrary $\varphi$'s in each axiom. Assume $\varphi \iimplies \Diamond \varphi$. We can substitute in the equivalent formula using the definition of $\Diamond$ and get $\varphi \iimplies \tlnot \Box \tlnot \varphi$. By contraposition, it follows that $\Box \tlnot \varphi \iimplies \tlnot \varphi$. We substitute in $\varphi$ for $\tlnot \varphi$ as the arbitrary formula, and have $\Box \varphi \iimplies \varphi$.
 %\end{proof}
 
-It is obvious then that $\Box \varphi \iimplies \Diamond \varphi$ is a theorem. This states that if something is necessarily true then it is possibly true. What about the other direction: $\Diamond \varphi \iimplies \Box \varphi$? It turns out this is not a theorem under the typical notions of necessity and possibility, nor under the axioms of $\mathit{S5}$. But this raises a question about how we would present a counterexample that disproves it. To do this, we need a semantics for the logic. The semantics we use are called \emph{possible world semantics}, and they are due to Saul Kripke~\cite{Kripke}. One would be hard-pressed to find a species of modal logic, whether in economics, computer science, or philosophy, that does not use possible world semantics in some form or another. Sometimes they are referred to as \emph{Kripke semantics}.
+It is obvious then that $\Box \varphi \iimplies \Diamond \varphi$ is a theorem. This states that if something is necessarily true then it is possibly true. What about the other direction: $\Diamond \varphi \iimplies \Box \varphi$? It turns out this is not a theorem under the typical notions of necessity and possibility. But this raises a question about how we would present a counterexample that disproves it. To do this, we need a semantics for the logic. The semantics we use are called \emph{possible world semantics}, and they are usually attributed to Saul Kripke~\cite{Kripke}. One would be hard-pressed to find a species of modal logic, whether in economics, computer science, or philosophy, that does not use possible world semantics in some form or another. Sometimes they are referred to as \emph{Kripke semantics}.
 
-In possible world semantics, a graph structure is created with worlds as nodes and accessibility relations among worlds as the edges in the graph. Propositional formulas are true or false at each world. These graph structures are typically called Kripke structures. We can define the following Kripke structure, $\mathcal{M} = \{W, R, V\}$, where $W$ is a finite set of worlds, $\{w, v\}$, $R$ is a binary accessibility relation defined on those worlds $\{(w,v), (v,w)\}$, meaning $w$ has access to $v$ and $v$ has access to $w$, and $V$ is a \emph{valuation} function, which maps propositions to sets of worlds at which they are true. For example, if $p$ is true at $w$, then $w \in V(p)$. In our model we only care about the proposition $p$, which now stands for some contingent proposition, like ``all swans are white". Formally, we say $w \not\in V(p)$ if not all swans are white in world $w$, denoted by $\tlnot p$, while $w \in V(p)$ if they are, denoted by $p$. The following figure illustrates $\mathcal{M}$:
+In possible world semantics, a graph structure is created with worlds as nodes and accessibility relations among worlds as the edges in the graph~\cite{modal}. Propositional formulas are true or false at each world. These graph structures are typically called Kripke structures. We can define the following Kripke structure, $\mathcal{M} = \{W, R, V\}$, where $W$ is a finite set of worlds, $\{w, v\}$, $R$ is a binary accessibility relation defined on those worlds $\{(w,v), (v,w)\}$, meaning $w$ has access to $v$ and $v$ has access to $w$, and $V$ is a \emph{valuation} function, which maps propositions to sets of worlds at which they are true. For example, if $p$ is true at $w$, then $w \in V(p)$. In our model we only care about the proposition $p$, which now stands for some contingent proposition, like ``all swans are white". Formally, we say $w \not\in V(p)$ if not all swans are white in world $w$, denoted by $\tlnot p$, while $w \in V(p)$ if they are, denoted by $p$. The following figure illustrates $\mathcal{M}$:
 
 \begin{figure}[H]
 	\begin{center}
@@ -143,22 +146,21 @@ In possible world semantics, a graph structure is created with worlds as nodes a
 
 According to possible world semantics, $\Box \varphi$ is true at a world $w$, written $w \models \Box \varphi$, if and only if for all worlds $v$ such that $R(w,v)$ ($v$ is related to $w$ by the $R$ relation), $v \models \varphi$. This says a formula is necessarily true at a world if and only if it is true at all worlds accessible by that world according to the underlying $R$ relation. Similarly, $w \models \Diamond \varphi$ if and only if there is some world $v$ such that $R(w,v)$ and $v \models \varphi$. In $\mathcal{M}$, $w$ is $R$-accessible to itself, so there is a world accessible to $w$ where $p$ is false, and thus $w \models \tlnot \Box p$. However, since $v$ is $R$-accessible to $w$, and $v \models p$, it is true that $w \models \Diamond p$. Thus, we have $w \models \Diamond p$ and $w \models \tlnot \Box p$, a negation of $\Diamond p \iimplies \Box p$, so it cannot be the case that $\Diamond \varphi \iimplies \Box \varphi$ is a theorem, for arbitrary formula $\varphi$.
 
-$\mathit{S5}$, while a very important modal logic, is not the only one. The way it is distinguished from other modal logics, and indeed that way any are distinguishable from each other, is based entirely on the definition of $R$. For $\mathit{S5}$, $R$ is a symmetric, transitive, reflexive binary relation on worlds. Thus, that is how ``possibility" is formally defined, and by extension, ``necessarily". We formally define these notions in the next section, along with the syntax and semantics of basic modal logic, sometimes call propositional modal logic.
+There are many systems of modal logic. The way any is distinguishedfrom  another is based entirely on the definition of $R$. For the popular \SFive, which we will examine later, $R$ is a Euclidean and eflexive binary relation on worlds. Thus, that is how ``possibility" is formally defined, and by extension, ``necessarily". That is also what determines the axioms and theorems comprising the logic. We formally define these notions in the next section, along with the syntax and semantics of propositional modal logic.
 
-\section{Modal Logic Syntax and Semantics}~\label{molo_syn_sem}
+\subsection{Modal Logic Syntax and Semantics}~\label{sec:molo_syn_sem}
 This section formally defines the syntax, what the logic looks like, and the semantics, what the truth conditions are for the logic.
 
 Recall that Boolean logic is a simple logic for reasoning about basic propositions using the logical connectives `and', `or', `not', and `if...then'. It forms the foundation of most logics and has applications ranging from philosophy to circuit design. Propositions are represented as constants {\emph p,\ \emph q} and well-formed formulas of the language are constants and any proper combination of constants using the above logical connectives, represented symbolically as,
-$$\varphi \stackrel{def}{=} p\  |\  \varphi \wedge \varphi\  |\  \varphi \vee \varphi\  |\ \neg \varphi \ |\   \varphi \rightarrow \varphi. 
+$$\varphi \stackrel{def}{=} p\  |\  \varphi \wedge \varphi\  |\  \varphi \vee \varphi\  |\ \neg \varphi \ |\   \varphi \iimplies \varphi. 
 $$
 
 As illustrated in the previous section, modal logic adds to propositional logic with modal operators for necessary and possible truths. The syntax for propositional logic is extended in the following way to make modal logic:
-$$\varphi \stackrel{def}{=} p\  |\  \varphi \wedge \varphi\  |\  \varphi \vee \varphi\  |\ \neg \varphi \ |\   \varphi \rightarrow \varphi\ |\ \Box \varphi \ |\ \Diamond \varphi. 
-$$
 
-The semantics for Boolean logic are simply truth tables for each connectives, which I will not reproduce here. Because the connectives are truth-functional, truth tables suffice. However, the operators in modal logic are not truth functional, and require more complex semantics, which we earlier mentioned are called possible world semantics. They are as follows.
 
-For a Kripke model $\mathcal{M} = \{W, R, V\}$ such that $W$ is a set of possible worlds, $R$ is a binary relation on those worlds, and $V$ is a valuation function mapping atomic propositions to the sets worlds satisfying them,  
+The semantics for Boolean logic are simply truth tables for each connective, which I will not reproduce here. However, the operators in modal logic are not truth functional, and require more complex semantics, which we earlier mentioned are called possible world semantics. They are as follows.
+
+Let $\mathcal{M} = \{W, R, V\}$ be a model such that $W$ is a set of possible worlds, $R$ is a binary relation on those worlds, and $V$ is a valuation function mapping atomic propositions to the sets worlds satisfying them,  
 
 \begin{align*}
 w \models p\  &\mathbf{iff}\ w \in V(p) \\
@@ -168,7 +170,7 @@ w \models \Box \varphi\  &\mathbf{iff}\ \forall v,\ R(w,v)\  \mathnormal{implies
 w \models \Diamond \varphi\ &\mathbf{iff}\ \exists v,\ R(w,v)\ \mathnormal{and}\ v\models \varphi.
 \end{align*}
 
-The character of a modal logic is determined by the binary relation on worlds underlying the modal operators. The logic we used for our intuitive notion of necessity in the previous secion, $\mathit{S5}$, has a $R$ relation in which every world is accessible to itself by the binary relation. It is also one in which the $R$ relation is transitive and symmetric. These conditions are called a \emph{frame} conditions, and the models that satisfy these conditions belong to said frame. All reflexive frames have the following frame conditions:
+The character of a modal logic is determined by the binary relation on worlds underlying the modal operators. We mentioned \SFive\ in the previous section as having a $R$ relation in which every world is accessible to itself by the binary relation. It is also one in which the $R$ relation is Euclidean. These conditions are called a \emph{frame} conditions, and the models that satisfy these conditions belong to said frame. All reflexive frames have the following frame conditions:
 \begin{equation}
 \forall x,\ R(x,x)
 \end{equation}
@@ -178,7 +180,7 @@ Likewise, all reflexive frames have the following axiom:
 \end{equation}
 It is not just a stipulation that all reflexive frames must have that axiom: They have that axiom \emph{because} they have that frame condition. This is due to correspondence theory, which we explain later on.
 
-Relaxing a frame condition changes the $R$ relation, and in doing so changes the logic. If we remove the reflexivity condition, the above axioms are no longer axioms, and the above theorem no longer holds. This means that we can specify the axioms we want by specifying the frame condition on the accessibility relation. Each frame condition corresponds to a modal logic axiom. In addition to reflexivity, the other common frame conditions are as follows, with their corresponding modal logic axiom:
+Relaxing a frame condition changes the $R$ relation, and in doing so changes the logic. If we remove the reflexivity condition, the above axiom is no longer an axiom for the logic defined on $\mathcal{M}$. This means that we can specify the axioms we want by specifying the frame condition on the accessibility relation. Each frame condition corresponds to a modal logic axiom. In addition to reflexivity, the other common frame conditions are as follows, with their corresponding modal logic axiom:
 \begin{itemize}
 	\item Transitivity
 	\begin{eqnarray}
@@ -202,12 +204,10 @@ Relaxing a frame condition changes the $R$ relation, and in doing so changes the
 	\end{eqnarray}
 \end{itemize}
 
-We saw earlier that reflexive frames are also serial frames, because we proved that we could derive the axiom for serial frames as a theorem from just the axiom for reflexive frames.
+These conditions are not exhaustive, but they represent some of the commonly combined conditions used to define axioms of different modal logics. By combining frame conditions, a modal operator is defined with the properties desired. For example, if we wish to define a modal operator for reasoning about the knowledge of ideally rational agents, as is done in Fagin \etal\cite{FHMV}, we impose the frame conditions of reflexivity and Euclidicity (Euclideanness), or one that is transitive and reflexive, as in Hintikka~\cite{Hintikka}. However, if we wish to develop a logic for belief, as the previously cited works also do, we must impose transitivity, Euclidicity, and seriality. The reasons for this are explored in the following sections.
 
-These conditions are not exhaustive, but they represent some of the commonly combined conditions used to define axioms of different modal logics. By combining frame conditions, a modal operator is defined with the properties desired. For example, if we wish to define a modal operator for reasoning about the knowledge of ideally rational agents, as is done in Fagin \emph{et. al}~\cite{FHMV}, we impose the frame conditions of transitivity, reflexivity, and Euclidean, or one that is transitive and reflexive, as in Hintikka~\cite{Hintikka}. However, if we wish to develop a logic for belief, as the previously cited works also do, we must impose transitivity, Euclidean, and seriality. The reasons for this are explored in the following sections.
-
-\section{Epistemic Logic}~\label{epistemic_logic}
-Epistemic logic began with philosophical concerns about knowledge. Presently, it is more likely to be studied in computer science as the logic for reasoning about the knowledge of ideally rational agents in well-structured environments. The agents are ideally rational in the sense that there is no bound on how much they can be said to know, nor on what propositions they are aware of at any one time. Thus, they have no problem conceiving of every possible sequence of moves a game may consist of, evaluating all possible outcomes, and deducing the optimal sequence of moves in order to maximize their own utilities. They are even stronger than contemporary computers in this way, which are bounded by time and space, and so are unable to actually compute the ideal strategy for an otherwise solvable game like Go. An ideally rational agent can solve Go and compute the game tree all the way to its end. These are the agents of game theory, which always select the optimal move when they have perfect information about the game and the other players.
+\subsection{Epistemic Logic}~\label{epistemic_logic}
+Epistemic logic began with philosophical concerns about knowledge ~\cite{FHMV,Hintikka,rescher}. Presently, it is likely to be studied in computer science as the logic for reasoning about ideally rational agents in well-structured environments. The agents are ideally rational in the sense that there is no bound on how much they can be said to know, nor on what propositions they are aware of at any one time. Thus, they have no problem conceiving of every possible sequence of moves a game may consist of, evaluating all possible outcomes, and deducing the optimal sequence of moves in order to maximize their own utilities. They are even stronger than contemporary computers in this way, which are bounded by time and space, and so are unable to actually compute the ideal strategy for an otherwise solvable game like Go. An ideally rational agent can solve Go and compute the game tree all the way to its end. These are the agents of game theory, which always select the optimal move when they have perfect information about the game and the other players.
 
 The axioms that specify this level of knowledge are those introduced in Section~\ref{gametheory}, and recounted here without reference to common knowledge, which complicates things too much for our purposes:
 
@@ -217,7 +217,7 @@ $\mathbf{Agency\  Model\  in\  Classical\  Game\  Theory}$.\\
 (3) $\Kns{i}\varphi \iimplies \Kns{i}\Kns{i}\varphi$\\
 (4) $\tlnot \Kns{i}\varphi \iimplies \Kns{i}\tlnot\Kns{i}\varphi$.
 
-These axioms make the knowledge operator an $\mathit{S5}$ modal operator. 
+These axioms make the knowledge operator an $\mathit{S5}$ modal operator. Strictly speaking, including (3) is unnecessary because it follows as a theorem from (2) and (4), but we include it so that the reader is not surprised when we refer to it.
 
 The first axiom holds for all \emph{normal} modal logics, and under the epistemic interpretation, it states that if an agent knows that $\varphi$ implies $\psi$, and she knows $\varphi$, then she knows $\psi$. This is intuitive enough on the first pass, but can lead to a problem of global skepticism. If $i$ knows that she is an embodied agent in the external world only if she knows that she is not a brain in a vat perceiving a simulated reality, then she knows she is an embodied agent only if she knows she is not a brain in a vat. It seems clear that she cannot know that she is not a brain in a vat, because her sensory experience is compatible with either the embodied scenario of the brain in a vat scenario. Therefore, she does not know she is an embodied agent in the external world. Thus, many philosophers question whether knowledge for human-like agents is closed under logical implication like this.
 
@@ -232,9 +232,104 @@ These axioms are firmly rooted in the literature of formal epistemology and epis
 \subsection{Why S5 Is Appealing} 
 Before presenting our relaxed axiom schema for knowledge, we acknowledge the appealing properties of the S5 knowledge operator. Logicians who adopt the S5 knowledge operator have good reasons for doing so, both technical and intuitive. The technical appeal lies in the fact that the S5 operator is well-behaved from a logical point of view. Epistemic logics with S5 operators are decidable because S5 operators have semantics that satisfy the finite model property, meaning that every invalid proposition has a finite counter-model. The S5 knowledge operator allows a formula prefixed by any arbitrary combination of $\Kns{i}$ and $\Poss{i}$ symbols to be reduced to a formula prefixed by at most two. This keeps the models small.
 
-On the intuitive side, the relations that define the semantics of an S5 knowledge operator are equivalence relations. They are defined as reflexive and Euclidean, which implies that they are also transitive and symmetric. Consider what it means for a world $v$ to be epistemically possible from the perspective of agent $i$ at world $w$.
-\section{Doxastic Logic}
-This section presents doxastic logic, the logic for reasoning about belief.
+On the intuitive side, the relations that define the semantics of an S5 knowledge operator are equivalence relations. They are defined as reflexive and Euclidean, which implies that they are also transitive and symmetric. Equivalence relations capture a notion of indistinguishability because each world in the equivalence class is indistinguishable from each other. All the modal formulas true at one of the worlds in an equivalence relation are true at each of the other worlds in the relation, so from a modal perspective, they are indistinguishable. When the modality is knowledge, this means that relative to the agent's knowledge, the worlds are indistinguishable. 
+
+These properties of \SFive\ epistemic logic are strong points in its favor. We suppose that any formal system seeking to model human-like knowledge must capture the intuitive idea that an agent does not know \emph{whether} a proposition $\varphi$ is true or false just in case she cannot distinguish the world she is in from the possible worlds in which either might be the case. Distinguishability seems to imply that there is some evidence possessed by the agent that allows her to rule out possibilities, and therefore gain knowledge.
+
+The technical benefit of the finite model property makes \SFive\ a friendly logic to work with, but it is not a reason to believe that the theory of knowledge described by \SFive\ is true of human agents. Therefore, we do not see the need to impose this condition as a requirement for realistic epistemic logics. However, it would be desireable to achieve the finite model property while maintaining realism.
+
+Next we turn to a brief summary of doxastic logic, which shall play a role in \DASL's static foundation. 
+
+\subsection{Doxastic Logic}
+This section presents doxastic logic, the logic for reasoning about belief. Hintikka's formalization in \cite{Hintikka} of the belief operator is standard, and we adopt it here. The operator $\Bels{i}$ for `agent $i$ believes $\ell$' is defined by a binary relation on worlds that is serial and Euclidean. It is a normal modal operator, and the property of transitivity follows from seriality and Euclidicity. So, the model of an agent's belief is defined by the following axioms,
+
+$\mathbf{Hintikka\ Belief\ Model}$.\\
+(1) $\Bels{i}(\varphi \iimplies \psi) \iimplies (\Bels{i}\varphi \iimplies \Bels{i}\psi)$\\
+(2) $\Bels{i}\varphi \iimplies \BPoss{i}\varphi$\\
+(3) $\Bels{i}\varphi \iimplies \Bels{i}\Bels{i}\varphi$\\
+(4) $\tlnot \Bels{i}\varphi \iimplies \Bels{i}\tlnot\Bels{i}\varphi$.
+
+Clearly the primary difference between this model of belief and the model of knowledge from classical game theory is axiom (2). Rather than guaranteeing truth, beliefs guarantee consistency. One could correctly argue that this is too strong of an assumption for humans, but we leave relaxations of the belief model to future work, and are content to relax the idealizations about knowledge in this dissertation. Similarly, reasonable cases could be made against axioms (3) and (4).
+
+The logic associated with these axioms is called $\mathcal{KD}\mathit{45}$. On the doxastic interpretation, it represents a slight idealization of how humans actually adopt beliefs. Clearly, humans can have contradictory beliefs, and they may believe something without believing that they believe it. Cases of cognitive dissonance like that are idealized away, not only because modeling such a psychology is complicated, but also because we seek a logic that maintains some level of normativity. If someone believes two contradictory propositions, she should be able to give one up if this contradiction is pointed out to her, and furthermore she is rational to do so. This reflects Hintikka's goal of developing logics of knowledge and belief that allow us to consistently identify when attributions of knowledge and belief are in some sense criticizable. Maintaining a notion of normativity in a logic is important to us, and underlies some the idealizations we accept in \DASL's static base logic.
+
+Knowledge involves a condition that is external to the agent's direct perception: the truth or falsity of the proposition. Belief, on the other hand, is entirely internal to the agent's perception. She can introspect on her evidence and deliberate on a proposition, and this is sufficient to see that she believes or disbelieves it, and this attitude is immediately available to her. For this reason, the positive and negative introspection axioms are more appropriate for belief than they are for knowledge. 
+
+\subsection{Knowledge and Belief Combined}
+In addition to developing a stand-alone axiomatization of the belief operator, Hintikka combined the knowledge and belief operators into a single multi-modal system. Other philosophers and logicians have constructed similar systems. Hintikka considers the following combined axioms, which he calls conditions, as options:
+
+$\mathbf{Hintikka\ Combinations\ Considered}$.\\
+(1) $\Kns{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$\\
+(2) $\Kns{i}\varphi \iimplies \Bels{i}\varphi$\\
+(3) $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$\\
+(4) $\Bels{i}\varphi \iimplies \Kns{i}\varphi$.
+
+He subsequently rejects (4) immediately, and through deliberation (3), while he accepts (1) and (2). Thus, Hintikka's combined logic of knowledge and belief is,
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{| l r |}
+			\hline
+			$\Kns{i}(\varphi \iimplies \psi) \iimplies (\Kns{i}\varphi \iimplies \Kns{i}\psi)$ & Distribution of $\Kns{i}$ \\
+			$\Kns{i}\varphi \iimplies \varphi$ & Truth Axiom \\
+			$\Kns{i}\varphi \iimplies \Kns{i}\Kns{i}\varphi$ & Positive Knowledge Introspection\\
+			$\Bels{i}(\varphi \iimplies \psi) \iimplies (\Bels{i}\varphi \iimplies \Bels{i}\psi)$ & Distribution of $\Bels{i}$\\
+			$\Bels{i}\varphi \iimplies \BPoss{i}\varphi$ & Belief Consistency Axiom\\
+			%			$\Bels{i}\varphi \iimplies \Bels{i}\Bels{i}\varphi$ & Positive Belief Introspection \\
+			$\tlnot\Bels{i}\varphi \iimplies \Bels{i}\tlnot\Bels{i}\varphi$ & Negative Belief Introspection\\
+			$\Kns{i}\varphi \iimplies \Bels{i}\varphi$ & Knowledge implies Belief \\
+			$\Kns{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ & Undeniable Knowledge\\
+			%			$\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$ & Beliefs are Known\\
+			From $\vdash \varphi$ and $\vdash \varphi \iimplies \psi$, infer $\vdash\psi$ & Modus Ponens\\
+			From $\vdash \varphi$, infer $\vdash \Kns{i}\varphi$ & Necessitation of $\Kns{i}$\\
+			\hline
+		\end{tabular}
+		\caption{Hintikka's Combined Logic of Knowledge and Belief}
+	\end{center}
+\end{table}
+
+We omit his defense of positive knowledge introspection, but point out that his defense of undeniable knowledge depends on his interpretation of the operators. Hintikka is concerned in his project with identifying statements about knowledge and belief that utterers cannot defensibly deny. Furthermore, his interpretation of knowledge and belief are not those propositions actively held in one's head, but those to which one could be led through a series of applications of \emph{Modus Ponens} from what one already knows or believes. We can think of knowledge, for Hintikka, as those propositions implied by what one already knows, and beliefs as those propositions that one is logically committed to by one's beliefs. This avoids the problem of logical omnicience for both modal operators. And it sets up an argument like the following, 
+\begin{enumerate}
+	\item $\varphi$ follows logically from what $i$ knows
+	\item If (1) is pointed out to $i$, it is indefensible for $i$ to deny that she believes that she knows $\varphi$.
+	\item Therefore, $\Kns{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$
+\end{enumerate}
+
+For Hintikka, this suffices to accept the formula as valid, as well as Knowledge implies Belief, for which a similar argument can be presented.
+
+Conversely, Hintikka rejects (3) because he does not find it plausible that \\$\Bels{i}\varphi \iimplies \Kns{i}\Poss{i}\varphi$, which (3) and the Truth Axiom jointly imply. He furthermore rejects arguments from introspection, which might ground a defense in considered formula (3), as fallacious. 
+
+Another potential combined logic of knowledge and belief is due to Kraus and Lehmann in \cite{KrausLehmann}.
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{| l r |}
+			\hline
+			$\Kns{i}(\varphi \iimplies \psi) \iimplies (\Kns{i}\varphi \iimplies \Kns{i}\psi)$ & Distribution of $\Kns{i}$ \\
+			$\Kns{i}\varphi \iimplies \varphi$ & Truth Axiom \\
+			$\Kns{i}\varphi \iimplies \Kns{i}\Kns{i}\varphi$ & Positive Knowledge Introspection\\
+			$\tlnot\Kns{i}\varphi \iimplies \Kns{i}\tlnot\Kns{i}\varphi$ & Negative Knowledge Introspection\\
+			$\Bels{i}(\varphi \iimplies \psi) \iimplies (\Bels{i}\varphi \iimplies \Bels{i}\psi)$ & Distribution of $\Bels{i}$\\
+			$\Bels{i}\varphi \iimplies \BPoss{i}\varphi$ & Belief Consistency Axiom\\
+			%			$\Bels{i}\varphi \iimplies \Bels{i}\Bels{i}\varphi$ & Positive Belief Introspection \\
+%			$\tlnot\Bels{i}\varphi \iimplies \Bels{i}\tlnot\Bels{i}\varphi$ & Negative Belief Introspection\\
+			$\Kns{i}\varphi \iimplies \Bels{i}\varphi$ & Knowledge implies Belief \\
+			$\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$ & Known Belief\\
+			%			$\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$ & Beliefs are Known\\
+			From $\vdash \varphi$ and $\vdash \varphi \iimplies \psi$, infer $\vdash\psi$ & Modus Ponens\\
+			From $\vdash \varphi$, infer $\vdash \Kns{i}\varphi$ & Necessitation of $\Kns{i}$\\
+			\hline
+		\end{tabular}
+		\caption{Kraus-Lehmann Combined Logic of Knowledge and Belief}
+	\end{center}
+\end{table}
+
+Knowledge is \SFive\ and belief is based on a serial relation. However, from this system the remaining $\mathit{KD45}$ formulas are derivable. Additionally, they have the interesting theorem $\Kns{i}\varphi \equiv \Bels{i}\Kns{i}\varphi$. 
+
+Kraus and Lehmann identify the formula $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ as interesting but exclude it, as it would cause a collapse of knowledge and belief into equivalence: $\Kns{i}\varphi \equiv \Bels{i}\varphi$. Obviously, a logic combining knowledge and belief should treat them as distinct operators, and we treat the avoidance of this collapse as a desirable feature of our own static base for \DASL. We also include the interesting formula above as an axiom, which imposes a condition on agents' beliefs that we consider a desireable idealization. To say $i$ believes $\varphi$ only if she believes that she knows $\varphi$ is to say she believes only those things that she has very good evidence for. This helps prevent agents from believing things without evidence, which we want to exclude from our model. The challenge with this axiom, as Kraus and Lehmann note, is to avoid the knowledge-belief collapse. We give this further treatment in a later chapter.
+
+This concludes our discussion of static epistemic and doxastic logics, including their combination. We pick this thread back up later when we present the static base of \DASL. The next section presents the relevant background of dynamic extensions to epistemic logic.
+
 %This is formalized in a couple different ways in the literature, sometimes as we did before mapping a proposition-world pair to a Boolean, sometimes defining propositions as sets of worlds, where $V(w)\in p$ if and only if $p$ is true at world $w$. The former convention will be followed here.
 
 
@@ -268,10 +363,12 @@ This section presents doxastic logic, the logic for reasoning about belief.
 %w \models \mathbf{K_{i}}\varphi\  &\mathbf{iff}\ \forall v,\ wR_{i}v\  \mathnormal{implies}\ v \models \varphi.
 %\end{align*}
 
-Early applications of epistemic logic in information security modeled system components as agents whose knowledge represented the information flowing to them. Recently, a modified version of epistemic logic known as dynamic epistemic logic has been used in information security to formally reason about security properties involving human components of systems. The research described in this proposal advances along similar lines, treating pilots as human components of safety critical aviation systems and using dynamic epistemic logic to reason about them. The next section describes the basic dynamic epistemic logic.
+%Early applications of epistemic logic in information security modeled system components as agents whose knowledge represented the information flowing to them. Recently, a modified version of epistemic logic known as dynamic epistemic logic has been used in information security to formally reason about security properties involving human components of systems. The research described in this proposal advances along similar lines, treating pilots as human components of safety critical aviation systems and using dynamic epistemic logic to reason about them. The next section describes the basic dynamic epistemic logic.
 
-\subsection{Dynamic Epistemic Logic}~\label{delsubsection}
-Dynamic Epistemic Logic (DEL) formalizes situations in which agents' epistemic states change over time, due to announcements or other informational events.~\cite{DEL} For example, if Alice truthfully and trustworthily communicates to Bob that $\varphi$, then after this informational even it is true that Bob knows $\varphi$. This situation cannot be modeled by the epistemic logic introduced in the previous section. To model it, we introduce the following formal machinery.
+\section{Dynamic Epistemic Logic}~\label{sec:delsection}
+This section presents the so-called \emph{dynamic turn} in modal logic, which incorporates elements of propositional dynamic logic into epistemic logic in order to model knowledge and action. See van Benthem \cite{VB_LDII,VB_MLOM,VB_TowardPlay}, and van Ditmarsch, van der Hoek, and Kooi \cite{DEL} for detailed examinations. The related Public Announcement Logic (PAL) uses similar techniques to model information flow among agents. See Baltag, Moss, and Solecki in \cite{BMS} for more on this.
+
+Dynamic Epistemic Logic (DEL) formalizes situations in which agents' epistemic states change over time, due to announcements or other informational events\cite{DEL}. For example, if Alice truthfully and trustworthily communicates to Bob that $\varphi$, then after this informational even it is true that Bob knows $\varphi$. This situation cannot be modeled by the epistemic logic introduced in the previous section. To model it, we introduce the following formal machinery.
 
 To capture informational events, we introduce the idea of relativizing a Kripke structure. In the previous example, if we model the Alice and Bob situation prior to Alice's communication, we can have a world $w$ from which Bob considers $\varphi$- as well as $\neg\varphi$-worlds possible. However, after the informational event, Bob knows $\varphi$, so the model is \emph{relativized} to a submodel in which only $\varphi$-worlds are accessible by Bob's epistemic possibility relation. Thus, after the informational event, the model transitions to a submodel with fewer edge relations.
 
@@ -328,11 +425,20 @@ edge [<-, loop right] node {$Bob$} (v);
 	\caption{$M2$: The model after Alice announces $``\varphi"$.}
 \end{figure}
 
-We are concerned with an additional element: the \emph{safety} status of an action, and an agent's knowledge and belief about that. To capture this, we extend DEL and call the new logic Dynamic Agent Safety Logic (DASL), which we introduce in the next chapter. The next section lays out the state of formal methods involving human-machine systems.
+We are concerned with an additional element: the \emph{safety} status of an action, and an agent's knowledge and belief about that. To capture this, we extend DEL and call the new logic Dynamic Agent Safety Logic (\DASL), which we introduce in the next chapter. The next section lays out the state of formal methods involving human-machine systems.
 
-%\section{Formal Methods}~\label{fm}
+\section{Formal Methods Tools}~\label{sec:fm}
+
+This section describes the Coq Proof Assistant \cite{coq_ref} and the Z3 Theorem Prover \cite{z3} that this dissertation makes use of. We use Coq to mechanically check our metatheory proofs of soundness and completeness, and our object theory proofs about safety-critical information flow. We use the Z3 Theorem Prover's capacity as a SMT solver to automatically infer missing safety-critical information based on an unsafe input action. This serves as a proof of concept for potential safety-critical information monitors that make use of \DASL\ as their foundation.
+
+The Coq Proof Assistant is a combination of a dependently-typed functional programming language and a language of tactics for partially automating proof verification. Coq supports compilation to Haskell and OCaml, which is convenient because one can write a program and verify its correctness in Coq, then compile the code to a nicer implementation language. This dissertation does not take advantage of that feature. Instead, we embed \DASL\ in Coq and use it as a proof checker that allows us to write recursive functions and proof-automating tactics. This represents a second use case of formal verification tools that one does not often see in the philosophy, mathematics, or logic departments of academia. Coq becomes a tool for us to use to increase the rigor of our research. Many who have ventured into the realm of mechanical theorem proving have been surprised initially by how complicated proofs `by routine induction' can become once all of the details must be spelled out.
+
+We use Z3 in the same way. As a tool, it is a collection of symbolic reasoning engines, including simplex, rewriting, DPLL, superposition, Euclidean solver, and others.\footnote{Presentation by Dr. Leonardo DeMoura, ``From Z3 to Lean: Efficient Verification." } We use it to validate that one can encode an instrument reading configuration and a safety precondition for an input action, and automatically detect whether the safety precondition is satisfied by the instrument readings. This validates an important requirement for implementing tools based on \DASL. Thus, rather than using Z3 to verify correctness properties of a prototype, we use it as an inference engine that demonstrates real time inference of safety-critical information from unsafe input actions.
+
 %The field of formal methods grew out of attempts to verify the correctness of hardware and software. It was normally confined to systems deemed mission- or safety-critical, due to its high cost. Arguments for the use of formal methods normally involve an anecdote in which a system fails due to some sort of error missed by traditional testing methods but that would have been caught and prevented were formal methods used.
+
 %Formal methods increase confidence that hardware and software components function correctly~\cite{RushbyFMbook}. They involve the application of mathematical techniques to the design and analysis of systems, usually the safety-critical components~\cite{johnson_butler_fm}. A standard approach is to develop an abstract specification of the software or hardware system, design the system to meet those specifications, and then use formal logic to prove that the designed system meets the desired safety specifications. 
+
 
 %According to the Federal Aviation Administration (FAA), one of the top 12 causes of mistakes in the aviation workplace is a lack of awareness~\cite{faa}. According to Boeing and the FAA, approximately 80 per cent of aviation accidents (including maintenance accidents) are due to human error~\cite{boeing,faaHF}. To increase safety in human factors, the industry relies on education, psychology, anthropometrics, safety engineering, and to a limited extent, computer science. The primary focus of computer science research regarding human factors is the design and testing of software systems that are easy and intuitive for humans to interact with. 
 
