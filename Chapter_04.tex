@@ -285,31 +285,94 @@ To illustrate the flexibility of this approach, we now formalize additional case
 \subsection{Copa 201 and Asiana 214}
 \noindent
 Copa flight 201 departed Panama City, Panama for Cali, Colombia in June, 1992. Due to faulty wiring in the captain's Attitude Indicator, he incorrectly believed he was in a left bank position. In response to this, he directed the plane into an 80 degree roll to the right, which caused the plane to enter a steep dive. A correctly functioning backup indicator was available to the captain, and investigators believe that the captain intended to direct the backup indicator's readings to his own, but due to an outdated training module, the flip he switched actually sent his own faulty readings to the co-pilot's indicator. Approximately 29 minutes after takeoff, the plane crashed into the jungle and all passengers and crew perished. We formalize the moment at which the pilot provides the hard right roll input.
-\begin{tcolorbox}	
-	\begin{enumerate}
-		\item $\mathit{(Left AI HorLeft2)} \tland \tlnot\mathit{(Middle AI HorLeft2)} \tland \dots$----------- configuration.
-		\item $\PalPos{\mathit{pilot}}{\mathit{hardwingright}}\mathit{true}$---------------------------------- pilot input.
-		\item $\Bels{\mathit{pilot}}(\mathit{Middle AI HorLeft2})$-------------------------- from axiom PR, $\mathit{pre_s}$.
-		\item $\tlnot \Kns{\mathit{pilot}}(\mathit{Middle AI HorLeft2})$-------------------- from axiom K-Reflexive.
-		\item $\Bels{\mathit{pilot}}\Kns{\mathit{pilot}}(\mathit{Middle AI HorLeft2})$--------------- from (3), axiom EP2.
-		\item $\tlnot \Kns{\mathit{pilot}} \tlnot \Kns{\mathit{pilot}}(\mathit{Middle AI HorLeft2})$--------------- from (5), Lemma~\ref{bec}.
-		\item $\tlnot \Kns{\mathit{pilot}}(\mathit{Middle AI HorLeft2}) \tland \tlnot \Kns{\mathit{pilot}} \tlnot \Kns{\mathit{pilot}}(\mathit{Middle AI HorLeft2})$----- from (4), (6).
-		\item $\tlnot(\tlnot \Kns{\mathit{pilot}}(\mathit{Middle AI HorLeft2}) \iimplies \Kns{\mathit{pilot}} \tlnot \Kns{\mathit{pilot}}(\mathit{Middle AI HorLeft2}))$ ---- from (7).
-	\end{enumerate}
-\end{tcolorbox}	
-Asiana flight 214 from South Korea to San Francisco departed in the evening of July 6, 2013 and was schedule to land just before noon that morning~\cite{asiana}. The weather was good and air traffic control cleared the pilots to perform a visual approach to the runway. The plane came in short and crashed against an embankment in front of the runway, resulting in the deaths of three passengers and 187 injured. The National Transportation Safety Board (NTSB) investigation found that the captain had mismanaged the approach and monitoring of the airspeed, resulting in the plane being too high for a landing. Upon noticing this, the captain selected a flight mode (flight level change speed) which unexpectedly caused the plane to climb higher. In response to this, the captain disconnected the autopilot and pulled back on the thrust. This caused an autothrottle (A/T) protection to turn off, so when the captain pitched the nose down, the plane descended faster than was safe, causing it to come down too quickly and collide with the embankment in front of the runway. We will formalize the moment at which the pilot pitches the nose down.
-\begin{tcolorbox}	
-	\begin{enumerate}
-		\item $\mathit{(A/T=Off)} \tland \mathit{(AirspeedSlow3)} \dots$----------------------- configuration.
-		\item $\PalPos{\mathit{pilot}}{\mathit{hardthrustminus}}\mathit{true}$--------------------------------- pilot input.
-		\item $\Bels{\mathit{pilot}}(\mathit{A/T=On})$------------------------------ from axiom PR, $\mathit{pre_s}$.
-		\item $\tlnot \Kns{\mathit{pilot}}(\mathit{A/T=On})$------------------------- from axiom K-Reflexive.
-		\item $\Bels{\mathit{pilot}}\Kns{\mathit{pilot}}(\mathit{A/T=On})$------------------------ from (3), axiom EP2.
-		\item $\tlnot \Kns{\mathit{pilot}} \tlnot \Kns{\mathit{pilot}}(\mathit{A/T=On})$----------------- from (5), Lemma~\ref{bec}.
-		\item $\tlnot \Kns{\mathit{pilot}}(\mathit{A/T=On}) \tland \tlnot \Kns{\mathit{pilot}} \tlnot \Kns{\mathit{pilot}}(\mathit{A/T=On})$--- from (4), (6).
-		\item $\tlnot(\tlnot \Kns{\mathit{pilot}}(\mathit{A/T=On}) \iimplies \Kns{\mathit{pilot}} \tlnot \Kns{\mathit{pilot}}(\mathit{A/T=On}))$ --- from (7).
-	\end{enumerate}
-\end{tcolorbox}	
+
+We begin with the present configuration of the instruments, simplified.
+
+\begin{tcolorbox}\begin{lstlisting}[language=Coq]
+Definition Config_2 := (atm (M Normal))
+	& (atm (InstrumentL (HorLeft2 Left))) 
+	& (atm (InstrumentM (HorLevel Middle)))
+	& (atm (InstrumentR (HorLevel Right))).
+	\end{lstlisting}
+\end{tcolorbox}
+
+We define the pilot's input and corresponding action.
+
+\begin{tcolorbox}\begin{lstlisting}[language=Coq]
+Definition Input2 := act Pilot Pilot Pri HardWingRight
+	(Global Normal (HorLeft2 Left) (HorLevel Middle) (HorLevel Right))
+	(Global Normal (HorLeft2 Left) (HorLeft2 Middle) (HorLeft2 Right)).
+
+Definition Act_2 := NOT (aft_ex_act Input2 (NOT TRUE)).
+	\end{lstlisting}
+\end{tcolorbox}
+
+Finally, we state the theorem but omit the proof for space. It is available on the \DASL\ Github.
+
+\begin{tcolorbox}\begin{lstlisting}[language=Coq]
+Theorem NegIntroFailHorLevel : 
+	|-- (Config_2 ==> Act_2 ==>
+	((NOT (K Pilot (pre_s(Input2)))) & 
+	(NOT (K Pilot (NOT (K Pilot (pre_s(Input2)))))))).
+	\end{lstlisting}
+\end{tcolorbox}
+%\begin{tcolorbox}	
+%	\begin{enumerate}
+%		\item $\mathit{(Left AI HorLeft2)} \tland \tlnot\mathit{(Middle AI HorLeft2)} \tland \dots$----------- configuration.
+%		\item $\langle{\mathit{hardwingright}\rangle_{pilot}\mathit{true}$---------------------------------- pilot input.
+%		\item $\Bels{\mathit{pilot}}(\mathit{Middle AI HorLeft2})$-------------------------- from axiom PR, $\mathit{pre_s}$.
+%		\item $\tlnot \Kns{\mathit{pilot}}(\mathit{Middle AI HorLeft2})$-------------------- from axiom K-Reflexive.
+%		\item $\Bels{\mathit{pilot}}\Kns{\mathit{pilot}}(\mathit{Middle AI HorLeft2})$--------------- from (3), axiom EP2.
+%		\item $\tlnot \Kns{\mathit{pilot}} \tlnot \Kns{\mathit{pilot}}(\mathit{Middle AI HorLeft2})$--------------- from (5), Lemma~\ref{bec}.
+%		\item $\tlnot \Kns{\mathit{pilot}}(\mathit{Middle AI HorLeft2}) \tland \tlnot \Kns{\mathit{pilot}} \tlnot \Kns{\mathit{pilot}}(\mathit{Middle AI HorLeft2})$----- from (4), (6).
+%		\item $\tlnot(\tlnot \Kns{\mathit{pilot}}(\mathit{Middle AI HorLeft2}) \iimplies \Kns{\mathit{pilot}} \tlnot \Kns{\mathit{pilot}}(\mathit{Middle AI HorLeft2}))$ ---- from (7).
+%	\end{enumerate}
+%\end{tcolorbox}	
+
+Asiana flight 214 from South Korea to San Francisco departed in the evening of July 6, 2013 and was schedule to land just before noon that morning~\cite{asiana}. The weather was good and air traffic control cleared the pilots to perform a visual approach to the runway. The plane came in short and crashed against an embankment in front of the runway, resulting in the deaths of three passengers and 187 injured. The National Transportation Safety Board (NTSB) investigation found that the captain had mismanaged the approach and monitoring of the airspeed, resulting in the plane being too high for a landing. Upon noticing this, the captain selected a flight mode (flight level change speed) which unexpectedly caused the plane to climb higher. In response to this, the captain disconnected the autopilot and pulled back on the thrust. This caused an autothrottle (A/T) protection to turn off, so when the captain pitched the nose down, the plane descended faster than was safe, causing it to come down too quickly and collide with the embankment in front of the runway. We will formalize the moment at which the pilot pitches the nose down. 
+
+\begin{tcolorbox}\begin{lstlisting}[language=Coq]
+Definition Config_3 := (atm (M Alternate1))
+	& (atm (InstrumentL (AirspeedSlow3 Left)))
+	& (atm (InstrumentM (AirspeedSlow3 Middle)))
+	& (atm (InstrumentR (AirspeedSlow3 Right))).
+	\end{lstlisting}
+\end{tcolorbox}
+
+\begin{tcolorbox}\begin{lstlisting}[language=Coq]
+Definition Input3 := act Pilot Pilot Pri HardThrustMinus
+	(Global Alternate1 (AirspeedSlow3 Left) 
+								 (AirspeedSlow3 Middle) 
+								 (AirspeedSlow3 Right))
+	(Global Normal (AirspeedSlow3 Left) 
+							(AirspeedSlow3 Middle) 
+							(AirspeedSlow3 Right)).
+	
+Definition Act_3 := NOT (aft_ex_act Input3 (NOT TRUE)).
+	\end{lstlisting}
+\end{tcolorbox}
+
+The corresponding theorem states that the pilot engaging in the action under those conditions is unaware of that the safety precondition is false.
+
+\begin{tcolorbox}\begin{lstlisting}[language=Coq]
+Theorem NegIntroFailATOff : 
+	|-- (Config_3 ==> Act_3 ==>
+	((NOT (K Pilot (pre_s(Input3))))
+	& (NOT (K Pilot (NOT (K Pilot (pre_s(Input3)))))))).
+	\end{lstlisting}
+\end{tcolorbox}
+%\begin{tcolorbox}	
+%	\begin{enumerate}
+%		\item $\mathit{(A/T=Off)} \tland \mathit{(AirspeedSlow3)} \dots$----------------------- configuration.
+%		\item $\langle\mathit{hardThrustMinus}\rangle_{pilot}\mathit{true}$--------------------------------- pilot input.
+%		\item $\Bels{\mathit{pilot}}(\mathit{A/T=On})$------------------------------ from axiom PR, $\mathit{pre_s}$.
+%		\item $\tlnot \Kns{\mathit{pilot}}(\mathit{A/T=On})$------------------------- from axiom K-Reflexive.
+%		\item $\Bels{\mathit{pilot}}\Kns{\mathit{pilot}}(\mathit{A/T=On})$------------------------ from (3), axiom EP2.
+%		\item $\tlnot \Kns{\mathit{pilot}} \tlnot \Kns{\mathit{pilot}}(\mathit{A/T=On})$----------------- from (5), Lemma~\ref{bec}.
+%		\item $\tlnot \Kns{\mathit{pilot}}(\mathit{A/T=On}) \tland \tlnot \Kns{\mathit{pilot}} \tlnot \Kns{\mathit{pilot}}(\mathit{A/T=On})$--- from (4), (6).
+%		\item $\tlnot(\tlnot \Kns{\mathit{pilot}}(\mathit{A/T=On}) \iimplies \Kns{\mathit{pilot}} \tlnot \Kns{\mathit{pilot}}(\mathit{A/T=On}))$ --- from (7).
+%	\end{enumerate}
+%\end{tcolorbox}	
 The above formalizations follow the same format as that of Air France 447. A pilot provides an input whose safety precondition conflicts with one of the instruments in the configuration, and we infer that the pilot lacks negative introspection of the safety precondition. This is distinct from but related to the property that the pilots, in engaging in an unsafe action, are unaware of the unsafe instrument readings. We can capture this in the form of safety properties, which I turn to in the next section.
 
 \section{Safety Properties}
@@ -336,19 +399,19 @@ However, the converse does not hold. We can satisfy SNI when the safety precondi
 
 The formalizations show that from the pilot's unsafe action, it follows that he lacks negative introspection of the safety precondition. 
 \begin{equation}
-\PalPos{i}{\laa}\mathit{true} \tland \tlnot \mathit{pre_s}(\laa) \iimplies \tlnot \Kns{i}\tlnot \Kns{i}\mathit{pre_s}(\laa)
+\PalPos{A,\laa}\mathit{true} \tland \tlnot \mathit{pre_s}(\laa) \iimplies \tlnot \Kns{i}\tlnot \Kns{i}\mathit{pre_s}(\laa)
 \end{equation}This situation violates SNI, because the pilot doesn't know that he doesn't know the safety precondition. Since SCD implies SNI, SCD is also violated.
 \begin{equation}
-\PalPos{i}{\laa}\mathit{true} \tland \tlnot \mathit{pre_s}(\laa) \iimplies \tlnot \Kns{i}\tlnot \mathit{pre_s}(\laa)
+\PalPos{A,\laa}\mathit{true} \tland \tlnot \mathit{pre_s}(\laa) \iimplies \tlnot \Kns{i}\tlnot \mathit{pre_s}(\laa)
 \end{equation} So, from an unsafe action, we can also infer that the pilot does not know that the safety precondition is false, a stronger conclusion.  
 
 Thus, by restoring knowledge that the safety precondition is false, it follows that either the safety precondition is true, or the unsafe action is not executed. 
 \begin{eqnarray}
-\Kns{i}\tlnot \mathit{pre_s}(\laa) \iimplies \tlnot \PalPos{i}{\laa}\mathit{true} \tlor \mathit{pre_s}(\laa)
+\Kns{i}\tlnot \mathit{pre_s}(\laa) \iimplies \tlnot \PalPos{A,\laa}\mathit{true} \tlor \mathit{pre_s}(\laa)
 \end{eqnarray}
 The pilot's knowledge in the antecedent implies that the safety precondition is false, so this simplifies to:
 \begin{equation}
-\Kns{i}\tlnot \mathit{pre_s}(\laa) \iimplies \tlnot \PalPos{i}{\laa}\mathit{true}.
+\Kns{i}\tlnot \mathit{pre_s}(\laa) \iimplies \tlnot \PalPos{A, \laa}\mathit{true}.
 \end{equation}
 
 This squares with the standard game theoretic inference, wherein a rational agent with knowledge of the situation executes a good action. Because our model of knowledge and rationality is weaker, we make the weaker claim that a minimally rational pilot with knowledge of the safety-critical information does not execute a bad action.

@@ -88,16 +88,16 @@
 		%		\item $\PalPos{i}{a}\true \iimplies \Bels{i}\pre_s(a)$ ........................ Axiom
 		\item $\tlnot \Kns{i} pre_s(a) \iimplies \Kns{i}\tlnot \Kns{i}pre_s(a)$ ....... Awareness Assumption
 		\item $\tlnot pre_s(a)$............................ Safety Precondition Assumption
-		\item $\tlnot pre_s(a) \iimplies \PalPos{i}{a}\true \iimplies \tlnot \Kns{i}\tlnot \Kns{i}pre_s(a)$........ Theorem 1
-		\item $\PalPos{i}{a}\true \iimplies \tlnot \Kns{i}\tlnot \Kns{i}pre_s(a)$............... 2, 3 Modus Ponens
+		\item $\tlnot pre_s(a) \iimplies \PalPos{A, \laa}\true \iimplies \tlnot \Kns{i}\tlnot \Kns{i}pre_s(a)$........ Theorem 1
+		\item $\PalPos{A, \laa}\true \iimplies \tlnot \Kns{i}\tlnot \Kns{i}pre_s(a)$............... 2, 3 Modus Ponens
 		\item $\tlnot \Kns{i}pre_s(a)$.................................................... 2, $\Know$ reflexive
 		\item $\Kns{i}\tlnot\Kns{i}pre_s(a)$........................................ 1, 5 Modus Ponens
 %		\item $\Bels{i}\tlnot\Kns{i}pre_s(a)$.................................................4, EP1 Axiom
 %		\item $\tlnot \BPoss{i}\Kns{i}pre_s(a)$.................................................. 5, Def. $\BPos$
 %		\item $\tlnot \Bels{i}\Kns{i}pre_s(a)$.................................................... 6, $\Bel$ serial
 %		\item $\tlnot\Bels{i}pre_s(a)$.................................................... 7, EP2 Axiom
-		\item $\tlnot \PalPos{i}{a}\true$.............................................. 4, 6 Modus Tollens
-		\item $\Pal{i, a}\false$........................................................... Def. $\PalPos{i}{a}$  $\Box$
+		\item $\tlnot \PalPos{A, \laa}\true$.............................................. 4, 6 Modus Tollens
+		\item $\Pal{A,\laa}\false$........................................................... Def. $\PalPos{A,\laa}$  $\Box$
 		%		\item $\tlnot \Bels{i}\Kns{i} pre_s(a) \iimplies \tlnot\Bels{i}pre_s(a)$
 		%		\item $\tlnot \Bels{i}\Kns{i}pre_s(a) \iimplies \tlnot \Kns{i}pre_s(a)$
 	\end{enumerate}
@@ -215,10 +215,10 @@ The final commands of the .smt2 file tell Z3 to check whether the formula is sat
 \noindent
 \begin{tcolorbox}
 	\begin{lstlisting}
-	input : z3 af447.smt2
-	output: unsat
-	output: (lair rair)
-	\end{lstlisting}
+input : z3 af447.smt2
+output: unsat
+output: (lair rair)
+\end{lstlisting}
 \end{tcolorbox}
 \noindent
 After downloading the Z3 executable\footnote{https://github.com/Z3Prover/z3/releases} and creating the af447.smt2 file, we run Z3 on the file in a single command line input, and receive two output lines. One line tells us that the formula is unsatisfiable, which means that there is some conflict between the actual instrument readings and the safety precondition for the action. The second line tells us which instrument readings are responsible for the conflict. In this case, the instrument readings $lair$ and $rair$ are determined to be the conflict. If we look up at the file contents, we see that the clauses with those labels capture the left airspeed indicator, reading 135, and the right airspeed indicator, reading 100. According to the safety precondition, these values should be equal. Otherwise, a hard nose up input is unsafe, because the airspeed is not known. 
@@ -236,16 +236,16 @@ We encode the variables the same as before, and leave out the code to save space
 \noindent
 \begin{tcolorbox}
 	\begin{lstlisting}
-	;; actual instrument readings
-	(assert (!(= left-airspeed 135) :named lair))
-	(assert (!(= right-airspeed 135) :named rair))
-	(assert (!(= middle-airspeed 135) :named mair))
-	(assert (!(= right-pitch 15) :named rpitch))
-	(assert (!(= middle-pitch 15) :named mpitch))
-	(assert (!(= left-pitch 15) :named lpitch))
-	(assert (!(= right-bank -15) :named rbank))
-	(assert (!(= middle-bank 0) :named mbank))
-	(assert (!(= left-bank 0) :named lbank))
+;; actual instrument readings
+(assert (!(= left-airspeed 135) :named lair))
+(assert (!(= right-airspeed 135) :named rair))
+(assert (!(= middle-airspeed 135) :named mair))
+(assert (!(= right-pitch 15) :named rpitch))
+(assert (!(= middle-pitch 15) :named mpitch))
+(assert (!(= left-pitch 15) :named lpitch))
+(assert (!(= right-bank -15) :named rbank))
+(assert (!(= middle-bank 0) :named mbank))
+(assert (!(= left-bank 0) :named lbank))
 	\end{lstlisting}	
 \end{tcolorbox}	
 \noindent
@@ -253,22 +253,22 @@ Then the safety precondition for a hard right bank would include the condition t
 \noindent
 \begin{tcolorbox}
 	\begin{lstlisting}
-	;;safety precondition of action: Hard Right Bank
-	(assert (= left-airspeed right-airspeed))
-	(assert (= left-airspeed middle-airspeed))
-	(assert (= middle-airspeed right-airspeed))
-	(assert (= right-bank left-bank))
-	(assert (= right-bank middle-bank))
-	(assert (= middle-bank left-bank))
-	(assert (< right-airspeed 700))
-	(assert (> right-airspeed 99))
-	(assert (< middle-airspeed 700))
-	(assert (> middle-airspeed 99))
-	(assert (< left-airspeed 700))
-	(assert (> left-airspeed 99))
-	
-	(check-sat)
-	(get-unsat-core)
+;;safety precondition of action: Hard Right Bank
+(assert (= left-airspeed right-airspeed))
+(assert (= left-airspeed middle-airspeed))
+(assert (= middle-airspeed right-airspeed))
+(assert (= right-bank left-bank))
+(assert (= right-bank middle-bank))
+(assert (= middle-bank left-bank))
+(assert (< right-airspeed 700))
+(assert (> right-airspeed 99))
+(assert (< middle-airspeed 700))
+(assert (> middle-airspeed 99))
+(assert (< left-airspeed 700))
+(assert (> left-airspeed 99))
+
+(check-sat)
+(get-unsat-core)
 	\end{lstlisting}	
 \end{tcolorbox}	
 \noindent
@@ -276,9 +276,9 @@ When we save the file as copa201.smt2 and run Z3 on it, we see the following in 
 \noindent
 \begin{tcolorbox}
 	\begin{lstlisting}
-	input : z3 copa201.smt2
-	output: unsat
-	output: (rbank lbank)
+input : z3 copa201.smt2
+output: unsat
+output: (rbank lbank)
 	\end{lstlisting}
 \end{tcolorbox}
 \noindent
@@ -292,11 +292,11 @@ In encoding this state of affairs, we add a new global state variable to capture
 \noindent
 \begin{tcolorbox}
 	\begin{lstlisting}
-	;; Asiana 214 Case
-	(set-option :produce-unsat-cores true)
+;; Asiana 214 Case
+(set-option :produce-unsat-cores true)
 	
-	;; global state
-	(declare-const autothrottle Bool)
+;; global state
+(declare-const autothrottle Bool)
 	\end{lstlisting}
 \end{tcolorbox}
 \noindent

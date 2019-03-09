@@ -20,7 +20,7 @@ The potential problem is due to L\"ob in \cite{Lob}. We describe the problem her
 
 \section{L\"ob's Theorem}
 \label{sec:lob_section}
-L\"ob's Obstacle takes its name from Martin Hugo L\"ob, who answered one of L. Henkin's follow up questions to G\"odel's striking incompleteness theorems. The question was, ``what about formulas that assert their own \emph{provability}, as opposed to unprovability?"\footnote{Not a direct quote.} L\"ob's response was as follows. A sufficiently powerful system, \emph{e.g.} Peano arithmetic, can prove that formulas asserting that their own provability implies that they are true only when Peano arithmetic actually proves the formula. It seems a little trivial. For formal systems capturing the reasoning of agents, it can lead to surprising results.
+L\"ob's Obstacle takes its name from Martin Hugo L\"ob, who answered one of L. Henkin's follow up questions to G\"odel's striking incompleteness theorems. The question was, \emph{what about formulas that assert their own provability, as opposed to unprovability?}\footnote{Not a direct quote.} L\"ob's response was as follows. A sufficiently powerful system, \emph{e.g.} Peano arithmetic, can prove that formulas asserting that their own provability implies that they are true only when Peano arithmetic actually proves the formula. It seems a little trivial. For formal systems capturing the reasoning of agents, it can lead to surprising results.
 
 L\"ob's Theorem in provability logic is,
 \begin{center}~\label{lob}
@@ -44,7 +44,7 @@ Here we give a template derivation of L\"ob's Theorem, which we shall refer to b
 	$\\$
 \begin{proofenum}
 	\item $\Box(\Box\varphi \iimplies \varphi)$\mbox{}\dotfill Assumption
-	\item $\Box(\psi \iiff (\Box\psi\iimplies \varphi))$\mbox{}\dotfill L\"ob Sentence\footnote{Sometimes referred as a Curry sentence after Logician Haskell Curry.}
+	\item $\Box(\psi \iiff (\Box\psi\iimplies \varphi))$\mbox{}\dotfill L\"ob Sentence\footnote{Sometimes referred as a Curry sentence after logician Haskell Curry.}
 	\item $\Box(\Box\psi \iiff \Box(\Box\psi \iimplies \varphi))$\mbox{}\dotfill Axiom K
 	\item $\Box(\Box\psi \iimplies \Box(\Box\psi \iimplies \varphi)))$\mbox{}\dotfill (1.3) Simplification of $\iiff$
 	\item $\Box(\Box\psi \iimplies (\Box\Box\psi \iimplies \Box\varphi))$\mbox{}\dotfill (1.4) Axiom K
@@ -141,7 +141,8 @@ They axiomatize knowledge and belief as follows.
 
 The key differences with \DASL\ are that knowledge is \SFive\ and the axiom of Conscious Belief, which reverses the composition of knowledge and belief under belief relative to \DASL's Evidential Restraint axiom. From the above axiom schemas, it follows that belief is a regular $\mathcal{KD}45$ operator.
 
-In their article, and in Meyer and van der Hoek's \cite{MeyerHoek}, they show that $\Bels{i}(\Bels{i}\varphi \iimplies \varphi)$ is a theorem. Therefore, this system suffers from a particularly bad collision with L\"ob: Both the knowledge and belief modalities lead to inconsistency for intelligent agenst capable of self-referential reasoning.
+In their article, and in Meyer and van der Hoek's \cite{MeyerHoek}, they show that $\Bels{i}(\Bels{i}\varphi \iimplies \varphi)$ is a theorem. Therefore, this system suffers from a particularly bad collision with L\"ob: Both the knowledge and belief modalities lead to inconsistency for intelligent agenst capable of self-referential reasoning. 
+
 \section{\DASL}
 \label{sec:crap}
 
