@@ -1132,7 +1132,7 @@ Of course, this theorem is not in the expected form of $\models \varphi \timplie
 	Let $\chi$ be a Sahqvist formula. $\chi$ corresponds to exactly one first order relation $c_\chi(x)$ that defines a class of frames, and $c_\chi(x)$ is effectively computable from $\chi$ using the Sahlqvist-van Benthem Algorithm.
 \end{theorem}
 \begin{proof}
-	See \cite{modal} chapter 3.
+	The former claim follows from the latter. See \cite{modal} chapter 3 for details on the algorithm.
 \end{proof}
 
 Since $c_\chi(x)$ defines the frame, $\chi$ is valid for that class of frames. So, by our proof of soundess where we show that the corresponding modal formulas are sound for their corresponding first order frame conditions, we can infer that these are the frame conditions for which the \DASL\ axioms are complete via the Sahlqvist theorem (\ref{thm:sahlqvist}). We leave the mechanization of these steps to future work. However, we do mechanize the preservation of completeness from $\mathtt{schema}$s to $\mathtt{prop}$s:
