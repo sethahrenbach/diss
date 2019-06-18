@@ -48,6 +48,10 @@
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}{Corollary}[theorem]
 \newtheorem{definition}{Definition}[theorem]
+\newenvironment{proofenum}{%                                     
+	\begin{enumerate}
+		\renewcommand\labelenumi{(\arabic{section}.\arabic{enumi})}}
+	{\end{enumerate}}
 %\usepackage{natbib}
 %\usepackage{microtype}
 % Coq lstlisting

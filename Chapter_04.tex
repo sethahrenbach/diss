@@ -51,21 +51,20 @@ The underlying logic of Coq is called the Calculus of Inductive Constructions, a
 
 The following mechanization demonstrates progress from the artificially simply toy examples normally analyzed in the literature to richer real-world examples. However, it does not represent the full richness of the approach. The actions and instrument readings mechanized in this paper are constrained to those most relevant to the case study. The approach is capable of capturing the full richness of all instrument reading configurations and actions available to a pilot. To do so, one needs to consult a flight safety manual and formally represent each action available to a pilot, and each potential instrument reading, according to the following scheme.
 
-Before beginning, we note that our use of sets in the following Coq code requires the following argument passed to coqtop before executing: -impredicative-set. In CoqIDE, this can be done by selecting the `Tools' dropdown, then `Coqtop arguments'. Type in \emph{-impredicative-set}.
 
 We first formalize the set of agents.
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]
-	Inductive Agents: Set := Pilot | CoPilot | AutoPilot.
+	Inductive Agents: Type := Pilot | CoPilot | AutoPilot.
 	\end{lstlisting}
 \end{tcolorbox}
 
-Next we formalize the set of available inputs. These themselves are not actions, but represent atomic propositions true or false of a configuration.
+Next we formalize the set of available inputs. These themselves are not actions, but represent atomic propositions true or false of a configuration. When a pilot manipulates an actuator via an action, the actuator being manipulated changes its state. We assume the pilot changes only one control surface actuator at a time, and so an input consists of the new state of whichever actuator is being manipulated.
 
 
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]
-	Inductive Inputs : Set := 
+	Inductive Inputs : Type := 
 	HardThrustPlus  | ThrustPlus 
 	| HardNoseUp      | NoseUp 
 	| HardWingLeft    | WingLeft
@@ -80,7 +79,7 @@ We represent readings by indicating which \emph{side} of the panel they are on. 
 
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]
-	Inductive Side : Set := Left | Middle | Right.
+	Inductive Side : TYpe := Left | Middle | Right.
 	\end{lstlisting}	
 	
 \end{tcolorbox}
@@ -89,7 +88,7 @@ We divide the main instruments into chunks of values they can take, in order to 
 
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]
-	Inductive Readings (s : Side) : Set := 
+	Inductive Readings (s : Side) : Type := 
 	VertUp1 | VertUp2 | VertUp3 | VertUp4 
 	| VertDown1 | VertDown2 | VertDown3 | VertDown4 
 	| VertLevel | HorLeft1 | HorLeft2 | HorLeft3 
@@ -101,11 +100,13 @@ We divide the main instruments into chunks of values they can take, in order to 
 	
 \end{tcolorbox}
 
+The difference between an input and a reading is that the inputs are values of actuator states, while readings are values of instrument states. In a properly functioning aircraft, the input values and readings values would correspond. However, in emergency situations, these tend to diverge.
+
 We define a set of potential modes the aircraft can be in.
 
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]
-	Inductive Mode : Set := Normal | Alternate1 | Alternate2.
+	Inductive Mode : Type := Normal | Alternate1 | Alternate2.
 	\end{lstlisting}
 \end{tcolorbox}
 
@@ -114,7 +115,7 @@ We define a set of global instrument readings representing the mode and all of t
 
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]
-	Inductive GlobalReadings : Set := Global (m: Mode) 
+	Inductive GlobalReadings : Type := Global (m: Mode) 
 	(rl : Readings Left) 
 	(rm : Readings Middle) 
 	(rr : Readings Right). 
@@ -126,7 +127,7 @@ The set of atomic propositions we are concerned with are those representing fact
 
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]
-	Inductive Atoms : Set := 
+	Inductive Atoms : Type := 
 	| M (m : Mode)
 	| Input (a : Inputs) 
 	| InstrumentL (r : Readings Left) 
@@ -136,29 +137,32 @@ The set of atomic propositions we are concerned with are those representing fact
 	\end{lstlisting}
 \end{tcolorbox}
 
-Next we  again follow Lescanne and Puiss\'egur \cite{lescanne, puislescanne} and Malikovi\'c and \v Cubrilo~\cite{delcoq1,delcoq2} in defining \emph{prop} of propositions of type $\mathtt{Prop}$, Coq's built in type for propositions. The definition provides constructors for atomic propositions consisting of particular instrument reading predicate statements, implications, propositions beginning with a knowledge modality, and those beginning with a belief modality. Interestingly, modal logic cannot be directly represented in Coq's framework~\cite{lescanne}. We first define propositions in first-order logic, which we then use to define DASL. This appears to be the standard technique for mechanizing modal logics in Coq. 
+Next we  again follow Lescanne and Puiss\'egur \cite{lescanne, puislescanne} and Malikovi\'c and \v Cubrilo~\cite{delcoq1,delcoq2} in defining \emph{prop} of propositions of type $\mathtt{Type}$. The definition provides constructors for atomic propositions consisting of particular instrument reading predicate statements, implications, propositions beginning with a knowledge modality, and those beginning with a belief modality.
 
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]	
-	Inductive prop : Set :=
+	Inductive prop : Type :=
 	| atm : Atoms -> prop
 	| imp: prop -> prop -> prop
-	| Forall : forall (A : Set), (A -> prop) -> prop
+	| negp: prop -> prop
+	| falsum : prop
 	| K : Agents -> prop -> prop
 	| B : Agents -> prop -> prop
 	\end{lstlisting}
 \end{tcolorbox}
 
+These should be familiar, as they are similar to the Backus-Naur form for the static modal logic from \ref{CH_03}, 
+	$$ \varphi \ ::=\   \lpp \bnf \varphi \iimplies \varphi \bnf \tlnot \varphi \bnf \bot  \bnf \Kns{i} \varphi \bnf \Bels{i}\varphi $$
+
 %| Ck : list Agents -> prop -> prop
 %| Cb : list Agents -> prop -> prop.
-We use the following notation for implication and universal quantification.
+We use the following notation for implication.
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]
 	Infix "==>" := imp (right associativity, at level 85).
-	Notation "\-/ p" := (Forall _ p) (at level 70, right associativity).
 	\end{lstlisting}
 \end{tcolorbox}
-We likewise follow Malikovi\'c and \v Cubrilo~\cite{delcoq1,delcoq2} by defining an inductive type \emph{theorem} representing a theorem of DASL. The constructors correspond to the Hilbert system, either as characteristic axioms, or inference rules. The first three represent axioms for propositional logic, then the rule Modus Ponens, then the axioms for the epistemic operator plus its Necessitation rule, then the doxastic operator and its Necessitation rule. Do not confuse the Necessitation rules with material implication in the object language. The final constructors capture the axioms relating belief and knowledge. The axioms for dynamic modal operators are defined separately, and are not included here.
+We likewise follow Lescanne and Puiss\'egur \cite{lescanne, puislescanne} by defining an inductive type \emph{theorem} representing a theorem of \DASL. Mechanized, it takes a previously defined \emph{prop} and returns a built-in Coq type \emph{Prop} for propositions in Coq's core logic. The constructors correspond to the Hilbert system, either as characteristic axioms, or inference rules. The first three represent axioms for propositional logic, then the rule Modus Ponens, then the axioms for the epistemic operator plus its Necessitation rule, then the doxastic operator and its Necessitation rule. Do not confuse the Necessitation rules with material implication in the object language. The final constructors capture the axioms relating belief and knowledge. The axioms for dynamic modal operators are defined separately, and are not included here.
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]
 	Inductive theorem : prop -> Prop :=
@@ -188,7 +192,7 @@ We use the following notation for \emph{theorem}:
 	Notation "|-- p" := (theorem p) (at level 80).
 	\end{lstlisting}
 \end{tcolorbox}
-We encode actions as records in Coq, recording the acting pilot, the observability of the action (whether it is observed by other agents or not), the input provided by the pilot, and the preconditions for the action and the safety preconditions for the action, both represented as global atoms.
+We encode actions as records in Coq, which allow for the definition of an inductive type along with projection functions. An action consists of the acting pilot, the observability of the action (whether it is observed by other agents or not), the input provided by the pilot, and the preconditions for the action and the safety preconditions for the action, both represented as global atoms.
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]
 	Record Action : Set := act {Ai : Agents; Aj : Agents; pi : PI; 
@@ -447,14 +451,18 @@ Output: Is there a set of instruments $I$ of size $k$ from configuration $C$ tha
 \begin{theorem}[NP]
 	SD is NP-Complete.
 \end{theorem}
-$\mathbf{Proof.}$ First, we prove that $SD$ is in NP by defining the decision problem $\mathit{SDV}$ that takes input to $\mathit{SD}$ and a $\mathit{certificate}$ and verifies that the certificate falsifies $\mathit{pre_s}(\laa)$ in polynomial time. Let the certificate be a set of instruments $I$ of size $k$ from the configuration $C$. Note that $\mathit{pre_s}(\laa)$ has the form $(c_1 \tland c_2 \tland \dots \tland c_n) \tlor (c_1' \tland c_2' \tland \dots \tland c_n') \tlor \dots$ The negation of this has the form $(\tlnot c_1 \tlor \tlnot c_2 \tlor \dots \tlor \tlnot c_n) \tland (\tlnot c_1' \tlor \tlnot c_2' \tlor \dots \tlnot c_n') \tland \dots$, which is in Conjunctive Normal Form. Computing the negation of $\mathit{pre_s}$ can be done in linear time. Next we take $I$ and treat it as an assignment of values to instruments of the form $(i_1 \tland i_2 \tland \dots \tland i_n)$ for each $i \in I$. Then we check whether $I$ satisfies $\tlnot \mathit{pre_s}(\laa)$ in polynomial time, treating $I$ as the certificate for the $SAT$ problem.
+$\mathbf{Proof.}$ First, we prove that $SD$ is in NP by defining the decision problem $\mathit{SDV}$ that takes input to $\mathit{SD}$ and a $\mathit{certificate}$ and verifies that the certificate falsifies $\mathit{pre_s}(\laa)$ in polynomial time. Let the certificate be a set of instruments $I$ of size $k$ from the configuration $C$. Note that $\mathit{pre_s}(\laa)$ has the form $(c_1 \tland c_2 \tland \dots \tland c_n) \tlor (c_1' \tland c_2' \tland \dots \\ \tland c_n') \tlor \dots$ The negation of this has the form $(\tlnot c_1 \tlor \tlnot c_2 \tlor \dots \tlor \tlnot c_n) \tland (\tlnot c_1' \tlor \tlnot c_2' \\ \tlor \dots \tlnot c_n') \tland \dots$, which is in Conjunctive Normal Form. Computing the negation of $\mathit{pre_s}$ can be done in linear time. Next we take $I$ and treat it as an assignment of values to instruments of the form $(i_1 \tland i_2 \tland \dots \tland i_n)$ for each $i \in I$. Then we check whether $I$ satisfies $\tlnot \mathit{pre_s}(\laa)$ in polynomial time, treating $I$ as the certificate for the $SAT$ problem.
 
 Second, we prove that $SD$ is in NP-Hard. We do this by providing a polynomial time reduction from $nSAT$ to $SD$. Taking the input from $nSAT$, we let the size of the configuration $|C| = n$, that is, we let $n$ be the number of instruments on the flight deck. The maximum size of any solution $I$ to $SD$ is therefore $n$. We let the $nSAT$ formula be the negation of $\mathit{pre_s}(\laa)$. We iterate over $k \in \{1..n\}$. Thus, for $nSAT$, the $SD$ problem is run at most $n$ times. Any input to $nSAT$ will be at least of size $n$, so the number of times $SD$ is run is polynomial in the length of $nSAT$'s input. $\Box$
 
 \subsection{Summary}
-This chapter has applied $\DASL$ to aviation cases from real life, demonstrating its use as a foundation for future formal methods involving human machine interaction. The model of reasoning formalized in $\DASL$ is more realistic than those of $\SFive$ and $\mathcal{S}4$. Those logics present an idealization of reasoning and knowledge such that agents have negative introspection in the former and positive introspection in both. Both forms of introspection are too strong for human knowledge, and furthermore, are insufficient for reasoning about false beliefs. Furthermore, both logics are inappropriate for modeling belief because of their reflexive frame conditions. Weakening the reflexivity condition to a seriality condition yields the logics $\mathit{KD}45$ and $\mathit{KD}4$ respectively. This allows for reasonable formalizations of belief, but denies a logical connection between the truth or falsity of a proposition and the agent's mental state. With $\DASL$, both problems are solved. We have a realistic picture of knowledge and belief, and maintain a logical connection between a proposition's truth value and the agent's mental state, which is required for the contrapositive of the game theoretic inference.
+This chapter mechanized an instance of \DASL appropriate for reasoning about safety-critical information flow and action in the context of aviation mishaps. It illustrates how \DASL is useful as a formal method for modeling human agents and the logical relationship between their actions and their mental states. Similar instances of \DASL\ could occur in a variety of situations, where a human agent makes decisions and it is important to rapidly identify when unsafe actions occur, and which safety-critical information would improve the safety of those actions. 
 
-The next chapter presents a theoretic worry facing $\DASL$, and indeed most modal logics of belief and knowledge developed in the literature so far. 
+We proved that when a rational pilot engages in unsafe action, it is because she is unaware of some safety-critical information. We explored the implications of this insight by identifying the information assurance properties of \emph{Safety Negative Introspection} (SNI) and \emph{Safety-Critical Delivery} (SCD), which formalize the notions that an agent should be aware when an action's safety precondition is unknown, and that she should know when an action's safety precondition is false, respectively. We proved that the latter implies the former, and that the aviation mishaps involve violations of SNI (and therefore SCD as well). This shows that both negative introspection and direct knowledge of a safety precondition's being false are sufficient for preventing unsafe actions. This formalizes the standard game-theoretic inference, weakened for our correspondingly weaker agents, that knowledge implies the \emph{avoidance} of bad actions.
+
+Finally, we showed that capitalizing on this insight via an algorithm is an NP-Complete problem. The decision problem takes as input an action, configuration, safety precondition, and integer \emph{k}, and returns true or false whether there is a set of instrument readings of size \emph{k} that falsifies the safety precondition for the given action.
+
+The next chapter presents a theoretic worry facing \DASL, and indeed most modal logics of belief and knowledge developed in the literature so far. 
 
 %It turns out that the Z3 Theorem Prover can solve this problem, which we turn to in the next chaper.
 	
