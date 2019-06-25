@@ -1133,14 +1133,29 @@ Theorem DASL_Axioms_Complete : forall (p q r : prop) (a : DASL.Agents),
 	\end{lstlisting}
 \end{tcolorbox}
 
-Of course, this theorem is not in the expected form of $\models \varphi \timplies \vDash \varphi$, and in fact we have only mechanized the proof that \DASL\ is complete with respect to \emph{some} set of frame relations. To show that \DASL\ is complete with respect to the very same relations as those for which we proved soundness, we must appeal to a theorem that we have not mechanized, presented in Blackburn \etal\cite{modal}. In it, they present the theorem,
+Of course, this theorem is not in the expected form of $\models \varphi \timplies \vDash \varphi$, and in fact we have only mechanized the proof that \DASL\ is complete with respect to \emph{some} set of frame relations. To show that \DASL\ is complete with respect to the very same relations as those for which we proved soundness, we refer back to the definition of \emph{correspondence}. 
 
-\begin{theorem}[Correspondence of Sahlqvist Formula to First Order Relation]\label{thm:correspondence}
-	Let $\chi$ be a Sahqvist formula. $\chi$ corresponds to exactly one first order relation $c_\chi(x)$ that defines a class of frames, and $c_\chi(x)$ is effectively computable from $\chi$ using the Sahlqvist-van Benthem Algorithm.
-\end{theorem}
+In our proof of soundness, we defined a \DASL\ frame as one consisting of reflexivity of $\Kns{i}$, seriality, transitivity, and euclidicity of $\Bels{i}$, partial ordering of $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ (Knowledge implies Belief), and $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ (Evidential Restraint). The soundness proof appealed to lemmas, which we mechanically proved, showing that each frame condition makes one of the axiom schemas valid for that class of frames. Thus, the soundness proof establishes that the first order frame conditions and their associated modal axioms establish one direction of the correspondence proof. What remains is to show that, for each associated axiom scheme and its associated first order condition, if they are valid on a given frame $\mathtt{F}$, then $\mathtt{F}$ is a member of the class of \DASL\ frames.
+
+Our proof of this direction applies van Benthem's standard translation algorithm, as presented by Blackburn \etal in \cite{modal} in order to yield a second order translation of each \DASL\ axiom schema, and then applies the Sahlqvist-van Benthem algorithm, presented also by \cite{modal}, to derive the corresponding first order formulas.
+\begin{lemma}
+	For all frames $\mathtt{F}$, if each \DASL\ axiom schema and its associated first order frame condition hold for $\mathtt{F}$, then $\mathtt{F}$ is a \DASL\ frame,
+\end{lemma}
+
+where \emph{hold} refers to frame validity and metalanguage semantics, respectively.
 \begin{proof}
-	The former claim follows from the latter. See \cite{modal} chapter 3 for details on the algorithm.
+	
 \end{proof}
+
+
+%must appeal to a theorem that we have not mechanized, presented in Blackburn \etal\cite{modal}. In it, they present the theorem,
+%
+%\begin{theorem}[Correspondence of Sahlqvist Formula to First Order Relation]\label{thm:correspondence}
+%	Let $\chi$ be a Sahqvist formula. $\chi$ corresponds to exactly one first order relation $c_\chi(x)$ that defines a class of frames, and $c_\chi(x)$ is effectively computable from $\chi$ using the Sahlqvist-van Benthem Algorithm.
+%\end{theorem}
+%\begin{proof}
+%	The former claim follows from the latter. See \cite{modal} chapter 3 for details on the algorithm.
+%\end{proof}
 
 Since $c_\chi(x)$ defines the frame, $\chi$ is valid for that class of frames. So, by our proof of soundess where we show that the corresponding modal formulas are sound for their corresponding first order frame conditions, we can infer that these are the frame conditions for which the \DASL\ axioms are complete via the Sahlqvist theorem (\ref{thm:sahlqvist}). We leave the mechanization of these steps to future work. However, we do mechanize the preservation of completeness from $\mathtt{schema}$s to $\mathtt{prop}$s:
 
