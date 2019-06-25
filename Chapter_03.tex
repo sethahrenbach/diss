@@ -864,7 +864,21 @@ Through similar definitions and lemmas of the remaining frame conditions and axi
 The proof proceeds by instantiating $\mathtt{phi}$, $\mathtt{F}$, $\mathtt{a}$, unfolding the definition of $\mathtt{DASL\_Frame}$ into its constituent frame conditions, and running and induction over $\mathtt{|-- phi}$. The call to $\mathtt{eauto}$ suffices due to each of the helper lemmas added to the $\mathtt{hints}$. We turn now to mechanizing completenss.
 
 \subsection{Completeness}~\label{sec:completeness}
-For completeness, our proof depends on the notion of a Sahlqvist formula, which itself depends on syntactical properties of modal formulas, which we must also define. The completeness proof is only \emph{mostly} mechanized. The overall theme of the proof is to rely on the \emph{Sahlqvist Theorem} of modal logic. This states that modal formulas with a particular structure can serve as axioms that correspond first order frame conditions in a way that guarantees soundness and completeness. We mechanized the component of the proof that establishes that the axiom schemas of \DASL\ are such \emph{Sahlqvist formulas}. 
+For completeness, our proof depends on the notion of a Sahlqvist formula, which itself depends on syntactical properties of modal formulas, which we must also define. The completeness proof is only \emph{mostly} mechanized. The overall theme of the proof is to rely on the \emph{Sahlqvist Completeness Theorem} of modal logic. 
+
+\begin{theorem}[Sahlqvist Completeness Theorem\cite{modal}\footnote{Theorem 4.42 of Chapter 4 in Blackburn \etal.}]
+	Every Sahlqvist formula is canonical for the first-order property it defines. Hence, given a set of Sahlqvist axioms $\Sigma$, the logic $\mathbf{K}\Sigma$ is complete with respect to the class of frames $\mathtt{F}_\Sigma$ (that is, the first-order class of frames defined by $\Sigma$.)
+\end{theorem}
+
+This states that every modal formula with a syntactic structure, defined by Sahlqvist, is complete for the class of frames defined by its corresponding first order formula. 
+
+A modal formula $\varphi$ and a first order formula $\chi$ \emph{correspond} when they define the same class of frames, $C$, meaning a frame $F$ belongs to $C$ defined by  $\varphi$ and $\chi$ if and only if $\varphi$ is valid on all $F$-frames and $\chi$ holds in the metalanguage of the semantics for all $F$-frames.
+
+An example might help. Consider the class of reflexive frames. It is defined by the first order property of \emph{reflexivity}, with the first order formula $\forall x,\ Rxx$. A frame for this class consists of a relational structure with a set of worlds $W$ and an accessibility relation $R$. We see that the reflexivity formula holds in the metalanguage when $x$ is drawn from $W$, and $R$ is such that each world accesses itself. Similarly, we know that the modal formula $\Box\varphi \iimplies \varphi$ is true for all frames with such an accessibility condition. The formulas $\Box\varphi \iimplies \varphi$ and $\forall x,\ Rxx$ correspond to each other.
+
+The Sahlqvist Completeness Theorem states that if $\Box\varphi \iimplies \varphi$ has certain syntactic properties to be defined shortly, then the basic modal logic $\mathbf{K}$ plus the axiom scheme $\Box\varphi \iimplies \varphi$ is complete with respect to the class of reflexive frames.
+
+We mechanized the component of the proof that establishes that the axiom schemas of \DASL\ are such \emph{Sahlqvist formulas}. We further mechanized the correspondence between the axiom schemes and their first order counterparts.
 
 A \emph{Sahlqvist implication} is a formula with a \emph{Sahlqvist antecedent} and a \emph{positive consequent}.
 
