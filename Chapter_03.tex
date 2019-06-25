@@ -864,7 +864,7 @@ Through similar definitions and lemmas of the remaining frame conditions and axi
 The proof proceeds by instantiating $\mathtt{phi}$, $\mathtt{F}$, $\mathtt{a}$, unfolding the definition of $\mathtt{DASL\_Frame}$ into its constituent frame conditions, and running and induction over $\mathtt{|-- phi}$. The call to $\mathtt{eauto}$ suffices due to each of the helper lemmas added to the $\mathtt{hints}$. We turn now to mechanizing completenss.
 
 \subsection{Completeness}~\label{sec:completeness}
-For completeness, our proof depends on the notion of a Sahlqvist formula, which itself depends on syntactical properties of modal formulas, which we must also define. The completeness proof is only \emph{mostly} mechanized. The overall theme of the proof is to rely on the \emph{Sahlqvist Completeness Theorem} of modal logic. 
+For completeness, our proof depends on the notion of a Sahlqvist formula, which itself depends on syntactical properties of modal formulas, which we must also define. The completeness proof is only \emph{mostly} mechanized. The overall theme of the proof is to rely on the \emph{Sahlqvist Completeness Theorem} (SCT) of modal logic. 
 
 \begin{theorem}[Sahlqvist Completeness Theorem\cite{modal}\footnote{Theorem 4.42 of Chapter 4 in Blackburn \etal.}]
 	Every Sahlqvist formula is canonical for the first-order property it defines. Hence, given a set of Sahlqvist axioms $\Sigma$, the logic $\mathbf{K}\Sigma$ is complete with respect to the class of frames $\mathtt{F}_\Sigma$ (that is, the first-order class of frames defined by $\Sigma$.)
@@ -878,7 +878,7 @@ An example might help. Consider the class of reflexive frames. It is defined by 
 
 The Sahlqvist Completeness Theorem states that if $\Box\varphi \iimplies \varphi$ has certain syntactic properties to be defined shortly, then the basic modal logic $\mathbf{K}$ plus the axiom scheme $\Box\varphi \iimplies \varphi$ is complete with respect to the class of reflexive frames.
 
-We mechanized the component of the proof that establishes that the axiom schemas of \DASL\ are such \emph{Sahlqvist formulas}. We further mechanized the correspondence between the axiom schemes and their first order counterparts.
+The SCT is so powerful that it suffices to prove that each of our axiom schemas of \DASL's static base is a Sahlqvist formula, and that their first order correspondents are the frame conditions. We have mechanized the proof that establishes that the axiom schemas of \DASL\ are such \emph{Sahlqvist formulas}, and the proof of correspondence between the axiom schemes and their first order counterparts is mechanized during the proof of soundness. In what follows we define a Sahlqvist formula's syntatic characteristics, and provide our mechanization of them in Coq.
 
 A \emph{Sahlqvist implication} is a formula with a \emph{Sahlqvist antecedent} and a \emph{positive consequent}.
 
@@ -1050,13 +1050,6 @@ According to Blackburn \etal\cite{modal}, a Sahlqvist formula is built up from `
 	\end{lstlisting}
 \end{tcolorbox}
 
-
-
-To prove that \DASL\ is complete, we use the following theorem, which we have not mechanized in Coq.
-
-\begin{theorem}[Sahlqvist's Theorem]~\label{thm:sahlqvist}
-	Every Sahlqvist formula $\varphi$ defines a complete modal logic when added as an axiom to the minimal modal logic defined by the axiom K, with respect to the first order frame relation corresponding to $\varphi$,  $\mathnormal{FO}(\varphi)$.
-\end{theorem}
 
 With these components, we define a Sahlqvist formula as follows.
 
