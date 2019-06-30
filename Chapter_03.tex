@@ -874,11 +874,11 @@ This states that every modal formula with a syntactic structure, defined by Sahl
 
 A modal formula $\varphi$ and a first order formula $\chi$ \emph{correspond} when they define the same class of frames, $C$, meaning a frame $F$ belongs to $C$ defined by  $\varphi$ and $\chi$ if and only if $\varphi$ is valid on all $F$-frames and $\chi$ holds in the metalanguage of the semantics for all $F$-frames.
 
-An example might help. Consider the class of reflexive frames. It is defined by the first order property of \emph{reflexivity}, with the first order formula $\forall x,\ Rxx$. A frame for this class consists of a relational structure with a set of worlds $W$ and an accessibility relation $R$. We see that the reflexivity formula holds in the metalanguage when $x$ is drawn from $W$, and $R$ is such that each world accesses itself. Similarly, we know that the modal formula $\Box\varphi \iimplies \varphi$ is true for all frames with such an accessibility condition. The formulas $\Box\varphi \iimplies \varphi$ and $\forall x,\ Rxx$ correspond to each other.
+An example might help. Consider the class of reflexive frames. It is defined by the first order property of \emph{reflexivity}, with the first order formula $\forall x,\ Rxx$. A frame for this class consists of a relational structure with a set of worlds $W$ and an accessibility relation $R$. We see that the reflexivity formula holds in the metalanguage when $x$ is drawn from $W$, and $R$ is such that each world accesses itself, but the proof of this requires translation algorithms due to Sahlqvist and van Benthem\cite{modal}. Similarly, we know (from the soundness proof) that the modal formula $\Box\varphi \iimplies \varphi$ is true for all frames with such an accessibility condition. The formulas $\Box\varphi \iimplies \varphi$ and $\forall x,\ Rxx$ correspond to each other.
 
-The Sahlqvist Completeness Theorem states that if $\Box\varphi \iimplies \varphi$ has certain syntactic properties to be defined shortly, then the basic modal logic $\mathbf{K}$ plus the axiom scheme $\Box\varphi \iimplies \varphi$ is complete with respect to the class of reflexive frames.
+The Sahlqvist Completeness Theorem states that if $\Box\varphi \iimplies \varphi$ has certain syntactic properties to be defined shortly, then the basic modal logic $\mathbf{K}$ plus the axiom scheme $\Box\varphi \iimplies \varphi$ is complete with respect to the class of reflexive frames, due to their correspondence.
 
-The SCT is so powerful that it suffices to prove that each of our axiom schemas of \DASL's static base is a Sahlqvist formula, and that their first order correspondents are the frame conditions. We have mechanized the proof that establishes that the axiom schemas of \DASL\ are such \emph{Sahlqvist formulas}, and the proof of correspondence between the axiom schemes and their first order counterparts is mechanized during the proof of soundness. In what follows we define a Sahlqvist formula's syntatic characteristics, and provide our mechanization of them in Coq.
+The SCT is so powerful that it suffices to prove that each of our axiom schemas of \DASL's static base is a Sahlqvist formula, and that the associated frame conditions used in the proof of soundness are their first order correspondents. We have mechanized the proof that establishes that the axiom schemas of \DASL\ are such \emph{Sahlqvist formulas}. The proof of correspondence between the axiom schemes and their first order counterparts is partially mechanized during the proof of soundness. In what follows we define a Sahlqvist formula's syntatic characteristics, and provide our mechanization of them in Coq.
 
 A \emph{Sahlqvist implication} is a formula with a \emph{Sahlqvist antecedent} and a \emph{positive consequent}.
 
@@ -1135,16 +1135,42 @@ Theorem DASL_Axioms_Complete : forall (p q r : prop) (a : DASL.Agents),
 
 Of course, this theorem is not in the expected form of $\models \varphi \timplies \vDash \varphi$, and in fact we have only mechanized the proof that \DASL\ is complete with respect to \emph{some} set of frame relations. To show that \DASL\ is complete with respect to the very same relations as those for which we proved soundness, we refer back to the definition of \emph{correspondence}. 
 
-In our proof of soundness, we defined a \DASL\ frame as one consisting of reflexivity of $\Kns{i}$, seriality, transitivity, and euclidicity of $\Bels{i}$, partial ordering of $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ (Knowledge implies Belief), and $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ (Evidential Restraint). The soundness proof appealed to lemmas, which we mechanically proved, showing that each frame condition makes one of the axiom schemas valid for that class of frames. Thus, the soundness proof establishes that the first order frame conditions and their associated modal axioms establish one direction of the correspondence proof. What remains is to show that, for each associated axiom scheme and its associated first order condition, if they are valid on a given frame $\mathtt{F}$, then $\mathtt{F}$ is a member of the class of \DASL\ frames.
+In our proof of soundness, we defined a \DASL\ frame as one consisting of reflexivity of $\Kns{i}$, seriality, transitivity, and euclidicity of $\Bels{i}$, partial ordering of $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ (Knowledge implies Belief), and $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ (Evidential Restraint). The soundness proof appealed to lemmas, which we mechanically proved, showing that each frame condition makes one of the axiom schemas valid for that class of frames. Thus, the soundness proof establishes that the first order frame conditions and their associated modal axioms establish one direction of the correspondence proof. What remains is to show that each axiom scheme in \DASL\ implies its associated frame condition. This, combined with the soundness proof's condition to axiom scheme derivation, establishes their equivalence. Therefore they define the same class of frames, and hence they correspond.
 
 Our proof of this direction applies van Benthem's standard translation algorithm, as presented by Blackburn \etal in \cite{modal} in order to yield a second order translation of each \DASL\ axiom schema, and then applies the Sahlqvist-van Benthem algorithm, presented also by \cite{modal}, to derive the corresponding first order formulas.
+
+The Standard Translation algorithm consists of the following recursive rewrite rules.
+
+\begin{definition}[Standard Translation]. For binary modal operators $\Bels{i}$ and $\Kns{i}$, we define the function $ST$ on a given variable $x$ and proposition letter $p$:
+	\begin{align*}
+	ST(x, p) &= P(x) \\
+	ST(x, \bot) &= (x \neq x) \\
+	ST(x, \tlnot\varphi) &=\ \sim(ST(x, \varphi)) \\
+	ST(x, \varphi \tlor \psi) &= ST(x, \varphi) \mathtt{\ or\ } ST(x, \psi)\\
+	ST(x, \Kns{i}\varphi) &= \forall y,\ \Rel{k}^i(x,y) \Longrightarrow ST(y, \varphi) \\
+	\end{align*}	
+\end{definition}
+
+
+The Sahlqvist-van Benthem algorithm is described in the following way.
+
+\emph{Step 1.} Apply the following equivalences, from left to right, (in this order):
+\begin{eqnarray}
+(\exists x, \gamma(x) \mathtt{\ and\ }\psi )\Longleftrightarrow \exists x, (\gamma(x) \mathtt{\ and\ }\psi)\\
+(\exists x, \gamma(x) \Longrightarrow \psi) \Longleftrightarrow \forall x, (\gamma(x) \Longrightarrow \psi),
+\end{eqnarray}
+where $\gamma(x)$ is a first order sentence with one free variable $x$.
+
+\emph{Step 2.}
+
 \begin{lemma}
 	For all frames $\mathtt{F}$, if each \DASL\ axiom schema and its associated first order frame condition hold for $\mathtt{F}$, then $\mathtt{F}$ is a \DASL\ frame,
 \end{lemma}
 
 where \emph{hold} refers to frame validity and metalanguage semantics, respectively.
 \begin{proof}
-	
+	$\\$
+	$\Kns{i}p \iimplies p$. Applying the above translation rules, where the normal equivalence of $\sim q \mathtt{\ or\ }r\equiv q \Longrightarrow r$, yields $(\forall y,\ \Rel{k}^i(x,y) \Longrightarrow P(y)) \Longrightarrow P(x)$.
 \end{proof}
 
 
