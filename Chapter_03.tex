@@ -1150,7 +1150,19 @@ The Standard Translation algorithm consists of the following recursive rewrite r
 	ST(x, \Kns{i}\varphi) &= \forall y,\ \Rel{k}^i(x,y) \Longrightarrow ST(y, \varphi) \\
 	\end{align*}	
 \end{definition}
+The resulting predicate and objects corresponding to modal propositions and variables are arbitrary, and so there are infinitely many standard translations from a modal formula to a first order formula.\footnote{See chapter 2, example 2.46 in \cite{modal}.} By the van Benthem Characterization Theorem, each such translation is equivalent to the other. An intuitive interpretation is that the translated formula in classical logic represents the satisfaction predicate for the proposition semantics of the modal logic, with the \emph{current} world $w$ assigned to the free variable $x$. However, because Sahlqvist formulas are uniform in their proposition letters, we can generalize the translation into monadic second order logic over predicates, one for each proposition letter, and instantiate it in the following way, for every $P$ in $ST(x, \varphi)$:
+\[
+P \rightsquigarrow 
+\begin{cases}
+\lambda u.\bot,& \text{if } ST(x, \varphi) \text{ positive in }P\\
+\lambda u.\top,& \text{if } ST(x, \varphi) \text{ negative in }P
+\end{cases}
+\]
+This produces the smallest valuation of positive propositions and the largest valuation of negative propositions, which by monotonicity of uniform formulas, allow for upward and downward truth preservation respectively. Thus, from a modal formula, a first order formula is derived.
 
+The standard translation is fed into the Sahlqvist-van Benthem algorithm for producing a corresponding frame condition. The algorithm works by abstracting each predicate and yielding a (monadic) second-order formula, and then instantiating each predicate as a lambda function. 
+
+Blackburn \etal\ refer to the translation into monadic second-order\footnote{monadic second order logic is restricted to predicates over sets.} logic as a preprocessing step, in addition to bookkeeping like ensuring that $x$ is not bound, and that no two quantifiers bind the same variable.
 
 The Sahlqvist-van Benthem algorithm is described in the following way.
 
@@ -1161,7 +1173,7 @@ The Sahlqvist-van Benthem algorithm is described in the following way.
 \end{eqnarray}
 where $\gamma(x)$ is a first order sentence with one free variable $x$.
 
-\emph{Step 2.}
+\emph{Step 2.} Instantiate predicates $P(x)$ to functions of the form $\lambda u.u\neq u$.
 
 \begin{lemma}
 	For all frames $\mathtt{F}$, if each \DASL\ axiom schema and its associated first order frame condition hold for $\mathtt{F}$, then $\mathtt{F}$ is a \DASL\ frame,
