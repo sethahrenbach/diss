@@ -1137,7 +1137,7 @@ Of course, this theorem is not in the expected form of $\models \varphi \timplie
 
 In our proof of soundness, we defined a \DASL\ frame as one consisting of reflexivity of $\Kns{i}$, seriality, transitivity, and euclidicity of $\Bels{i}$, partial ordering of $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ (Knowledge implies Belief), and $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ (Evidential Restraint). The soundness proof appealed to lemmas, which we mechanically proved, showing that each frame condition makes one of the axiom schemas valid for that class of frames. Thus, the soundness proof establishes that the first order frame conditions and their associated modal axioms establish one direction of the correspondence proof. What remains is to show that each axiom scheme in \DASL\ implies its associated frame condition. This, combined with the soundness proof's condition to axiom scheme derivation, establishes their equivalence. Therefore they define the same class of frames, and hence they correspond.
 
-Our proof of this direction applies van Benthem's standard translation algorithm, as presented by Blackburn \etal in \cite{modal} in order to yield a second order translation of each \DASL\ axiom schema, and then applies the Sahlqvist-van Benthem algorithm, presented also by \cite{modal}, to derive the corresponding first order formulas.
+Our proof of this direction applies van Benthem's standard translation algorithm, as presented by Blackburn \etal in \cite{modal} in order to yield a second order translation of each \DASL\ axiom schema, and then applies the Sahlqvist-van Benthem algorithm, presented also by \cite{modal}, to derive the corresponding first order formulas. The transformation takes us from a modal formula through monadic second order logic, and applies lambda calculus to transform second order formulas into first order formulas. We do not mechanize all of this machinery, but do provide the important details here.
 
 The Standard Translation algorithm consists of the following recursive rewrite rules.
 
@@ -1150,7 +1150,9 @@ The Standard Translation algorithm consists of the following recursive rewrite r
 	ST(x, \Kns{i}\varphi) &= \forall y,\ \Rel{k}^i(x,y) \Longrightarrow ST(y, \varphi) \\
 	\end{align*}	
 \end{definition}
-The resulting predicate and objects corresponding to modal propositions and variables are arbitrary, and so there are infinitely many standard translations from a modal formula to a first order formula.\footnote{See chapter 2, example 2.46 in \cite{modal}.} By the van Benthem Characterization Theorem, each such translation is equivalent to the other. An intuitive interpretation is that the translated formula in classical logic represents the satisfaction predicate for the proposition semantics of the modal logic, with the \emph{current} world $w$ assigned to the free variable $x$. However, because Sahlqvist formulas are uniform in their proposition letters, we can generalize the translation into monadic second order logic over predicates, one for each proposition letter, and instantiate it in the following way, for every $P$ in $ST(x, \varphi)$:
+The resulting predicate and objects corresponding to modal propositions and variables are arbitrary, and so there are infinitely many standard translations from a modal formula to a first order formula.\footnote{See chapter 2, example 2.46 in \cite{modal}.} By the van Benthem Characterization Theorem, each such translation is equivalent to the other. An intuitive interpretation is that the translated formula in classical logic represents the satisfaction predicate for the proposition semantics of the modal logic, with the \emph{current} world $w$ assigned to the free variable $x$. However, because we quantify over predicates, the resulting formula is second order, and we can instantiate the predicates to minimal valuations. We restrict our quantification over monadic predicates, so that we are limited to monadic second order logic\footnote{monadic second order logic is restricted to predicates over sets.}.
+
+When modal formulas are uniform in their proposition letters (each letter is only positive or only negative), one can universally quantify over translated predicates and instantiate them in the following way, for every $P$ in $ST(x, \varphi)$:
 \[
 P \rightsquigarrow 
 \begin{cases}
@@ -1160,20 +1162,26 @@ P \rightsquigarrow
 \]
 This produces the smallest valuation of positive propositions and the largest valuation of negative propositions, which by monotonicity of uniform formulas, allow for upward and downward truth preservation respectively. Thus, from a modal formula, a first order formula is derived.
 
-The standard translation is fed into the Sahlqvist-van Benthem algorithm for producing a corresponding frame condition. The algorithm works by abstracting each predicate and yielding a (monadic) second-order formula, and then instantiating each predicate as a lambda function. 
-
-Blackburn \etal\ refer to the translation into monadic second-order\footnote{monadic second order logic is restricted to predicates over sets.} logic as a preprocessing step, in addition to bookkeeping like ensuring that $x$ is not bound, and that no two quantifiers bind the same variable.
+Sahlqvist formulas are not necessarily uniform in their propositions, but a similar technique is used to generalize translated predicates into a monadic second order formula, and instantiate them to minimal valuations. The monadic second order standard translation is fed into the Sahlqvist-van Benthem algorithm for producing a corresponding frame condition.
 
 The Sahlqvist-van Benthem algorithm is described in the following way.
 
 \emph{Step 1.} Apply the following equivalences, from left to right, (in this order):
 \begin{eqnarray}
-(\exists x, \gamma(x) \mathtt{\ and\ }\psi )\Longleftrightarrow \exists x, (\gamma(x) \mathtt{\ and\ }\psi)\\
-(\exists x, \gamma(x) \Longrightarrow \psi) \Longleftrightarrow \forall x, (\gamma(x) \Longrightarrow \psi),
+(\exists x, \varPhi(x) \mathtt{\ and\ }\psi )\Longleftrightarrow \exists x, (\varPhi(x) \mathtt{\ and\ }\psi)\\
+(\exists x, \varPhi(x) \Longrightarrow \psi) \Longleftrightarrow \forall x, (\varPhi(x) \Longrightarrow \psi),
 \end{eqnarray}
-where $\gamma(x)$ is a first order sentence with one free variable $x$.
+where $\varPhi(x)$ is a sentence with one free variable $x$.
 
-\emph{Step 2.} Instantiate predicates $P(x)$ to functions of the form $\lambda u.u\neq u$.
+\emph{Step 2.} Construct minimal valuations for each proposition letter instance. Proposition letter instances are converted to predicates over variables. Our intuitive interpretation is that the variables are worlds from the frame. An appropriate lambda function can be created for each predicate such that the smallest frame possible validates it. For a proposition letter $p$ appearing once in a formula, either as an atom or behind a diamond (\emph{e.g. $\BPoss{i}p$}), $\lambda u.u=x$ is created, assuming $x$ is the appropriate variable appearing in second order translation $P(x)$. 
+
+If $p$ appears twice, either as an atom or behind a diamond, each instance appears in the translated sentence in some form like $\exists x_1(\Rel{b}^i(w,x_1) \mathtt{\ and\ } P(x_1))$ (for diamonds) $... \mathtt{\ and\ }P(x_2)$. The lambda function to serve as $P$'s instance is $\lambda u.(u=x_1 \text{\ or\ }u=x_2)$. For more than two appearances as atoms or behind diamonds, this pattern is repeated.
+
+For proposition letters behind boxes (\emph{e.g.} $\Bels{i}p$), lambda functions of the form $\lambda u.(\bigvee_{j=0}^n (\Rel{b}^i(x_j,u)))$ are used, for the number of proposition letters $n$ in the formula. When a proposition letter appears behind boxes and atomically, the atomic instances use the $=$ relation in the lambda function.
+
+\emph{Step 3.} Perform the instantiations. This step substitutes the predicate variables for the minimal valuations constructed in \emph{Step 2}. For example, if $P(x)$ appears in the second order formula, with the minimal valuation substitution $\lambda u.u=x$, the instantiated predicate instance yields the sentence $(\lambda u.u=x_1)(x)$, which beta reduces to $x=x_1$. If the proposition letter instance appears behind a box in the modal formula, \emph{e.g.} $\Bels{i}p$, the second order formula is $\forall y(\Rel{b}^i(x_1, y) \mathtt{\ implies\ }P(y))$ with the lambda function $\lambda u.(\Rel{b}^i(x_1, u))$, which yields the formula  $\forall y(\Rel{b}^i(x_1, y) \mathtt{\ implies\ }\lambda u.(\Rel{b}^i(y, x_1)))(y)$. This beta reduces to $\forall y(\Rel{b}^i(x_1, y) \mathtt{\ implies\ }\Rel{b}^i(x_1, y))$, which is equivalent to $\forall y, \Rel{b}^i(x_1, y)$. For examples, see Blackburn \etal\cite{modal} chapter 3.
+
+The result is a first order logic frame condition corresponding to the axiom schema. We apply this algorithm to each \DASL\ axiom schema and show that it is equivalent to the frame condition used to prove soundness.
 
 \begin{lemma}
 	For all frames $\mathtt{F}$, if each \DASL\ axiom schema and its associated first order frame condition hold for $\mathtt{F}$, then $\mathtt{F}$ is a \DASL\ frame,
