@@ -1190,9 +1190,18 @@ The result is a first order logic frame condition corresponding to the axiom sch
 where \emph{hold} refers to frame validity and metalanguage semantics, respectively.
 \begin{proof}
 	$\\$
+
 	$\Kns{i}p \iimplies p$. Applying the Standard Translation rules yields $\forall P(\forall y,\ \Rel{k}^i(x,y) \Longrightarrow P(y)) \Longrightarrow P(x)$. We have a single predicate with one instance in the antecedent behind a box. This yields the lambda function $\lambda u.(\Rel{k}^i(x,u))$. We substitute this instance of $P$ into the formula to yield:\\
-	$\forall y, ((\Rel{k}^i(x,y)\Longrightarrow \lambda u.(\Rel{k}^i(x,u))(y))\Longrightarrow \lambda u.(\Rel{k}^i(x,u))(x))$, which beta reduces and simplifies to:\\
-	$\forall y, (\Rel{k}^i(x,y)\Longrightarrow \Rel{k}^i(x,x))$.
+	$\forall y, (\Rel{k}^i(x,y)\Longrightarrow \lambda u.(\Rel{k}^i(x,u))(y))\Longrightarrow \lambda u.(\Rel{k}^i(x,u))(x)$, which beta reduces and simplifies to:\\
+	$\forall y, \Rel{k}^i(x,y)\Longrightarrow \Rel{k}^i(x,x)$, which is equivalent to $\Rel{k}^i(x,x)$\footnote{Proof: Assume $\Rel{k}^i(x,x)$. Then by monotonicity, $\forall y,(\Rel{k}^i(x,y) \Longrightarrow \Rel{k}^i(x,x))$. For the other direction, by contraposition, assume $\sim \Rel{k}^i(x,x)$. Then $\exists y, \sim \Rel{k}^i(x,y)$, which is equivalent to $\sim \forall y, \Rel{k}^i(x, y)$}.
+	
+	$\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$. We skip ahead to this more interesting example.
+	\begin{align*}
+		&\rightsquigarrow \forall P,(\forall y,\Rel{b}^i(x,y)\Longrightarrow P(y)) \Longrightarrow (\forall z, (\Rel{k}^i \circ \Rel{b}^k )(x,z) \Longrightarrow P(z)) \\
+		&\rightsquigarrow \forall P,\forall y,z, (\Rel{k}^i \circ \Rel{b}^k )(x,z)\cdot(\Rel{b}^i(x,y)\Longrightarrow P(y)) \Longrightarrow P(z)\\
+		&\rightsquigarrow \forall y,z, (\Rel{k}^i \circ \Rel{b}^k )(x,z)\cdot(\Rel{b}^i(x,y)\Longrightarrow \lambda u. (\Rel{b}^i(x,u))(y)) \Longrightarrow \lambda u.(\Rel{b}^i(x,u)(z)\\
+		&\rightsquigarrow \forall y,z, (\Rel{k}^i \circ \Rel{b}^k )(x,z)\cdot\Rel{b}^i(x,y)\Longrightarrow \Rel{b}^i(x,z)
+	\end{align*}	
 \end{proof}
 
 
