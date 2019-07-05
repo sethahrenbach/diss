@@ -864,21 +864,29 @@ Through similar definitions and lemmas of the remaining frame conditions and axi
 The proof proceeds by instantiating $\mathtt{phi}$, $\mathtt{F}$, $\mathtt{a}$, unfolding the definition of $\mathtt{DASL\_Frame}$ into its constituent frame conditions, and running and induction over $\mathtt{|-- phi}$. The call to $\mathtt{eauto}$ suffices due to each of the helper lemmas added to the $\mathtt{hints}$. We turn now to mechanizing completeness.
 
 \subsection{Completeness}~\label{sec:completeness}
-For completeness, our proof depends on the notion of a Sahlqvist formula, which itself depends on syntactical properties of modal formulas, which we must also define. The completeness proof is only \emph{mostly} mechanized. The overall theme of the proof is to rely on the \emph{Sahlqvist Completeness Theorem} (SCT) of modal logic. 
+For completeness, our proof depends on the notion of a Sahlqvist formula, which itself depends on syntactical properties of modal formulas, which we must also define. The completeness proof is only \emph{mostly} mechanized. The overall theme of the proof is to rely on the \emph{Sahlqvist Completeness Theorem} (SComT) and Sahlqvist Correspondence Theorem (SCorT) of modal logic.
 
-\begin{theorem}[Sahlqvist Completeness Theorem\cite{modal}\footnote{Theorem 4.42 of Chapter 4 in Blackburn \etal.}]
-	Every Sahlqvist formula is canonical for the first-order property it defines. Hence, given a set of Sahlqvist axioms $\Sigma$, the logic $\mathbf{K}\Sigma$ is complete with respect to the class of frames $\mathtt{F}_\Sigma$ (that is, the first-order class of frames defined by $\Sigma$.)
+The SCorT is as follows:
+\begin{theorem}[Sahlqvist Correspondence Theorem\cite{modal}\footnote{Theorem 3.54 of Chapter 3 in Blackburn \etal.}]
+	If $\varphi$ is a Sahlqvist formula, then $\varphi$ corresponds to a first order frame condition $\chi$, and $\chi$ is effectively computable from $\varphi$ via the Sahlqvist-van Benthem algorithm.
 \end{theorem}
 
-This states that every modal formula with a syntactic structure, defined by Sahlqvist, is complete for the class of frames defined by its corresponding first order formula. 
+The SComT is:
+\begin{theorem}[Sahlqvist Completeness Theorem\cite{modal}\footnote{Theorem 4.42 of Chapter 4 in Blackburn \etal.}]
+	Every Sahlqvist formula is canonical for the first-order property it defines. Hence, given a set of Sahlqvist axioms $\Sigma$, the logic $\mathbf{K}\Sigma$ is strongly complete with respect to the class of frames $\mathtt{F}_\Sigma$ (that is, the first-order class of frames defined by $\Sigma$.)
+\end{theorem}
 
-A modal formula $\varphi$ and a first order formula $\chi$ \emph{correspond} when they define the same class of frames, $C$, meaning a frame $F$ belongs to $C$ defined by  $\varphi$ and $\chi$ if and only if $\varphi$ is valid on all $F$-frames and $\chi$ holds in the metalanguage of the semantics for all $F$-frames.
+This states that every modal formula with a syntactic structure, defined by Sahlqvist, is complete for the class of frames defined by its corresponding first order formula. Our completeness proof first mechanically proves that each static axiom schema in \DASL\ (excluding those valid for all normal modal logics) is a Sahlqvist formula. We then apply the Sahlqvist-van Benthem Algorithm to each formula to show that the \DASL\ frames we defined are correspond to the static axiom schemas.
 
-An example might help. Consider the class of reflexive frames. It is defined by the first order property of \emph{reflexivity}, with the first order formula $\forall x,\ Rxx$. A frame for this class consists of a relational structure with a set of worlds $W$ and an accessibility relation $R$. We see that the reflexivity formula holds in the metalanguage when $x$ is drawn from $W$, and $R$ is such that each world accesses itself, but the proof of this requires translation algorithms due to Sahlqvist and van Benthem\cite{modal}. Similarly, we know (from the soundness proof) that the modal formula $\Box\varphi \iimplies \varphi$ is true for all frames with such an accessibility condition. The formulas $\Box\varphi \iimplies \varphi$ and $\forall x,\ Rxx$ correspond to each other.
+%A modal formula $\varphi$ and a first order formula $\chi$ \emph{correspond} when they define the same class of frames, $C$, meaning a frame $F$ belongs to $C$ defined by  $\varphi$ and $\chi$ if and only if $\varphi$ is valid on all $F$-frames and $\chi$ holds in the metalanguage of the semantics for all $F$-frames.
+%
+%An example might help. Consider the class of reflexive frames. It is defined by the first order property of \emph{reflexivity}, with the first order formula $\forall x,\ Rxx$. A frame for this class consists of a relational structure with a set of worlds $W$ and an accessibility relation $R$. We see that the reflexivity formula holds in the metalanguage when $x$ is drawn from $W$, and $R$ is such that each world accesses itself, but the proof of this requires translation algorithms due to Sahlqvist and van Benthem\cite{modal}. Similarly, we know (from the soundness proof) that the modal formula $\Box\varphi \iimplies \varphi$ is true for all frames with such an accessibility condition. The formulas $\Box\varphi \iimplies \varphi$ and $\forall x,\ Rxx$ correspond to each other.
+%
+%The Sahlqvist Completeness Theorem states that if $\Box\varphi \iimplies \varphi$ has certain syntactic properties to be defined shortly, then the basic modal logic $\mathbf{K}$ plus the axiom scheme $\Box\varphi \iimplies \varphi$ is complete with respect to the class of reflexive frames, due to their correspondence.
+%
+%The SComT is so powerful that it suffices to prove that each of our axiom schemas of \DASL's static base is a Sahlqvist formula, and that the associated frame conditions used in the proof of soundness are their first order correspondents. We have mechanized the proof that establishes that the axiom schemas of \DASL\ are such \emph{Sahlqvist formulas}. The proof of correspondence between the axiom schemes and their first order counterparts is partially mechanized during the proof of soundness. We prove the remaining correspondence direction by hand below. We begin this section by defining a Sahlqvist formula's syntatic characteristics, and provide our mechanization of them in Coq.
 
-The Sahlqvist Completeness Theorem states that if $\Box\varphi \iimplies \varphi$ has certain syntactic properties to be defined shortly, then the basic modal logic $\mathbf{K}$ plus the axiom scheme $\Box\varphi \iimplies \varphi$ is complete with respect to the class of reflexive frames, due to their correspondence.
-
-The SCT is so powerful that it suffices to prove that each of our axiom schemas of \DASL's static base is a Sahlqvist formula, and that the associated frame conditions used in the proof of soundness are their first order correspondents. We have mechanized the proof that establishes that the axiom schemas of \DASL\ are such \emph{Sahlqvist formulas}. The proof of correspondence between the axiom schemes and their first order counterparts is partially mechanized during the proof of soundness. We prove the remaining correspondence direction by hand below. We begin this section by defining a Sahlqvist formula's syntatic characteristics, and provide our mechanization of them in Coq.
+We first explain what a Sahlqvist formula is. A Sahlqvist formula is composed of Sahlqvist implications combined in a manner to be described later.
 
 A \emph{Sahlqvist implication} is a formula with a \emph{Sahlqvist antecedent} and a \emph{positive consequent}.
 
@@ -1070,7 +1078,7 @@ Fixpoint sahlqvist_formula (phi : schema) : Prop :=
 	\end{lstlisting}
 \end{tcolorbox}
  
-For completeness, it suffices to show that each static \DASL\ axiom schema is a Sahlqvist formula. Because in our soundess proof we mechanically proved that the \DASL\ frame conditions correspond to the axiom schemas of \DASL, and because this correspondence consists of unique pairs per the theorem, it follows that those frame conditions are the ones for which the axioms schemas are complete.
+For completeness, we must show that each static \DASL\ axiom schema is a Sahlqvist formula. The SComT allows us to prove \DASL\ is complete with respect to a class of frames corresponding to the axiom schemas, and by the SCorT it holds that this class of frames is effectively computable by the Sahlqvist-van Benthem Algorithm. So, if we prove that each static axiom schema is a Sahlqvist formula, and use the Salqvist-van Benthem algorithm to show that the frame conditions for which \DASL\ is complete are indeed the \DASL\ frame conditions we have defined, it follows that those frame conditions are the ones for which the axioms schemas are complete.
 
 %In order to make use of Theorem \ref{thm:sahlqvist}, we characterize the Negative Belief Introspection axiom as the equivalent contrapositive $\BPoss{i}\Bels{i}\varphi \iimplies \Bels{i}\varphi$, as in below:
 
@@ -1133,11 +1141,15 @@ Theorem DASL_Axioms_Complete : forall (p q r : prop) (a : DASL.Agents),
 	\end{lstlisting}
 \end{tcolorbox}
 
-Of course, this theorem is not in the expected form of $\models \varphi \timplies \vdash \varphi$, and in fact we have only mechanized the proof that \DASL\ is complete with respect to \emph{some} set of frame relations. To show that \DASL\ is complete with respect to the very same relations as those for which we proved soundness, we refer back to the definition of \emph{correspondence}. 
+We have only mechanized the proof that \DASL\ is complete with respect to \emph{some} set of frame relations. To show that \DASL\ is complete with respect to the very same relations as those for which we proved soundness, we apply the Sahlqvist-van Benthem Algorithm, which takes a starting point . 
 
-In our proof of soundness, we defined a \DASL\ frame as one consisting of reflexivity of $\Kns{i}$, seriality, transitivity, and euclidicity of $\Bels{i}$, partial ordering of $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ (Knowledge implies Belief), and $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ (Evidential Restraint). The soundness proof appealed to lemmas, which we mechanically proved, showing that each frame condition makes one of the axiom schemas valid for that class of frames. Thus, the soundness proof establishes that the first order frame conditions and their associated modal axioms establish one direction of the correspondence proof. What remains is to show that each axiom scheme in \DASL\ implies its associated frame condition. This, combined with the soundness proof's condition to axiom scheme derivation, establishes their model equivalence. Therefore they define the same class of frames, and hence they correspond.
+%In our proof of soundness, we defined a \DASL\ frame as one consisting of reflexivity of $\Kns{i}$, seriality, transitivity, and euclidicity of $\Bels{i}$, partial ordering of $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ (Knowledge implies Belief), and $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ (Evidential Restraint). The soundness proof appealed to lemmas, which we mechanically proved, showing that each frame condition makes one of the axiom schemas valid for that class of frames. Thus, the soundness proof establishes that the first order frame conditions and their associated modal axioms establish one direction of the correspondence proof. What remains is to show that each axiom scheme in \DASL\ implies its associated frame condition. This, combined with the soundness proof's condition to axiom scheme derivation, establishes their model equivalence. Therefore they define the same class of frames, and hence they correspond.
 
-Our proof of this direction applies van Benthem's standard translation algorithm, as presented by Blackburn \etal in \cite{modal} in order to yield a second order translation of each \DASL\ axiom schema, and then applies the Sahlqvist-van Benthem algorithm, presented also by \cite{modal}, to derive the corresponding first order formulas. The transformation takes us from a modal formula through monadic second order logic, and applies lambda calculus to transform second order formulas into first order formulas. We do not mechanize all of this machinery, but do provide the important details here.
+Our proof continues by applying van Benthem's standard translation algorithm, as presented by Blackburn \etal in \cite{modal} in order to yield a second order translation of each \DASL\ axiom schema, and then applies the Sahlqvist-van Benthem algorithm, presented also by \cite{modal}, to derive the corresponding first order formulas. The transformation takes us from a modal formula through monadic second order logic, and applies lambda calculus to transform second order formulas into first order formulas. We do not mechanize all of this machinery, but do provide the important details here.
+
+The Salqvist-van Benthem Algorithm translates a modal logic formula into a first order frame condition. It does so by first applying the standard translation of a modal formula $ST(\varphi)$ to generate a second order logic formula, and then applying some choice generalizations and instantiations of predicates in order to produce a minimal valuation satisfying the formula's antecedent. Monotonicity results preserve validity from the minimal valuation to all expansions of it. Thus, the result is the smallest first order formula defining a class of frames that can be expanded by any valuation function.
+
+We proceed by describing the Standard Translation as an inductive function, and then applying it to the static \DASL\ axiom schemas.
 
 The Standard Translation algorithm consists of the following recursive rewrite rules.
 
@@ -1152,17 +1164,19 @@ The Standard Translation algorithm consists of the following recursive rewrite r
 \end{definition}
 The resulting predicate and objects corresponding to modal propositions and variables are arbitrary, and so there are infinitely many standard translations from a modal formula to a first order formula.\footnote{See chapter 2, example 2.46 in \cite{modal}.} By the van Benthem Characterization Theorem, each such translation is equivalent to the other. An intuitive interpretation is that the translated formula in classical logic represents the satisfaction predicate for the proposition semantics of the modal logic, with the \emph{current} world $w$ assigned to the free variable $x$. However, because we quantify over predicates, the resulting formula is second order, and we can instantiate the predicates to minimal valuations. We restrict our quantification over monadic predicates, so that we are limited to monadic second order logic\footnote{monadic second order logic is restricted to predicates over sets.}.
 
-When modal formulas are uniform in their proposition letters (each letter is only positive or only negative), one can universally quantify over translated predicates and instantiate them in the following way, for every $P$ in $ST(x, \varphi)$:
-\[
-P \rightsquigarrow 
-\begin{cases}
-\lambda u.\bot,& \text{if } ST(x, \varphi) \text{ positive in }P\\
-\lambda u.\top,& \text{if } ST(x, \varphi) \text{ negative in }P
-\end{cases}
-\]
-This produces the smallest valuation of positive propositions and the largest valuation of negative propositions, which by monotonicity of uniform formulas, allow for upward and downward truth preservation respectively. Thus, from a modal formula, a first order formula is derived.
+%When modal formulas are uniform in their proposition letters (each letter is only positive or only negative), one can universally quantify over translated predicates and instantiate them in the following way, for every $P$ in $ST(x, \varphi)$:
+%\[
+%P \rightsquigarrow 
+%\begin{cases}
+%\lambda u.\bot,& \text{if } ST(x, \varphi) \text{ positive in }P\\
+%\lambda u.\top,& \text{if } ST(x, \varphi) \text{ negative in }P
+%\end{cases}
+%\]
+%This produces the smallest valuation of positive propositions and the largest valuation of negative propositions, which by monotonicity of uniform formulas, allow for upward and downward truth preservation respectively. Thus, from a modal formula, a first order formula is derived.
+%
+%Sahlqvist formulas are not necessarily uniform in their propositions, but a similar technique is used to generalize translated predicates into a monadic second order formula, and instantiate them to minimal valuations. 
 
-Sahlqvist formulas are not necessarily uniform in their propositions, but a similar technique is used to generalize translated predicates into a monadic second order formula, and instantiate them to minimal valuations. The monadic second order standard translation is fed into the Sahlqvist-van Benthem algorithm for producing a corresponding frame condition.
+The monadic second order standard translation is fed into the Sahlqvist-van Benthem algorithm for producing a corresponding frame condition.
 
 The Sahlqvist-van Benthem algorithm is described in the following way.
 
@@ -1173,21 +1187,24 @@ The Sahlqvist-van Benthem algorithm is described in the following way.
 \end{eqnarray}
 where $\varPhi(x)$ is a sentence with one free variable $x$.
 
-\emph{Step 2.} Construct minimal valuations. For each proposition letter instance in the formula's antecedent, select a minimal valuation that makes the antecedent true, then combine them as a lambda function over a disjunction of them. Proposition letter instances are converted to predicates over variables. The resulting formula will quantify over these variables, so they must be distinct from the free variable in the standard translation. Our intuitive interpretation is that the variables are worlds from the frame. An appropriate lambda function can be created for each predicate such that the smallest frame possible validates it. For a proposition letter $p$ appearing once in a formula, either as an atom or behind a diamond (\emph{e.g. $\BPoss{i}p$}), $\lambda u.u=x_1$ is created, assuming $x_1$ is the bound variable appearing in second order translation $\forall P,\forall x_1,(\Rel{b}^i(x,x_1)\cdot P(x_1))$. 
+\emph{Step 2.} Construct minimal valuations. For each proposition letter instance in the formula's antecedent, select a minimal valuation that makes the antecedent true. The resulting formula will quantify over these variables, so they must be distinct from the free variable in the standard translation. Our intuitive interpretation is that the variables are worlds from the frame. An appropriate lambda function can be created for each predicate such that the smallest frame possible validates it.
+
+For a proposition letter $p$ appearing once in a formula's antecedent, either as an atom or behind a diamond, $\lambda u.u=x$ is the minimal valuation satisfying it.
+
+For example, in the formula $p \iimplies \BPoss{i}p$, $p$ appears once in the antecedent. The Standard Translation yields $\forall P, (P(x) \Longrightarrow \exists y, (\Rel{b}^i(x,y) \cdot P(y)))$. We instantiate $P$ using the above lambda function, and use beta reduction to simplify, yielding $x=x \Longrightarrow \exists y, (\Rel{b}^i(x,y)\cdot y=x)$.
 
 If $p$ appears twice in the antecedent, either as an atom or behind a diamond, each instance appears in the translated sentence in some form like $\exists x_1(\Rel{b}^i(w,x_1) \cdot P(x_1))$ (for diamonds) $... \cdot P(x_2)$. The lambda function to serve as $P$'s instance is $\lambda u.(u=x_1 + u=x_2)$. For more than two appearances as atoms or behind diamonds, this pattern is repeated.
 
 For proposition letters behind boxes (\emph{e.g.} $\Bels{i}p$), lambda functions of the form $\lambda u.(\bigvee_{j=0}^n (\Rel{b}^i(x_j,u)))$ are used, for the number of proposition letters $n$ in the formula. When a proposition letter appears behind boxes and atomically, the atomic instances use the $=$ relation in the lambda function.
 
-\emph{Step 3.} Perform the instantiations. This step substitutes the predicate variables for the minimal valuations constructed in \emph{Step 2}. For example, if $P(x_1)$ appears in the second order formula's antecedent as a singular instance of $P$, with the minimal valuation substitution $\lambda u.u=x_1$, the instantiated predicate instance yields the sentence $(\lambda u.u=x_1)(x_1)$, which beta reduces to $x+1=x_1$. If the proposition letter instance appears behind a box in the modal formula, \emph{e.g.} $\Bels{i}p$, the second order formula is $\forall y(\Rel{b}^i(x_1, y) \Longrightarrow P(y))$ with the lambda function $\lambda u.(\Rel{b}^i(x_1, u))$, which yields the formula  $\forall y(\Rel{b}^i(x_1, y) \Longrightarrow \lambda u.(\Rel{b}^i(y, x_1)))(y)$. This beta reduces to $\forall y(\Rel{b}^i(x_1, y) \Longrightarrow \Rel{b}^i(x_1, y))$, which is equivalent to $\forall y, \Rel{b}^i(x_1, y)$. For examples, see Blackburn \etal\cite{modal} chapter 3.
+\emph{Step 3.} Perform the instantiations. This step substitutes the predicate variables for the minimal valuations constructed in \emph{Step 2}. For example, if $P(x)$ appears in the second order formula's antecedent as a singular instance of $P$, with the minimal valuation substitution $\lambda u.u=x$, the instantiated predicate instance yields the sentence $(\lambda u.u=x)(x)$, which beta reduces to $x=x$. If the proposition letter instance appears behind a box in the modal formula, \emph{e.g.} $\Bels{i}p$, the second order formula is $\forall y(\Rel{b}^i(x, y) \Longrightarrow P(y))$ with the lambda function $\lambda u.(\Rel{b}^i(x, u))$, which yields the formula  $\forall y(\Rel{b}^i(x, y) \Longrightarrow \lambda u.(\Rel{b}^i(x, u)))(y)$. This beta reduces to $\forall y(\Rel{b}^i(x, y) \Longrightarrow \Rel{b}^i(x, y))$, which is equivalent to $\forall y, \Rel{b}^i(x, y)$. For more examples, see Blackburn \etal\cite{modal} chapter 3.
 
-The result is a first order logic frame condition corresponding to the axiom schema. We apply this algorithm to each \DASL\ axiom schema and show that it is equivalent to the frame condition used to prove soundness.
+The result is a first order logic frame condition corresponding to the axiom schema. We apply this algorithm to each \DASL\ axiom schema and show that it is equivalent to a frame condition comprising \DASL\ frames.
 
 \begin{lemma}[Schema to First Order Frame Condition Correspondence]\label{schema_to_frame}
-	For all frames $\mathtt{F}$, if each \DASL\ axiom schema and its associated first order frame condition hold for $\mathtt{F}$, then $\mathtt{F}$ is a \DASL\ frame,
+	Each static \DASL\ axiom schema corresponds to a first order frame condition for \DASL\ frames.
 \end{lemma}
 
-where \emph{hold} refers to frame validity and metalanguage semantics, respectively.
 \begin{proof} We must show a translation from the following axiom schemas to the appropriate first order frame conditions:
 	\begin{enumerate}
 		\item $\Kns{i}\varphi \iimplies \varphi$
@@ -1231,13 +1248,13 @@ where \emph{hold} refers to frame validity and metalanguage semantics, respectiv
 	which is the frame condition for Knowledge implies Belief.
 \end{proof}
 
-Lemma \ref{schema_to_frame}, in conjunction with the proof of soundness, prove that the modal axiom schemas of \DASL\ correspond to the first order frame conditions of \DASL\ frames. By the SCT, this suffices to show that \DASL\ is complete for \DASL\ frames as we have defined them.
+Lemma \ref{schema_to_frame}, in conjunction with the proof that each static \DASL\ axiom schema is a Sahlqvist formula, prove that \DASL\ is complete for \DASL\ frames as we have defined them.
 
 \begin{theorem}[\DASL\ complete on \DASL\ frames]\label{completeness}
 	If $\mathtt{F}$ is a \DASL\ frame, then $\mathtt{F}\models \varphi$ implies $\vdash \varphi$ in \DASL.
 \end{theorem}
 \begin{proof}
-	By the SCT, \DASL\ is complete with respect to the class of frames its axiom schemas define. By the proof of soundness, \DASL\ frame conditions each imply an axiom schema validity, and by the Sahlqvist-van Benthem algorith, each axiom schema translates to the corresponding frame condition. Therefore, the first order frame conditions and axiom schemas correspond. Therefore, the axiom schemas define the \DASL\ frame conditions. Thus, \DASL\ is complete with respect to the \DASL\ class of frames.
+	By the SComT, \DASL\ is complete with respect to the class of frames its axiom schemas define. We mechanically proved that each static \DASL\ schema is a Sahlqvist formula, which from SCorT it follows that each axiom schema corresponds to a first order frame condition. By the Sahlqvist-van Benthem algorithm, each axiom schema translates to a corresponding \DASL\ frame condition. Therefore, the axiom schemas define the \DASL\ frame conditions. Thus, \DASL\ is complete with respect to the \DASL\ class of frames.
 \end{proof}
 %must appeal to a theorem that we have not mechanized, presented in Blackburn \etal\cite{modal}. In it, they present the theorem,
 %
@@ -1266,7 +1283,9 @@ Lemma \ref{schema_to_frame}, in conjunction with the proof of soundness, prove t
 %Qed.
 %	\end{lstlisting}
 %\end{tcolorbox}
+This concludes our discussion of completeness. We include some additional discussion of our mechanization in the next section. 
 
+\section{Discussion}
 To help validate our mechanization of the $\mathtt{sahlqvist\_formula}$ function in Coq, we run it against some modal formulas whose status as Sahlqvist formulas, in the positive and negative cases, is known.
 
 L\'ob's formula $\Box(\Box \varphi \iimplies \varphi) \iimplies \Box \varphi$, the characteristic axiom of provability logic, is not a Sahlqvist formula, and lacks a first order correspondent\cite{Boolos}.
