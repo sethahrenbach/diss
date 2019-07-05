@@ -698,12 +698,12 @@ We begin this section with the soundness proof, and follow up with the completen
 
 \subsection{Soundness}~\label{sec:soundness}
 
-A logic has the property of soundness \emph{if and only if} all of its derivable theorems are valid in its model theory. \DASL's model theory is the class of relational frames with two binary relations for each agent $i$, $\Rel{k}^i$ and $\Rel{b}^i$, defined over possible worlds. The $\Rel{k}^i$ relations are reflexive, and the $\Rel{b}^i$ relations are serial, euclidean, subsets of $\Rel{k}^i$, and subsets of $(\Rel{k}^i \circ \Rel{b}^i)$. Any formula satisfied by all models of this class of frames, no matter the valuation assignment of propositional variables, is a valid formula. Thus, to show that \DASL is sound is to show that all of its theorems are satisfied by all such models.
+A logic has the property of soundness \emph{if and only if} all of its derivable theorems are valid in its model theory. \DASL's model theory is the class of relational frames with two binary relations for each agent $i$, $\Rel{k}^i$ and $\Rel{b}^i$, defined over possible worlds. The $\Rel{k}^i$ relations are reflexive, and the $\Rel{b}^i$ relations are serial, euclidean, and supersets of $\Rel{k}^i$, and of $(\Rel{k}^i \circ \Rel{b}^i)$. Any formula satisfied by all models of this class of frames, no matter the valuation assignment of propositional variables, is a valid formula. Thus, to show that \DASL is sound is to show that all of its theorems are satisfied by all such models.
 
 Formally, this amounts to:
 
 \begin{theorem}[Soundness]
-	Dynamic Agent Safety Logic is sound for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, $(\Rel{b}^i \circ \Rel{k}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$.
+	Dynamic Agent Safety Logic is sound for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$.
 \end{theorem}
 
 In order to formalize this in Coq for mechanical proof checking, we must define the notions of a frame, model, proposition, and theorem. We follow the Master's thesis of Paulien De Wind \cite{dewind} for the model theory mechanization and the works of Lescanne and Puiss\'egur \cite{lescanne, puislescanne} and Malikovi\'c and \v Cubrilo \cite{delcoq1, delcoq2} in setting up the proof theory.
@@ -861,7 +861,7 @@ Through similar definitions and lemmas of the remaining frame conditions and axi
 	
 \end{tcolorbox}
 
-The proof proceeds by instantiating $\mathtt{phi}$, $\mathtt{F}$, $\mathtt{a}$, unfolding the definition of $\mathtt{DASL\_Frame}$ into its constituent frame conditions, and running and induction over $\mathtt{|-- phi}$. The call to $\mathtt{eauto}$ suffices due to each of the helper lemmas added to the $\mathtt{hints}$. We turn now to mechanizing completenss.
+The proof proceeds by instantiating $\mathtt{phi}$, $\mathtt{F}$, $\mathtt{a}$, unfolding the definition of $\mathtt{DASL\_Frame}$ into its constituent frame conditions, and running and induction over $\mathtt{|-- phi}$. The call to $\mathtt{eauto}$ suffices due to each of the helper lemmas added to the $\mathtt{hints}$. We turn now to mechanizing completeness.
 
 \subsection{Completeness}~\label{sec:completeness}
 For completeness, our proof depends on the notion of a Sahlqvist formula, which itself depends on syntactical properties of modal formulas, which we must also define. The completeness proof is only \emph{mostly} mechanized. The overall theme of the proof is to rely on the \emph{Sahlqvist Completeness Theorem} (SCT) of modal logic. 
@@ -878,7 +878,7 @@ An example might help. Consider the class of reflexive frames. It is defined by 
 
 The Sahlqvist Completeness Theorem states that if $\Box\varphi \iimplies \varphi$ has certain syntactic properties to be defined shortly, then the basic modal logic $\mathbf{K}$ plus the axiom scheme $\Box\varphi \iimplies \varphi$ is complete with respect to the class of reflexive frames, due to their correspondence.
 
-The SCT is so powerful that it suffices to prove that each of our axiom schemas of \DASL's static base is a Sahlqvist formula, and that the associated frame conditions used in the proof of soundness are their first order correspondents. We have mechanized the proof that establishes that the axiom schemas of \DASL\ are such \emph{Sahlqvist formulas}. The proof of correspondence between the axiom schemes and their first order counterparts is partially mechanized during the proof of soundness. In what follows we define a Sahlqvist formula's syntatic characteristics, and provide our mechanization of them in Coq.
+The SCT is so powerful that it suffices to prove that each of our axiom schemas of \DASL's static base is a Sahlqvist formula, and that the associated frame conditions used in the proof of soundness are their first order correspondents. We have mechanized the proof that establishes that the axiom schemas of \DASL\ are such \emph{Sahlqvist formulas}. The proof of correspondence between the axiom schemes and their first order counterparts is partially mechanized during the proof of soundness. We prove the remaining correspondence direction by hand below. We begin this section by defining a Sahlqvist formula's syntatic characteristics, and provide our mechanization of them in Coq.
 
 A \emph{Sahlqvist implication} is a formula with a \emph{Sahlqvist antecedent} and a \emph{positive consequent}.
 
@@ -1133,9 +1133,9 @@ Theorem DASL_Axioms_Complete : forall (p q r : prop) (a : DASL.Agents),
 	\end{lstlisting}
 \end{tcolorbox}
 
-Of course, this theorem is not in the expected form of $\models \varphi \timplies \vDash \varphi$, and in fact we have only mechanized the proof that \DASL\ is complete with respect to \emph{some} set of frame relations. To show that \DASL\ is complete with respect to the very same relations as those for which we proved soundness, we refer back to the definition of \emph{correspondence}. 
+Of course, this theorem is not in the expected form of $\models \varphi \timplies \vdash \varphi$, and in fact we have only mechanized the proof that \DASL\ is complete with respect to \emph{some} set of frame relations. To show that \DASL\ is complete with respect to the very same relations as those for which we proved soundness, we refer back to the definition of \emph{correspondence}. 
 
-In our proof of soundness, we defined a \DASL\ frame as one consisting of reflexivity of $\Kns{i}$, seriality, transitivity, and euclidicity of $\Bels{i}$, partial ordering of $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ (Knowledge implies Belief), and $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ (Evidential Restraint). The soundness proof appealed to lemmas, which we mechanically proved, showing that each frame condition makes one of the axiom schemas valid for that class of frames. Thus, the soundness proof establishes that the first order frame conditions and their associated modal axioms establish one direction of the correspondence proof. What remains is to show that each axiom scheme in \DASL\ implies its associated frame condition. This, combined with the soundness proof's condition to axiom scheme derivation, establishes their equivalence. Therefore they define the same class of frames, and hence they correspond.
+In our proof of soundness, we defined a \DASL\ frame as one consisting of reflexivity of $\Kns{i}$, seriality, transitivity, and euclidicity of $\Bels{i}$, partial ordering of $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ (Knowledge implies Belief), and $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ (Evidential Restraint). The soundness proof appealed to lemmas, which we mechanically proved, showing that each frame condition makes one of the axiom schemas valid for that class of frames. Thus, the soundness proof establishes that the first order frame conditions and their associated modal axioms establish one direction of the correspondence proof. What remains is to show that each axiom scheme in \DASL\ implies its associated frame condition. This, combined with the soundness proof's condition to axiom scheme derivation, establishes their model equivalence. Therefore they define the same class of frames, and hence they correspond.
 
 Our proof of this direction applies van Benthem's standard translation algorithm, as presented by Blackburn \etal in \cite{modal} in order to yield a second order translation of each \DASL\ axiom schema, and then applies the Sahlqvist-van Benthem algorithm, presented also by \cite{modal}, to derive the corresponding first order formulas. The transformation takes us from a modal formula through monadic second order logic, and applies lambda calculus to transform second order formulas into first order formulas. We do not mechanize all of this machinery, but do provide the important details here.
 
@@ -1166,7 +1166,7 @@ Sahlqvist formulas are not necessarily uniform in their propositions, but a simi
 
 The Sahlqvist-van Benthem algorithm is described in the following way.
 
-\emph{Step 1.} Apply the following equivalences, from left to right, (in this order):
+\emph{Step 1.} Apply the following equivalences, from left to right, to the antecedent (in this order):
 \begin{eqnarray}
 (\exists x, \varPhi(x) \cdot\psi )\Longleftrightarrow \exists x, (\varPhi(x) \cdot\psi)\\
 (\exists x, \varPhi(x) \Longrightarrow \psi) \Longleftrightarrow \forall x, (\varPhi(x) \Longrightarrow \psi),
@@ -1183,13 +1183,18 @@ For proposition letters behind boxes (\emph{e.g.} $\Bels{i}p$), lambda functions
 
 The result is a first order logic frame condition corresponding to the axiom schema. We apply this algorithm to each \DASL\ axiom schema and show that it is equivalent to the frame condition used to prove soundness.
 
-\begin{lemma}
+\begin{lemma}[Schema to First Order Frame Condition Correspondence]\label{schema_to_frame}
 	For all frames $\mathtt{F}$, if each \DASL\ axiom schema and its associated first order frame condition hold for $\mathtt{F}$, then $\mathtt{F}$ is a \DASL\ frame,
 \end{lemma}
 
 where \emph{hold} refers to frame validity and metalanguage semantics, respectively.
-\begin{proof}
-	$\\$
+\begin{proof} We must show a translation from the following axiom schemas to the appropriate first order frame conditions:
+	\begin{enumerate}
+		\item $\Kns{i}\varphi \iimplies \varphi$
+		\item $\Bels{i}\varphi \iimplies \BPoss{i}\varphi$
+		\item $\Kns{i}\varphi \iimplies \Bels{i}\varphi$
+		\item $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$
+	\end{enumerate}
 
 	$\Kns{i}p \iimplies p$. Applying the Standard Translation rules yields $\forall P(\forall y,\ \Rel{k}^i(x,y) \Longrightarrow P(y)) \Longrightarrow P(x)$. We have a single predicate with one instance in the antecedent behind a box. This yields the lambda function $\lambda u.(\Rel{k}^i(x,u))$. We substitute this instance of $P$ into the formula to yield:\\
 	$\forall y, (\Rel{k}^i(x,y)\Longrightarrow \lambda u.(\Rel{k}^i(x,u))(y))\Longrightarrow \lambda u.(\Rel{k}^i(x,u))(x)$, which beta reduces and simplifies to:\\
@@ -1202,9 +1207,38 @@ where \emph{hold} refers to frame validity and metalanguage semantics, respectiv
 		&\rightsquigarrow \forall y,z, (\Rel{k}^i \circ \Rel{b}^k )(x,z)\cdot(\Rel{b}^i(x,y)\Longrightarrow \lambda u. (\Rel{b}^i(x,u))(y)) \Longrightarrow \lambda u.(\Rel{b}^i(x,u)(z)\\
 		&\rightsquigarrow \forall y,z, (\Rel{k}^i \circ \Rel{b}^k )(x,z)\cdot\Rel{b}^i(x,y)\Longrightarrow \Rel{b}^i(x,z)
 	\end{align*}	
+	$\forall z,(\Rel{k}^i \circ \Rel{b}^k )(x,z)$ is equivalent to $\forall z,z', \Rel{b}^i(x,z') \cdot \Rel{k}^i(z',z)$. 
+	Thus, the above translation simplifies to
+	$\forall z, (\Rel{k}^i \circ \Rel{b}^k )(x,z) \Longrightarrow \Rel{b}^i(x,z)$, which is the subset relation of the frame condition.\footnote{Because $\forall y,z,z', \Rel{b}^i(x,y)\cdot\Rel{b}(x,z')\cdot\Rel{k}(z',z)$ can rewrite $z'$ with $y$ and simplify to $\Rel{b}^i(x,y)\cdot\Rel{k}^i(y,z)$.}
+	
+	$\Bels{i}\varphi \iimplies \BPoss{i}\varphi$.
+	\begin{align*}
+		&\rightsquigarrow \forall P,y, (\Rel{b}^i(x,y)\Longrightarrow P(y)) \Longrightarrow \exists z, (\Rel{b}^i(x,z)\cdot P(z))\\
+		&\rightsquigarrow \forall y, (\Rel{b}^i(x,y)\Longrightarrow \lambda u.(\Rel{b}^i(x,u))(y)) \Longrightarrow \exists z, (\Rel{b}^i(x,z)\cdot \lambda u.(\Rel{b}^i(x,u))(z))\\
+		&\rightsquigarrow \forall y, (\Rel{b}^i(x,y)) \Longrightarrow \exists z, (\Rel{b}^i(x,z))		
+	\end{align*}
+	which is equivalent to frame condition for seriality.\footnote{In one direction by monotonicity, in the other by instantiating the consequent and then the antecedent, and then existentially generalizing.}
+	
+	$\Kns{i}\varphi \iimplies \Bels{i}\varphi$.
+	\begin{align*}
+		&\rightsquigarrow \forall P, y, (\Rel{k}^i(x,y) \Longrightarrow P(y)) \Longrightarrow \forall z, (\Rel{b}^i(x,z) \Longrightarrow P(z))\\
+		&\rightsquigarrow \forall y, (\Rel{k}^i (x,y) \Longrightarrow \lambda u.(\Rel{k}^i(x,u))(y))\Longrightarrow \forall z, (\Rel{b}^i (x,z) \Longrightarrow \lambda u. (\Rel{b}^i(x, u))(z))\\
+		&\rightsquigarrow \forall y, (\Rel{k}^i(x,y)) \Longrightarrow \forall z, (\Rel{b}^i(x,z) \Longrightarrow \Rel{k}^i(x,z))\\
+		&\equiv \forall y,z,  (\Rel{k}^i(x,y)\Longrightarrow\Rel{b}^i(x,z)\Longrightarrow\Rel{k}^i(x,z))\\
+		&\equiv \forall y,z, (\Rel{k}^i(x,y)\cdot\Rel{b}^i(x,z) \Longrightarrow \Rel{k}^i(x,z))\\
+		&\equiv \forall z, (\Rel{b}^i(x,z)\Longrightarrow\Rel{k}^i(x,z))\footnote{By monotonicity in one direction and intstantiation followed by generalization in the other.}
+	\end{align*}
+	which is the frame condition for Knowledge implies Belief.
 \end{proof}
 
+Lemma \ref{schema_to_frame}, in conjunction with the proof of soundness, prove that the modal axiom schemas of \DASL\ correspond to the first order frame conditions of \DASL\ frames. By the SCT, this suffices to show that \DASL\ is complete for \DASL\ frames as we have defined them.
 
+\begin{theorem}[\DASL\ complete on \DASL\ frames]\label{completeness}
+	If $\mathtt{F}$ is a \DASL\ frame, then $\mathtt{F}\models \varphi$ implies $\vdash \varphi$ in \DASL.
+\end{theorem}
+\begin{proof}
+	By the SCT, \DASL\ is complete with respect to the class of frames its axiom schemas define. By the proof of soundness, \DASL\ frame conditions each imply an axiom schema validity, and by the Sahlqvist-van Benthem algorith, each axiom schema translates to the corresponding frame condition. Therefore, the first order frame conditions and axiom schemas correspond. Therefore, the axiom schemas define the \DASL\ frame conditions. Thus, \DASL\ is complete with respect to the \DASL\ class of frames.
+\end{proof}
 %must appeal to a theorem that we have not mechanized, presented in Blackburn \etal\cite{modal}. In it, they present the theorem,
 %
 %\begin{theorem}[Correspondence of Sahlqvist Formula to First Order Relation]\label{thm:correspondence}
@@ -1214,22 +1248,24 @@ where \emph{hold} refers to frame validity and metalanguage semantics, respectiv
 %	The former claim follows from the latter. See \cite{modal} chapter 3 for details on the algorithm.
 %\end{proof}
 
-Since $c_\chi(x)$ defines the frame, $\chi$ is valid for that class of frames. So, by our proof of soundess where we show that the corresponding modal formulas are sound for their corresponding first order frame conditions, we can infer that these are the frame conditions for which the \DASL\ axioms are complete via the Sahlqvist theorem (\ref{thm:sahlqvist}). We leave the mechanization of these steps to future work. However, we do mechanize the preservation of completeness from $\mathtt{schema}$s to $\mathtt{prop}$s:
+%Since $c_\chi(x)$ defines the frame, $\chi$ is valid for that class of frames. So, by our proof of soundess where we show that the corresponding modal formulas are sound for their corresponding first order frame conditions, we can infer that these are the frame conditions for which the \DASL\ axioms are complete via the Sahlqvist theorem (\ref{thm:sahlqvist}). We leave the mechanization of these steps to future work. However, 
 
-\begin{tcolorbox}
-	\begin{lstlisting}[language=Coq]
-Lemma schema_to_prop_completeness : forall (phi : schema),
-	|s- phi ->
-	|-- schema_to_prop phi.
-Proof.
-	intros.
-	induction H; simpl; try constructor.
-	simpl in IHStheorem1.
-	simpl in IHStheorem2. pose proof MP p q IHStheorem1; auto.
-	simpl in IHStheorem; auto.
-Qed.
-	\end{lstlisting}
-\end{tcolorbox}
+%We mechanize the preservation of completeness from $\mathtt{schema}$s to $\mathtt{prop}$s:
+%
+%\begin{tcolorbox}
+%	\begin{lstlisting}[language=Coq]
+%Lemma schema_to_prop_completeness : forall (phi : schema),
+%	|s- phi ->
+%	|-- schema_to_prop phi.
+%Proof.
+%	intros.
+%	induction H; simpl; try constructor.
+%	simpl in IHStheorem1.
+%	simpl in IHStheorem2. pose proof MP p q IHStheorem1; auto.
+%	simpl in IHStheorem; auto.
+%Qed.
+%	\end{lstlisting}
+%\end{tcolorbox}
 
 To help validate our mechanization of the $\mathtt{sahlqvist\_formula}$ function in Coq, we run it against some modal formulas whose status as Sahlqvist formulas, in the positive and negative cases, is known.
 
