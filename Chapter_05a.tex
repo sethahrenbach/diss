@@ -305,13 +305,18 @@ Absent one of the three L\"ob Conditions, L\"ob's Theorem cannot be derived. Thu
 
 One might wonder whether it would be acceptable to abandon the Truth Axiom for knowledge and allow L\"ob's Theorem to hold for the knowledge operator in a way that avoids inconsistency. This would introduce more modesty to the notion of knowledge, where a human-like agent knows that her knowledge is true only for those propositions that she actually knows, but not in the general sense.\footnote{Smullyan referred to such agents as modest agents, for they are confident in the accuracy only of particular beliefs that they have good reasons (proofs) for, but lack a general confidence in their own beliefs.} 
 
-What would this mean for epistemology? A false proposition would no longer imply a lack of knowledge, and the rejection of the truth axiom goes against the entire history of Western philosophical thought. This is to say, it would require robust philosophical defense, which we are not prepared to give here. Relaxing the Truth Axiom allows positive and negative introspection to live harmoniously with self-reference. We leave this for future work to explore. We note here, however, that work by Barasz \etal in \cite{modal_prisoner} show that agents with L\"ob's Theorem holding for their epistemic operators are able to cooperate in the Prisoner's Dilemma game.\footnote{Specifically, they are programs capable of inspecting their own source code.} Related research in formal agent modeling via programs that play games with each other and can examine each other's source code has been explored by Binmore, Howard, McAfee, Tennenholtz, and other game theorists.
+What would this mean for epistemology? A false proposition would no longer imply a lack of knowledge, and the rejection of the truth axiom goes against the entire history of Western philosophical thought. This is to say, it would require robust philosophical defense, which we are not prepared to give here. Relaxing the Truth Axiom allows positive and negative introspection to live harmoniously with self-reference. We leave this for future work to explore. We note here, however, that work by Barasz \etal in \cite{modal_prisoner} show that agents with L\"ob's Theorem holding for their epistemic operators are able to cooperate in the Prisoner's Dilemma game.\footnote{Specifically, they are programs capable of inspecting their own source code.} Related research in formal agent modeling via programs that play games with each other and can examine each other's source code has been explored by Binmore, Howard, McAfee, Tennenholtz, and other game theorists. Barasz \etal introduce the novel approach of using the so-called G\"odel-L\"ob ($\mathbb{GL}$) modal logic of provability, presented in detail by Boolos in \cite{Boolos}. This logic consists of a $\Box$ operator for ``is provable in PA", with the above L\"ob Theorem as an axiom, in addition to Axiom K (Distribution).
 
 Rather than pursuing that route, we relax our axiom schema so as to avoid the derivation of L\"ob's Theorem entirely, while maintaining the same or similar realism sought by the original \DASL\ static schemas.
 
 \section{Avoiding L\"ob}
 \label{sec:avoiding_lob}
-We leave the reader with the following logic that avoids the L\"obian Obstacle while retaining the inference from unsafe action to information about missing knowledge, the useful and interesting contrapositive to the standard game theoretic inference mentioned at the beginning of this thesis.
+Earlier, we noted that there is a mathematical gravity pulling agents toward L\"ob's Obstacle due to the desiderata of rationality. Recall we described these desiderata as fundamentally \emph{external} and \emph{internal}. We seek rational agents that are accurate with respect to the external world, in that their beliefs (knowledge) is are true. We also seek rational agents that are highly introspectively accurate, able to draw inferences about their internal epistemic states. With this framework in mind, an approach to avoiding L\"ob's Obstacle that adopts $\mathbb{GL}$ as the epistemic operator, as in \cite{modal_prisoner}, eschews the external desiderata in favor of the internal desiderata. The agent is highly introspective, and we, as external observers, take it for granted that they are also externally accurate, though they themselves could not conclude this in general.
+
+In order to avoid L\"ob's Obstacle, we eschew the internal accuracy desideratum, and model agents who know only that their knowledge is accurate of the world, but not whether they know something or not, and have sufficient introspection as to know that they do not believe inconsistencies, and that they have strong evidence for their beliefs. This model is better suited to human-like agents who interact with reality and lack perfect information about the environment.
+
+We make the following relaxtions from \DASL's static logic. First, we reduce the belief operator to a basic System D modality, consisting of $\Bels{i}\varphi \iimplies \BPoss{i}
+\varphi$. Second, we weaken Evidential Restraint from $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ to $\Bels{i}\iimplies \BPoss{i}\Kns{i}\varphi$, which we call Weakened Subjective Evidential Restraint. We make each of these moves because negative introspection and Evidential Restraint are each sufficient for deriving positive introspection for belief, which opens the door for L\"ob's Theorem, which leads to the Consistency Disaster proved in Theorem \ref{no_bel_cons}. The resulting logic avoids the L\"obian Obstacle while retaining the inference from unsafe action to information about missing knowledge, the useful and interesting contrapositive to the standard game theoretic inference mentioned at the beginning of this thesis. Furthermore, it remains realistic for human-like agents, and remains in the class of logics whose completeness is established via Sahlqvist's Theorems. When this static logic serves as a foundation for \DASL's dynamic extension, we refer to that logic as \DASL$^-$, or Weakened \DASL.
 
 \begin{table}[H]
 	\begin{center}
@@ -324,17 +329,17 @@ We leave the reader with the following logic that avoids the L\"obian Obstacle w
 			%		$\Bels{i}\varphi \iimplies \Bels{i}\Bels{i}\varphi$ & Positive Belief Introspection \\
 			%		$\tlnot\Bels{i}\varphi \iimplies \Bels{i}\tlnot\Bels{i}\varphi$ & Negative Belief Introspection\\
 			$\Kns{i}\varphi \iimplies \Bels{i}\varphi$ & Knowledge implies Belief \\
-			$\Bels{i}\varphi \iimplies \Poss{i}\Kns{i}\varphi$ & Weak Evidential Restraint\\
+			$\Bels{i}\varphi \iimplies \BPoss{i}\Kns{i}\varphi$ & Weak Subjective Evidential Restraint\\
 			%			$\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$ & Beliefs are Known\\
 			From $\vdash \varphi$ and $\vdash \varphi \iimplies \psi$, infer $\vdash\psi$ & Modus Ponens\\
 			From $\vdash \varphi$, infer $\vdash \Kns{i}\varphi$ & Necessitation of $\Kns{i}$\\
 			\hline
 		\end{tabular}
-		\caption{Logic of Grounded Coherent Epistemic Agents}~\label{GC_agent}
+		\caption{Static Logic of \DASL$^-$}~\label{GC_agent}
 	\end{center}
 \end{table}
 
-We call it a logic of Grounded Coherent Epistemic Agents, because their beliefs are grounded by objectively available evidence, and their beliefs are coherent. Neither the belief operator nor the knowledge operator is susceptible to L\"ob's Obstacle, as L\"ob's Theorem is not derivable in the system.
+Neither the belief operator nor the knowledge operator is susceptible to L\"ob's Obstacle, as L\"ob's Theorem is not derivable in the system.
 
 In the counterexample below, we see that the belief operator lacks positive introspection.
 
@@ -370,7 +375,7 @@ Without positive belief introspection, L\"ob's Theorem for belief is no longer d
 	Theorem weak_evidential_restraint_is_sahlqvist: 
 		forall (phi : prop) (a : DASL.Agents),
 			sahlqvist_formula 
-			(SB a (SProp phi) =s=> \ (SK a (\ (SK a (SProp phi))))).
+			(SB a (SProp phi) =s=> \ (SB a (\ (SK a (SProp phi))))).
 	Proof.
 		intros; sahlqvist_reduce. 
 	Qed.
@@ -407,7 +412,7 @@ We provide the following counterexample to L\"ob's Theorem.
 
 We assume in world $w$ that $\Bels{i}(\Bels{i}p \iimplies p)$ holds. From this it follows that in all doxastically accessible worlds, \emph{e.g.} $v$, $\Bels{i}p \iimplies p$ holds. This holds for $v$ when it has reflexive access only to itself, and $\tlnot p$ is the case. Because $\tlnot p$ is the case $v$, $\tlnot \Bels{i}p$ is the case at $w$, concluding the counterexample.
 
-The logic also includes a sort of weakened positive introspection theorem about knowledge, from the Knowledge implies Belief axiom and Weak Evidential Restraint. It is $\Kns{i}\varphi \iimplies \Poss{i}\Kns{i}\varphi$, which we read as ``$i$ knows that $\varphi$ only if she has objectively available evidence that she knows $\varphi$". This seems intuitive, and does not allow L\"ob's theorem to destroy the integrity of knowledge. It is perhaps a satisfying compromise for those who find positive introspection about knowledge to be intuitive. The contrapositive of this weak positive introspection formula, $\Kns{i}\tlnot\Kns{i}\varphi \iimplies \tlnot\Kns{i}\varphi$ is an instance of the T axiom, so it turns out to have been a theorem all along anyway, for any epistemic logic with the Truth axiom for knowledge.
+The logic also includes a sort of weakened positive introspection theorem about knowledge, from the Knowledge implies Belief axiom and Weak Subjective Evidential Restraint. It is $\Kns{i}\varphi \iimplies \Poss{i}\Kns{i}\varphi$, which we read as ``$i$ knows that $\varphi$ only if she has objectively available evidence that she knows $\varphi$". This seems intuitive, and does not allow L\"ob's theorem to destroy the integrity of knowledge. It is perhaps a satisfying compromise for those who find positive introspection about knowledge to be intuitive. The contrapositive of this weak positive introspection formula, $\Kns{i}\tlnot\Kns{i}\varphi \iimplies \tlnot\Kns{i}\varphi$ is an instance of the T axiom, so it turns out to have been a theorem all along anyway, for any epistemic logic with the Truth axiom for knowledge.
 
 This logic allows us to make the key inference discussed in this thesis, when it serves as a static foundation for weakened \DASL.
 
@@ -416,5 +421,51 @@ This logic allows us to make the key inference discussed in this thesis, when it
 $(\PalPos{A, \laa}true \tland \tlnot pre_s(\laa) )\iimplies \tlnot \Kns{i}pre_s(\laa)\tland \tlnot\Kns{i}\tlnot \Kns{i}pre_s(\laa)$.
 \end{theorem}
 \begin{proof}
-	Assuming $w\models\PalPos{A,\laa}true$, it follows that $\Bels{i}pre_s(\laa)$, from minimum rationality. From weak evidential restraint, it follows that $\Poss{i}\Kns{i}pre_s(\laa)$, which is equivalent to $\tlnot \Kns{i}\tlnot\Kns{i}pre_s(\laa)$. From $\tlnot pre_s(\laa)$, it follows from the Truth axiom that $\tlnot \Kns{i}pre_s(\laa)$.
+	Assuming $w\models\PalPos{A,\laa}true$, it follows that $\Bels{i}pre_s(\laa)$, from minimum rationality. From weak subjective evidential restraint, it follows that $\BPoss{i}\Kns{i}pre_s(\laa)$. As an instance of Knowledge implies Belief, this implies $\Poss{i}\Kns{i}pre_s(\laa)$, which is equivalent to $\tlnot \Kns{i}\tlnot\Kns{i}pre_s(\laa)$. From $\tlnot pre_s(\laa)$, it follows from the Truth axiom that $\tlnot \Kns{i}pre_s(\laa)$.
 \end{proof}
+Thus, the application results established in Chapter \ref{CH_04} still apply, and likewise the contrapositive of the standard game theoretic inference still holds, from bad action to bad knowledge. We turn now to some philosophical considerations.
+
+\subsection{Philosophical Considerations}
+\label{sec:weak_dasl_phil}
+It is worth circling back to the philosophical considerations presented in Chapter \ref{CH_03} and assessing the effects of this weakening move. We must assess whether the static base of \DASL$^-$ satisfies them, and if not, acknowledge it here. The philosophical desiderata were: $1)$ An account of justification, $2)$ Avoidance of skepticism for humans, $3)$ the formal properties of soundness, completeness, indistinguishability formalized, and avoid a collapse of belief and knowledge, and $4)$ handle Moore's Paradox.
+
+\emph{Justification. }Though we have altered our axiom schema, we have not altered our interpretation of the epistemic and doxastic relations. An epistemic relation between two possible worlds is still based on objectively available evidence, and a doxastic relation is one based on subjectively available evidence. The notion of Weakened Subjective Epistemic Restraint remains internalist about justification. We still assume our agents hold only justified beliefs, and this is captured with Weakened Subjective Evidential Restraint, where an agent believes something only if she has subjectively available evidence that she knows it, \emph{i.e.} that it is true, she believes it, and she is justified. Lacking powerful internal accuracy, it may be more difficult for such agents to form beliefs. The axiom schemas, in conjuction with the K axiom schemas, grant us some internal power, though. Agents know that their beliefs are consistent, they know that knowledge is factual, and they know that their beliefs are justified. They do not necessarily know what they believe, but they have subjective evidence that they believe something, when they do.
+
+An alternative approach is to use $\Bels{i}\varphi \iimplies \Poss{i}\Kns{i}\varphi$, which might we called Weakened Evidential Restraint. This is actually weaker than the Weakened Subjective Evidential Restraint property.
+
+\begin{theorem}[Weakened Subjective ER Implies Weakened ER]\label{wser_wer}
+	$\\ (\Bels{i}\varphi \iimplies \BPoss{i}\Kns{i}\varphi)
+	\iimplies (\Bels{i}\varphi \iimplies \Poss{i}\Kns{i}\varphi).$
+\end{theorem}
+\begin{proof}
+	It suffices to show that $\BPoss{i}\Kns{i}\varphi \iimplies \Poss{i}\Kns{i}\varphi$. This is an instance of Knowledge implies Belief.
+\end{proof}
+Adopting this weaker property would be consistent with externalist theories of justification, which we eschew, being convinced by arguments for internalism.
+
+\emph{Skepticism. }We clearly do not present an account of knowledge that falls victim to the skeptical hypothesis argument, because we avoid the problematic properties of knowledge that do not hold for human-like agents, \emph{i.e.} positive introspection. Regarding the skeptical argument that justification is impossible, we maintain our evidentialist interpretation of the relations on possible worlds, and continue with our foundationalist version of evidentialism where noticed perceptions of evidence can constitute justification, in addition to beliefs.
+
+\emph{Indistinguishibility. } The static base of \DASL$^-$ has caused us to lose our notion of doxastic capture defined in Theorem \ref{dpc_theorem}. This formal property provided a sense of indistinguishibility proved in Theorem \ref{dc_equiv}. Our choice of external accuracy over internal accuracy seems to have cost us this desideratum. However, it is worth noting that no epistemic logic can achieve indistinguishability through an equivalence relation while also avoiding L\"ob's Obstacle. An equivalence relation entails reflexivity and transitivity, which in conjunction with self-reflection yield L\"ob's Theorem and inconsistency. Thus, it may be the case that indistinguishability cannot be achieved through an equivalence relation. For now, we take it as philosophical debt that we must further explore indistinguishibility for self-reflective agents.
+
+\emph{Collapse}. The static base of \DASL$^-$ similarly avoids the collapse of belief and knowledge. The same counterexample serves, where agent $i$ falsely believes $\varphi$, and thus does not know it.
+
+\emph{Moore's Paradox. } We maintain the ability to model assertions as actions that presuppose beliefs, thereby formalizing Moore's sentence, ``$p$, but I do not know that $p$," as $\Bels{i}p \tland \Bels{i}\tlnot\Kns{i}p$. Weakened Subjective Evidential Restraint allows us to infer $\BPoss{i}\Kns{i}p$ from the first conjunct, which is equivalent to $\tlnot \Bels{i}\tlnot\Kns{i}p$, a direct contradiction to the second conjunct, explaining the intuitive paradox of Moore's sentence.
+
+\emph{Soundness and Completeness}. We have already shown that \DASL$^-$ is complete, but we have not specified the frame condition corresponding to Weakened Subjective Evidential Restraint. We do so now, by applying the Sahlqvist-van Benthem Algorithm
+
+	$\Bels{i}\varphi \iimplies \BPoss{i}\Kns{i}\varphi$.
+\begin{align*}
+&\rightsquigarrow \forall P,y, (\Rel{b}^i(x,y)\Longrightarrow P(y)) \Longrightarrow \exists z, \forall z',(\Rel{b}^i(x,z)\cdot (\Rel{k}^i(z,z') \Longrightarrow P(z')))\\
+&\rightsquigarrow \forall y, (\Rel{b}^i(x,y)\Longrightarrow \lambda u.(\Rel{b}^i(x,u))(y)) \\ &\ \ \ \ \Longrightarrow \exists z,\forall z', (\Rel{b}^i(x,z)\cdot (\Rel{k}^i(z,z') \Longrightarrow \lambda u.(\Rel{b}^i(x,u))(z')))\\
+&\rightsquigarrow \forall y, (\Rel{b}^i(x,y)) \Longrightarrow \exists z,\forall z', (\Rel{b}^i(x,z)\cdot (\Rel{k}^i(z,z') \Longrightarrow  (\Rel{b}^i(x,z'))))		
+\end{align*}
+
+It is an unfamiliar frame condition, but it is a first order formula, and because SCorT establishes correspondence between the modal formula and the first order formula, it entails that the class of frames defined by the first order formula as a frame condition are those for which the modal formula are sound.
+
+\section{Summary}
+This chapter has presented a problem facing agents capable of self-reflective reasoning that gives rise to logical problems of self-reference, which are present in the Peano Arithmetic. Thus, any agent whose reasoning is formally stronger than PA must worry about this problem, named L\"ob's Obstacle.
+
+We explained how the L\"ob Conditions (Axiom K, Axiom 4, and Rule of Necessitation), in conjunction with self-reflective sentences, derive L\"ob's Theorem. We showed that standard assumptions about knowledge and belief result in the antecedent of L\"ob's Theorem being a theorem itself, for both knowledge operators and belief operators, which results in inconsistency. \DASL's static base suffers from this problem.
+
+We responded to this by presenting a weakened \DASL, which we named \DASL$^-$, that keeps most of the strengths of \DASL\ while avoiding L\"ob's Obstacle. The one desideratum we lost in \DASL$^-$ was a formal account of indistinguishibility, which is intuitively powerful but not formally required, and generally lacks philosophical defense. Furthermore, we conjecture that any modal system with a satisfactory account of indistinguishibility will run into L\"ob's Obstacle.
+
+
