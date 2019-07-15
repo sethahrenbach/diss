@@ -866,6 +866,14 @@ The proof proceeds by instantiating $\mathtt{phi}$, $\mathtt{F}$, $\mathtt{a}$, 
 \subsection{Completeness}~\label{sec:completeness}
 For completeness, our proof depends on the notion of a Sahlqvist formula, which itself depends on syntactical properties of modal formulas, which we must also define. The completeness proof is only \emph{mostly} mechanized. The overall theme of the proof is to rely on the \emph{Sahlqvist Completeness Theorem} (SComT) and Sahlqvist Correspondence Theorem (SCorT) of modal logic.
 
+We first explain what a Sahlqvist formula is. A Sahlqvist formula is composed of Sahlqvist implications combined in a manner to be described later.
+
+A \emph{Sahlqvist implication} is a formula with a \emph{Sahlqvist antecedent} and a \emph{positive consequent}.
+
+A formula is \emph{positive} if all of its propositional letters are in the scope of an even number of negation signs. A formula is \emph{negative} if one or more of its propositional letters are in the scope of an odd number of negation signs.
+
+A \emph{Sahlqvist antecedent} is a formula built from $a)$ propositional letters prefixed by $n\geq0$ $\Box$'s and $b)$ negative formulas, $c)$ using only $\tlor$, $\tland$, and $\Diamond$ to build the antecedent from $(a)$ and $(b)$ components. We can now state the key theorems.
+
 The SCorT is as follows:
 \begin{theorem}[Sahlqvist Correspondence Theorem\cite{modal}\footnote{Theorem 3.54 of Chapter 3 in Blackburn \etal.}]
 	If $\varphi$ is a Sahlqvist formula, then $\varphi$ corresponds to a first order frame condition $\chi$, and $\chi$ is effectively computable from $\varphi$ via the Sahlqvist-van Benthem algorithm.
@@ -886,15 +894,8 @@ This states that every modal formula with a syntactic structure, defined by Sahl
 %
 %The SComT is so powerful that it suffices to prove that each of our axiom schemas of \DASL's static base is a Sahlqvist formula, and that the associated frame conditions used in the proof of soundness are their first order correspondents. We have mechanized the proof that establishes that the axiom schemas of \DASL\ are such \emph{Sahlqvist formulas}. The proof of correspondence between the axiom schemes and their first order counterparts is partially mechanized during the proof of soundness. We prove the remaining correspondence direction by hand below. We begin this section by defining a Sahlqvist formula's syntatic characteristics, and provide our mechanization of them in Coq.
 
-We first explain what a Sahlqvist formula is. A Sahlqvist formula is composed of Sahlqvist implications combined in a manner to be described later.
 
-A \emph{Sahlqvist implication} is a formula with a \emph{Sahlqvist antecedent} and a \emph{positive consequent}.
-
-A formula is \emph{positive} if all of its propositional letters are in the scope of an even number of negation signs. A formula is \emph{negative} if one or more of its propositional letters are in the scope of an odd number of negation signs.
-
-A \emph{Sahlqvist antecedent} is a formula built from $a)$ propositional letters prefixed by $n\geq0$ $\Box$'s and $b)$ negative formulas, $c)$ using only $\tlor$, $\tland$, and $\Diamond$ to build the antecedent from $(a)$ and $(b)$ components.
-
-To define these notions and reason about axiom schemas rather than actual well-formed formulas of the object language, we define an inductive type in Coq that more closely resembles the formula schemas one typically uses when discussing a logic, as in $\Kns{i}\varphi \iimplies \varphi$, where $\varphi$ is a metalanguage variable standing in for any well-formed formula of the language. Because our inductive Coq type for well-formed formulas of the language is $\mathtt{prop}$, we must create an inductive type that takes $\mathtt{prop}$ as basic.
+To mechanize these notions and reason about axiom schemas rather than actual formulas of the object language, we define an inductive type in Coq that more closely resembles the formula schemas one typically uses when discussing a logic, as in $\Kns{i}\varphi \iimplies \varphi$, where $\varphi$ is a metalanguage variable standing in for any well-formed formula of the language. Because our inductive Coq type for well-formed formulas of the language is $\mathtt{prop}$, we must create an inductive type that takes $\mathtt{prop}$ as basic.
 
 \begin{tcolorbox}
 	\begin{lstlisting}[language=Coq]
