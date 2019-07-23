@@ -703,7 +703,8 @@ A logic has the property of soundness \emph{if and only if} all of its derivable
 Formally, this amounts to:
 
 \begin{theorem}[Soundness]
-	Dynamic Agent Safety Logic is sound for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$.
+	Dynamic Agent Safety Logic's static base is sound for Kripke structures with\\ (1) reflexive $\Rel{k}^i$ relations,\\ (2) serial, Euclidean $\Rel{b}^i$ relations, \\(3) which are partially ordered $(\Rel{k}^i \circ \Rel{b}^i) \subseteq \Rel{b}^i$, and $\Rel{b}^i \subseteq \Rel{k}^i$.\footnote{We ignore the following dynamic frame conditions for now:  $\llbracket (A,\laa)_i \rrbracket^S \subseteq \llbracket (A,\laa)_i \rrbracket$ and 
+	$\llbracket (A,\laa)_i \rrbracket \subseteq (\llbracket (A,\laa)_i \rrbracket^S \circ \Rel{b}^i)$, although they are also \DASL\ frame conditions.}
 \end{theorem}
 
 In order to formalize this in Coq for mechanical proof checking, we must define the notions of a frame, model, proposition, and theorem. We follow the Master's thesis of Paulien De Wind \cite{dewind} for the model theory mechanization and the works of Lescanne and Puiss\'egur \cite{lescanne, puislescanne} and Malikovi\'c and \v Cubrilo \cite{delcoq1, delcoq2} in setting up the proof theory.
@@ -1240,7 +1241,7 @@ The result is a first order logic frame condition corresponding to the axiom sch
 	$\Kns{i}\varphi \iimplies \Bels{i}\varphi$.
 	\begin{align*}
 		&\rightsquigarrow \forall P, y, (\Rel{k}^i(x,y) \Longrightarrow P(y)) \Longrightarrow \forall z, (\Rel{b}^i(x,z) \Longrightarrow P(z))\\
-		&\rightsquigarrow \forall y, (\Rel{k}^i (x,y) \Longrightarrow \lambda u.(\Rel{k}^i(x,u))(y))\Longrightarrow \forall z, (\Rel{b}^i (x,z) \Longrightarrow \lambda u. (\Rel{b}^i(x, u))(z))\\
+		&\rightsquigarrow \forall y, (\Rel{k}^i (x,y) \Longrightarrow \lambda u.(\Rel{k}^i(x,u))(y))\Longrightarrow \forall z, (\Rel{b}^i (x,z) \Longrightarrow \lambda u. (\Rel{k}^i(x, u))(z))\\
 		&\rightsquigarrow \forall y, (\Rel{k}^i(x,y)) \Longrightarrow \forall z, (\Rel{b}^i(x,z) \Longrightarrow \Rel{k}^i(x,z))\\
 		&\equiv \forall y,z,  (\Rel{k}^i(x,y)\Longrightarrow\Rel{b}^i(x,z)\Longrightarrow\Rel{k}^i(x,z))\\
 		&\equiv \forall y,z, (\Rel{k}^i(x,y)\cdot\Rel{b}^i(x,z) \Longrightarrow \Rel{k}^i(x,z))\\
@@ -1634,3 +1635,80 @@ $\PalPos{A,\laa}\varphi \iimplies \Bels{i}\SPalPos{A,\laa}\varphi$ & Minimum Rat
 The axiom schema for \emph{Inevitability} states that if engaging in action $\laa$ from action structure $A$ guarantees that $\varphi$ is true as a result, then safely engaging in that action also guarantees that $\varphi$ will result. One way to think about this is that the postcondition of a mere action is the same function as the postcondition for a safe action. The converse of \emph{Inevitability} does not hold, however, because $\pre$ is defined on a subset of worlds on which $\pre_s$ is defined for a given action, representing the notion that it is \emph{easier} to merely engage in an action than to do so safely. The subset relation here represents number of constraints. Thus there may be worlds on which the safety precondition for an action is undefined but on which the precondition is defined. When the safety precondition is undefined it is trivially true that engaging in the action safely guarantees $\varphi$, for all $\varphi$. However, $\varphi$ may not be guaranteed given mere engagement in the action.
 
 The axiom schema for \emph{Minimum Rationality} states that if after engaging in $\laa$ $\varphi$ results, then $i$ believes that after safely engaging in $\laa$ $\varphi$ results. It is more intuitive when the implication is read as an ``only if". This axiom schema is clearly an idealization meant to contribute normative value to the logic rather than descriptive value. It can be interpreted as an assumption that the human agents being modeled do not engage in actions that they believe to be unsafe. For commercial pilots, this assumption is reasonably secure. For other domains, this assumption should be carefully noted and considered.
+
+To finish off our defense of \DASL, we must show that the dynamic extension with these non-reductive axiom schemas is sound and complete. Recall the semantics for the dynamic operators:
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{|c|}
+\hline
+\\
+$M,w \models \Pal{A,\laa}\varphi \iiff \forall M',w',\  (M,w) \llbracket (A,\laa)_i \rrbracket (M',w')$ \\ $\timplies\ M',w' \models \varphi$ \\
+$M,w \models \SPal{A,\laa}\varphi \iiff \forall M',w',\  (M,w) \llbracket (A,\laa)_i \rrbracket^S (M',w')$ \\ $\timplies\ M',w' \models \varphi$\\
+\hline 
+\end{tabular}
+\caption{Dynamic operator semantics}
+\end{center}
+\end{table}
+Additionally, the dynamic model relations are defined as:
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{|c|}
+\hline
+\\
+$(M,w)\llbracket (A,\laa)_i\rrbracket (M',w') \iiff M,w \models \pre(\laa)$ \\ $\aand update(M,A,w,\laa,i) = (M',w')$ \\
+\\
+$(M,w)\llbracket (A,\laa)_i \rrbracket^S (M',w') \iiff M,w \models pre_s(\laa)$ \\ $\aand update(M,A,w,\laa,i) = (M',w')$\\
+\\
+\hline 
+\end{tabular}
+\caption{\DASL's dynamic model relations.}
+\end{center}
+\end{table}
+
+\begin{theorem}[Dynamic Extension Soundness]
+	Dynamic Agent Safety Logic's dynamic extension is sound for Kripke structures with \\
+	(1) $\llbracket (A,\laa)_i \rrbracket^S \subseteq \llbracket (A,\laa)_i \rrbracket$\\
+	(2) $\llbracket (A,\laa)_i \rrbracket \subseteq (\llbracket (A,\laa)_i \rrbracket^S \circ \Rel{b}^i)$
+\end{theorem}
+\begin{proof}
+For soundness with respect to $(1)$, we use \emph{Inevitability}:\\
+$\Pal{A,\laa}\varphi \iimplies \SPal{A,\laa}\varphi$. Note that condition $(1)$ is equivalent to $\forall z, (x \llbracket (A,\laa)_i \rrbracket^S z \Longrightarrow x \llbracket (A,\laa)_i \rrbracket z)$.
+
+Assume $M,w \models \Pal{A,\laa}\varphi$. By the semantics of $\Pal{A,\laa}$, for all $M', w'$, if \\$(M,w)\llbracket (A,\laa)_i \rrbracket (M',w')$, then $M',w'\models \varphi$. By condition $(1)$, $(M,w)\llbracket (A,\laa)_i \rrbracket^S (M',w')$, so $M,w\models \SPal{A,\laa}\varphi$.
+
+For soundness with respect to $(2)$ we use \emph{Minimum Rationality}:\\ $\PalPos{A,\laa}\varphi \iimplies \Bels{i}\SPalPos{A,\laa}\varphi$. Note that the equivalent first order frame condition to $(2)$ is $\forall y, z, (x \llbracket (A,\laa)_i \rrbracket y \Longrightarrow (\Rel{b}^i(x,z) \Longrightarrow z  \llbracket (A,\laa)_i \rrbracket^S y))$.
+
+Assume $M,w \models \PalPos{A,\laa}\varphi$. By the semantics of $\PalPos{A,\laa}$, there exists $M',w'$ such that $(M,w)\llbracket (A,\laa)_i\rrbracket (M',w')$ and $M',w' \models \varphi$. From condition $(2)$, for all $(M,v)$, $\Rel{b}^i(w,v)$ implies $(M,v)\llbracket (A,\laa)_i \rrbracket^S (M',w')$. So, $M,w \models \Bels{i}\SPalPos{A,\laa}\varphi$.
+
+\end{proof}
+
+\begin{theorem}[Dynamic Extension Completeness]
+	The dynamic extension of \DASL\ is complete with respect to \DASL\ models.
+\end{theorem}
+\begin{proof}
+	We use the two Sahlqvist theorems SComT and SCorT for this proof. Both axiom schemas are clearly Sahlqvist implications, so we proceed by applying the Sahlqvist-van Benthem Algorithm to each. We abbreviate $(M,w)\llbracket (A,\laa)_i\rrbracket^S (M',w')$ with $\Rel{M,M'}^S(w,w')$ and $(M,w)\llbracket (A,\laa)_i\rrbracket (M',w')$ with $\Rel{M,M'}(w,w')$.
+	
+	$\Pal{A,\laa}p \iimplies \SPal{A,\laa}p$.
+	\begin{align*}
+	&\rightsquigarrow \forall P, y, (\Rel{M,M'}(x,y) \Longrightarrow P(y)) \Longrightarrow \forall z, (\Rel{M,M'}^S(x,z) \Longrightarrow P(z))\\
+	&\rightsquigarrow \forall y, (\Rel{M,M'} (x,y) \Longrightarrow \lambda u.(\Rel{M,M'}(x,u))(y))\Longrightarrow \forall z, (\Rel{M,M'}^S (x,z) \Longrightarrow \lambda u. (\Rel{M,M'}(x, u))(z))\\
+	&\rightsquigarrow \forall y, (\Rel{M,M'}(x,y)) \Longrightarrow \forall z, (\Rel{M,M'}^S(x,z) \Longrightarrow \Rel{M,M'}(x,z))\\
+	&\equiv \forall y,z,  (\Rel{M,M'}(x,y)\Longrightarrow\Rel{M,M'}^S(x,z)\Longrightarrow\Rel{M,M'}(x,z))\\
+	&\equiv \forall y,z, (\Rel{M,M'}(x,y)\cdot\Rel{M,M'}^S(x,z) \Longrightarrow \Rel{M,M'}(x,z))\\
+	&\equiv \forall z, (\Rel{M,M'}^S(x,z)\Longrightarrow\Rel{M,M'}(x,z))\\
+	&\equiv \Rel{M,M'}^S \subseteq \Rel{M,M'}
+	\end{align*}
+	
+	$\PalPos{A,\laa}p \iimplies \Bels{i}\SPalPos{A,\laa}p$.
+	\begin{align*}
+		&\equiv \BPoss{i}\SPal{A,\laa}p \iimplies \Pal{A,\laa}p\\
+		&\rightsquigarrow \forall P, (\exists y, (\Rel{b}^i(x,y) \cdot \forall z, (\Rel{M,M'}^S(y,z) \Longrightarrow P(z)))\Longrightarrow \forall z', (\Rel{M,M'}(x,z') \Longrightarrow P(z'))) \\
+		&\rightsquigarrow \forall P,y, ((\Rel{b}^i(x,y) \cdot \forall z, (\Rel{M,M'}^S(y,z) \Longrightarrow P(z))) \Longrightarrow \forall z', (\Rel{M,M'}(x,z') \Longrightarrow P(z')))\\
+		&\rightsquigarrow \forall y, (\Rel{b}^i(x,y) \Longrightarrow \forall z', (\Rel{M,M'}(x,z') \Longrightarrow \Rel{M,M'}^S(y,z')))\\
+		&\equiv \forall y, z', (\Rel{M,M'}(x,z') \Longrightarrow (\Rel{b}^i(x,y) \Longrightarrow \Rel{M,M'}^S(y,z')))\\
+		&\equiv \Rel{M,M'} \subseteq (\Rel{M,M'}^S \circ \Rel{b}^i)		
+	\end{align*}
+\end{proof}
+
+Thus, for additional dynamic frame conditions  $\llbracket (A,\laa)_i \rrbracket^S \subseteq \llbracket (A,\laa)_i \rrbracket$ and 
+$\llbracket (A,\laa)_i \rrbracket \subseteq (\llbracket (A,\laa)_i \rrbracket^S \circ \Rel{b}^i)$, \DASL\ is sound and complete. Next we turn to case studies in which we apply \DASL\ to the analysis of real aviation mishaps, to both prove its usefulness in modeling realistic human agents, and to show instances of an interesting contrapositive of the game theoretic inference from non-optimal action and rationality to a lack of knowledge.
