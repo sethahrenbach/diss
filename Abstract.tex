@@ -3,4 +3,10 @@
 
 \centerline{\bf \large ABSTRACT}
 \vskip 10mm % Edit everything below with your acknowledging text.
-This is the abstract of your dissertation project.  It should not exceed one page.
+Modal logic is a family of logics for reasoning about relational structures, broadly construed. It sits at the nexus of philosophy, mathematics, software engineering, and economics. By modeling a target domain as a relational structure, one can define a modal logic for reasoning about its properties. Common examples include modal logics for knowledge, belief, time, program execution, mathematical provability, and ethics. 
+
+This thesis presents a modal logic that combines several modalities in order to reason about realistic human-like agents. We combine knowledge, belief, action, and \emph{safe} action, which we call Dynamic Agent Safety Logic, or \DASL. We distinguish \DASL\ from other modal logics treating similar topics by arguing that the standard models of human agency are not adequate. We present some criteria a logic of agency should strive to achieve, and then compare how related logics fare.
+
+We use the Coq interactive theorem prover to mechanically prove soundness and completeness results for the logic, as well as apply it to case studies in the domain of aviation safety, demonstrating its ability to model realistic, minimally rational agents.
+
+Finally, we examine the consequences of modeling agents capable of a certain sort of self-reflection. Such agents face a formal difficulty due to L\"ob's Theorem, called L\"ob's Obstacle in the literature. We show how \DASL\ can be relaxed to avoid L\"ob's Obstacle, while the other modal logics of agency cannot easily do so.

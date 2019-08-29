@@ -3,7 +3,7 @@
 
 
 
-The logic for reasoning about information flow in knowledge games is called Dynamic Epistemic Logic (DEL). As its name suggests, it combines elements of epistemic logic and dynamic logic. Epistemic logic is the static logic for reasoning about knowledge, and dynamic logic is used to reason about actions. In dynamic logic semantics, nodes are states of the system (or of the world), and relations on nodes are transitions via programs or actions from node to node. If we think of each node in dynamic logic as being a model of epistemic logic, then actions become relations on models, representing transitions from one multi-agent epistemic model to another. For example, if we have a static epistemic model $M1$ representing the knowledge states of agents $1$ and $2$ at a moment, then the action $``p?"$ is a relation between $M1$ and $M2$, a new static epistemic model of $1$'s and $2$'s knowledge after the question is asked. All of this is captured by DEL.
+The logic for reasoning about information flow in knowledge games is called Dynamic Epistemic Logic (DEL). As its name suggests, it combines elements of epistemic logic and dynamic logic. Epistemic logic is the static logic for reasoning about knowledge, and dynamic logic is used to reason about actions. In dynamic logic semantics, nodes are states of the system (or of the world), and relations on nodes are transitions via programs or actions from node to node. If we think of each node in dynamic logic as being a distinct model of static epistemic logic, then actions become relations on models, representing transitions from one multi-agent epistemic model to another. For example, if we have a static epistemic model $M1$ representing the knowledge states of agents $1$ and $2$ at a moment, then the action $``p?"$ is a relation between $M1$ and $M2$, where $M2$ is a new static epistemic model of $1$'s and $2$'s knowledge after the question is asked. All of this is captured by DEL.
 
 \begin {center}
 \begin {tikzpicture}[-latex ,auto ,node distance =3 cm and 4cm ,on grid ,
@@ -34,7 +34,13 @@ We are concerned with an additional element: the \emph{safety} status of an acti
 
 	$$ \varphi \ ::=\   \lpp  \bnf \tlnot \varphi \bnf \varphi \tland \varphi  \bnf \Kns{i} \varphi \bnf \Bels{i}\varphi \bnf \Pal{A,\laa}\varphi \bnf\SPal{A,\laa}\varphi,$$
 
-where $\lpp \in AtProp$ is an atomic proposition letter drawn from a finite set of such letters , $\mathbf{i}$ refers to $i \in Agents$, $\mathbf{\laa}$ is the name of an action, called an action token, belong to a set of such tokens, $Actions$, and $\mathbf{A}$ refers to an action model. The knowledge operator $\Kns{i}$ indicates that ``agent \emph{i} knows that ..." Similarly, the operator for belief, $\Bels{i}$ can be read, ``agent \emph{i} believes that..." The notion of action tokens and structures will be defined in the semantics. The operators $\Pal{A,\laa}$ and $\SPal{A,\laa}$ are the dynamic operators for action $\laa$ from action structure $A$ occurring in the former case, and happening safely in the latter case. One can read the action operators as ``after $\laa$ from $A$ occurs (\emph{safely}), $\varphi$ holds in all resulting worlds.' We define the dual modal operators $\Poss{i}$, $\BPoss{i}$, $\PalPos{A,\laa}$, and $\SPalPos{A,\laa}$ in the usual way. 
+where $\lpp \in AtProp$ is an atomic proposition letter drawn from a finite set of such letters , $\mathbf{i}$ refers to $i \in Agents$, $\mathbf{\laa}$ is the name of an action, called an action token, belong to a set of such tokens, $Actions$, and $\mathbf{A}$ refers to an action model. The knowledge operator $\Kns{i}$ indicates that ``agent \emph{i} knows that ..." Similarly, the operator for belief, $\Bels{i}$ can be read, ``agent \emph{i} believes that..." The notion of action tokens and structures will be defined in the semantics. The operators $\Pal{A,\laa}$ and $\SPal{A,\laa}$ are the dynamic operators for action $\laa$ from action structure $A$ occurring in the former case, and happening safely in the latter case. One can read the action operators as ``after $\laa$ from $A$ occurs (\emph{safely}), $\varphi$ holds in all resulting worlds.' We define the dual modal operators $\Poss{i}$, $\BPoss{i}$, $\PalPos{A,\laa}$, and $\SPalPos{A,\laa}$ in the usual way:
+\begin{align*}
+	\Poss{i}&\equiv \tlnot \Kns{i}\tlnot \\
+	\BPoss{i}&\equiv \tlnot \Bels{i}\tlnot \\
+	\PalPos{A,\laa}&\equiv\tlnot \Pal{A,\laa}\tlnot \\
+	\SPalPos{A,\laa}&\equiv\tlnot\SPal{A,\laa}\tlnot 			
+\end{align*} 
 
 The semantics of \DASL\ involve two structures that are defined simultaneously, one for epistemic models, and one for action structures capturing the transition relation among epistemic models. Additionally, we define numerous helper functions that straddle the division between metalanguage and object language. 
 
@@ -232,7 +238,7 @@ The definitions of the dynamic modalities make use of a relation between two mod
     $\tlnot\Bels{i}\varphi \iimplies \Bels{i}\tlnot\Bels{i}\varphi$ & Negative Belief Introspection\\
     &\\
     $\Kns{i}\varphi \iimplies \Bels{i}\varphi$ & Knowledge implies Belief \\
-    $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ & Evidential Restraintf\\
+    $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$ & Evidential Restraint\\
 %    $\Bels{i}\varphi \iimplies \Kns{i}\Bels{i}\varphi$ & Beliefs are Known\\
 	&\\
     $\Pal{A,\laa}p \iiff post(\laa, pre(\laa))(p)$ & Atomic Consequence\\
@@ -310,7 +316,7 @@ Recall the static base of \DASL.
 	\end{center}
 \end{table}
 
-As far as we can tell, this axiom scheme is novel, and disagrees with other attempts to model the interaction of knowledge and belief. The primary point of departure is that the knowledge operator is no longer and \SFive\ operator, but merely a T operator. Thus, it is severely weakened as a modal operator, but the corollary to this fact is that knowledge no longer has the imposing necessary conditions of positive and negative introspection. 
+As far as we can tell, this axiom scheme is novel, and disagrees with other attempts to model the interaction of knowledge and belief. The primary point of departure is that the knowledge operator is no longer an \SFive\ operator, but merely a T operator, defined by the axiom scheme $\Kns{i}\varphi \iimplies \varphi$. Thus, it is severely weakened as a modal operator, but the corollary to this fact is that knowledge no longer has the imposing necessary conditions of positive and negative introspection. 
 
 This section presents the desirable features that a static logic should have, and along the way argues against \SFive's appropriateness as an epistemic base. Before beginning, we briefly establish a consistent informal interpretation of knowledge and belief.
 
@@ -383,7 +389,7 @@ Epistemology is the study of knowledge, and knowledge is widely held to require 
 \end{enumerate}
 A theory of justification is shaped by how it responds to this regress argument. Denying premise (1) requires a theory to explain what, other than beliefs, justifies beliefs. Popular candidates include experiential mental states. This involves justification flowing from something that is not true or false to something true or false, and thus is not easily formalized in a logic. Denying premise (3) pushes one toward a \emph{foundationalist} theory, where the task then is to describe how a foundation of basic beliefs can be justified, and how the principle of premise (1) does not properly apply to them. Denying premise (4) pushes one toward \emph{coherentism}, where the task is to justify how a circular chain of beliefs is not viciously circular. Denying premise (5) pushes one toward \emph{infinitism}, where the task is to justify how an incomplete infinite chain can have justified constituent beliefs.
 
-In addition to responding to the regress argument, a theory of epistemic justification must present an analysis of what constitutes justification. In addressing the regress argument, a theory takes a position about the structure of the justification relation and whether believes are of a single type or of multiple types. A theory must then take a position about the definition of the justification relation so as to avoid the problem of skepticism.
+In addition to responding to the regress argument, a theory of epistemic justification must present an analysis of what constitutes justification. In addressing the regress argument, a theory takes a position about the structure of the justification relation and whether beliefs are of a single type or of multiple types. A theory must then take a position about the definition of the justification relation so as to avoid the problem of skepticism.
 
 
 \subparagraph{Skepticism}
@@ -457,7 +463,7 @@ Knowledge and belief are distinct. There are two distinguishing characteristics 
 An offending theorem flagged in the literature as responsible for equivalence collapse is $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$, which is our axiom \emph{Evidential Restraint}. We must show that our system avoids $\Kns{}\Bels{}$ collapse.
 
 \subparagraph{Indistinguishability}
-Many find it intuitive to speak of the epistemic relation as an equivalence or indistinguishability relation, which requires it to be symmetric, transitive, and reflexive. The epistemic relation in S5 is Euclidean and reflexive, which together yield symmetry and transitivity, and therefore an equivalence relation. Equivalence relations satisfy and indistinguishability relation because each world in the equivalence class is indistinguishable from each other relative to the relation defining the class. We must show that our axiom schema can satisfy the intuition behind epistemic indistinguishability.
+Many find it intuitive to speak of the epistemic relation as an equivalence or indistinguishability relation, which requires it to be symmetric, transitive, and reflexive. The epistemic relation in S5 is Euclidean and reflexive, which together yield symmetry and transitivity, and therefore an equivalence relation. Equivalence relations satisfy an indistinguishability relation because each world in the equivalence class is indistinguishable from each other relative to the relation defining the class. We must show that our axiom schema can satisfy the intuition behind epistemic indistinguishability.
 
 We proceed now to our arguments that \DASL's static base fares well on these counts.
 %\subparagraph{L\"obian Obstacle}
@@ -535,7 +541,7 @@ What is it for a source of information to support a proposition? We take it to b
 	Evidence is \emph{subjectively available} to agent $i$ for proposition $\varphi$ if and only if $i$ has direct mental access to some information, accurate or inaccurate, that supports the proposition $\varphi$.
 \end{definition}
 
-When a coin lands with \emph{heads} facing up, the light reflecting off the coin's surface is a source of information that supports the propositions that ``the coin landed \emph{heads} up," and ``the coin is unfair and has two \emph{heads}," and ``the coin landed \emph{tails} down." This is because evidence underdetermines the theories it supports, and so multiple propositions are always supported by the same source of information. The light reflecting off the surface is objectively available evidence for these propositions. If anyone notices the light reflecting off the coin, then this evidence becomes subjectively available to them. From the actual world, doxastic relations spider-web outward to possible worlds at which those propositions are true, and she considers those worlds possible. The event itself caused those worlds to become epistemically possible.
+When a coin lands with \emph{heads} facing up, the light reflecting off the coin's surface is a source of information that supports the propositions that ``the coin landed \emph{heads} up," and ``the coin is unfair and has two \emph{heads}," and ``the coin landed \emph{tails} down." This is because evidence underdetermines the theories it supports, and so multiple propositions are always supported by the same source of information.\footnote{This is called the \emph{Duhem-Quine Thesis}, due to Pierre Duhem in \cite{duhem} and W. V. O. Quine in \cite{quine}, which holds that evidence never supports exactly one scientific hypothesis, and can always be accounted for by competing hypotheses.} The light reflecting off the surface is objectively available evidence for these propositions. If anyone notices the light reflecting off the coin, then this evidence becomes subjectively available to them. From the actual world, doxastic relations spider-web outward to possible worlds at which those propositions are true, and she considers those worlds possible. The event itself caused those worlds to become epistemically possible.
 
 % If someone, say Alice, tells you she saw a ghost, this is objectively available evidence for the propositions, ``Alice saw a ghost," and ``Alice claims to have seen a ghost." Whether you believe both of these propositions or not depends on myriad things, which this model does not address, but the soundwaves emanating from Alice's mouth when she tells you that she saw a ghost are objectively available evidence. If she said it out loud to no one in particular in a room she thought was empty of people, but a tape recorder was running, then her saying it and causing the information to be stored on the tape recorder would constitute objectively available evidence. When someone listens to the tape recorder, it becomes subjectively available evidence, and the possible worlds under her consideration include potentially both propositions, and almost certainly the latter.
 
@@ -558,7 +564,7 @@ In the case of false beliefs, suppose Bob is an early bird in 1948 America, and 
  Thus, we have provided an interpretation of the possibility relations underlying knowledge and belief, which is not often done in the literature. We now present our theory's notion of justification and its response to skepticism.
  
  \subsection{Justification}\label{sec:just}
- Justification in our logic is not represented explicitly with a justification operator, as in Artemov and Nogina \cite{ArtemovNogina}. There, they formalize justification and knowledge with a formula like $t:\varphi$, where $t$ is a justification (a proof-like object) for $\varphi$ polynomial in its length. They adopt $\mathcal{S}4$ as the static base epistemic logic, and interpret knowledge in the usual implicit or subjunctive way. They include a connective axiom schema $t:\varphi \iimplies \Kns{}\varphi$, read ``if $\varphi$ is justified then $\varphi$ is knowable". We seek a weaker notion of justification here, under the notion that false propositions can nonetheless be justified by evidence. Rather than representing justification explicitly in the object language, we bury it in the underlying model theory, relating evidence to the possibility relations over worlds. We capture the notion of justification in the object language with the axiom schema \emph{Evidential Restraint}.
+ Justification in our logic is not represented explicitly with a justification operator, as in Artemov and Nogina \cite{ArtemovNogina}. There, they formalize justification and knowledge with a formula like $t:\varphi$, where $t$ is a justification (a proof-like object) for $\varphi$ polynomial in its length. They adopt $\mathcal{S}4$, a modal logic defined by the axiom schemas $\Kns{i}\varphi \iimplies \Kns{i}\Kns{i}\varphi$ plus $\Kns{i}\varphi \iimplies \varphi$, as the static base epistemic logic, and interpret knowledge in the usual implicit or subjunctive way. They include a connective axiom schema $t:\varphi \iimplies \Kns{}\varphi$, read ``if $\varphi$ is justified then $\varphi$ is knowable". We seek a weaker notion of justification here, under the notion that false propositions can nonetheless be justified by evidence. Rather than representing justification explicitly in the object language, we bury it in the underlying model theory, relating evidence to the possibility relations over worlds. We capture the notion of justification in the object language with the axiom schema \emph{Evidential Restraint}.
  
 Recall \emph{Evidential Restraint}: $\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$. An agent believes $\varphi$ only if \emph{her reflection} on all the objectively available evidence yields only possible worlds where $\varphi$ is true. It places a constraint on the beliefs agents form such that they have direct awareness of solid evidence for the proposition. Yet they can still be mistaken, because it is their reflection on the evidence that supports the proposition, not the objectively available evidence itself. Unpacking this, we accomplish several desiderata simultaneously. First, we make a normative idealizing assumption about agents, that all their beliefs are constrained by subjectively available evidence. Second, we capture an internalist theory of justification, where an agent's belief is justified by the evidence available to her\footnote{The specific internalist theory we adopt is called evidentialism; cf Feldman and Conee in \cite{evidentialism}.}. This theory is philosophically defensible, even if it is not unanimously held (few philosphical positions are). The species of internalism we endorse, evidentialism, can be adopted as a coherentist version or a foundationalist version, and we are happy to adopt the foundationalist version, where perceptual seemings and beliefs about evidence can serve as justifiers of beliefs. Finally, the distinction this theory draws between objective and subject perspectives helps account for powerful intuitions about knowledge.
 
@@ -595,7 +601,7 @@ Furthermore, we can deny the problematic part of the problem of logical omniscie
 
 Many find it intuitive to speak of the epistemic relation as an equivalence or indistinguishability relation, which requires it be an equivalence relation. Euclidicity, combined with the reflexivity underlying the Truth Axiom and transitivity of positive introspection, yields such an equivalence relation. It makes sense to say that world $v$ is epistemically possible from world $w$ for agent $i$ if $i$ cannot tell the two worlds apart, \emph{i.e.} they are indistinguishable. The power of this intuitive appeal presents a challenge for us. We must show that our axiom schema can satisfy the intuition behind epistemic indistinguishability without imposing symmetry on the epistemic relation.
 
-The key to achieving this is through the composition of the doxastic relation with the epistemic relation. From a first person perspective, our model does collapse belief and knowledge together. That means that an agent cannot distinguish her mere beliefs from her genuine knowledge. Let $\Rel{k/b}^i(w)$ denote the extension of the epistemic/doxastic relation of $w$. We also define the following mathematical notion on the relations.
+The key to achieving this is through the composition of the doxastic relation with the epistemic relation. From a first person perspective, our model does collapse belief and knowledge together. That means that an agent cannot distinguish her mere beliefs from her genuine knowledge. Let $\Rel{k/b}^i(w)$ denote the extension of the epistemic/doxastic relation of $w$.\footnote{The \emph{extension} of a relation $R$ is a set of pairs $(w,v)\in R$, and the \emph{extension} of a relation $R$ of $w$ is a set $\{v|(w,v)\in R\}$} We also define the following mathematical notion on the relations.
 
 \begin{definition}[Doxastic Capture]
 	For all $w,v,u\in W$, the doxastic capture of $w$, $dc(w)$ is defined recursively as follows:
@@ -636,7 +642,7 @@ Since $\Rel{k}^i$ and $\Rel{b}^i$ are part of the same bimodal equivalence relat
 	Suppose $w(\Rel{k}^i \circ \Rel{b}^i)v$ and $w\Rel{b}^iw'$ for some arbitrary $w,w',v\in W$. It suffices to show that $w',v \in dc(w)$. Since $w\Rel{b}^iw'$, $w'\in dc(w)$. Since $w(\Rel{k}^i \circ \Rel{b}^i)v$, the composed relation being a subset of $\Rel{b}^i$, it follows that $w\Rel{b}^iv$ and therefore $v \in dc(w)$.
 \end{proof}
 
-Theorem~\ref{weak_equiv} does not guarantee that the actual world $w$ is in this bimodal composed equivalence relation, because it may not be the case that $w\Rel{b}^iw$. This fails when $i$ has false beliefs, which is frequently the case with humans. However, the following is still the case: any branch departing $w$ via the $\Rel{b}^i$ relation will be a bimodal composed equivalence class of epistemic and doxastic possibility, and thus indistinguishable from each other. Any path that departs from $w$ solely by the $\Rel{k}^i$ relation will not partake in the equivalence class. The way to interpret this is as follows. For some reason, the epistemically possible worlds outside the bimodal composed equivalence class are not registering with her cognizance. It could be that she is overlooking some information. It could be that she is motivated in her skepticism for some psychological reason. It could be that she is under the cloud of some cognitive bias. Regardless, when $\varphi$ is true in the bimodal composed equivalence class but false in some epistemically possible world (\emph{e.g.} the actual world), her belief that $\varphi$ overpowers the lone epistemic relation, and she instead believes that she knows $\varphi$.
+Theorem~\ref{weak_equiv} does not guarantee that the actual world $w$ is in this bimodal composed equivalence relation, because it may not be the case that $w\Rel{b}^iw$. This fails when $i$ has false beliefs, which is frequently the case with humans. However, the following is still the case: any world $v$ considered possible from $w$ via the $\Rel{b}^i$ relation is part of the doxastic capture of $w$, and thus all the worlds considered possible are indistinguishable from each other, doxastically and epistemically. Any path that departs from $w$ solely by the $\Rel{k}^i$ relation will not partake in the equivalence class. The way to interpret this is as follows. For some reason, the epistemically possible worlds outside the doxastic capture equivalence class are not registering with her cognizance. It could be that she is overlooking some information. It could be that she is motivated in her skepticism for some psychological reason. It could be that she is under the cloud of some cognitive bias. Regardless, when $\varphi$ is true in the bimodal composed equivalence class but false in some epistemically possible world (\emph{e.g.} the actual world), her belief that $\varphi$ overpowers the lone epistemic relation, and she instead believes that she knows $\varphi$.
 
 If the actual world is in its own doxastic relation, we have the following. 
 
@@ -690,7 +696,7 @@ This suffices to show that the two modalities do not collapse. We have thus far 
 
 \section{Soundness and Completeness}
 
-This section establishes the soundness and completeness of the logic.  We present mechanized formalizations of each proof in the Coq Proof Assistant. The proof of soundness shows that axioms of \DASL\ are each valid for all \DASL\ frames. The proof of completeness shows that each axiom schema is a Sahlqvist formula, and therefore forms a complete logic built by adding them to the axiom K of the minimal modal logic, by Sahlqvist's Theorem~\cite{sahlqvist}.
+This section establishes the soundness and completeness of the logic.  We present mechanized formalizations of each proof in the Coq Proof Assistant. The proof of soundness shows that axioms of \DASL\ are each valid for all \DASL\ frames. The proof of completeness shows that each axiom schema is a Sahlqvist formula, and therefore forms a complete logic built by adding them to the axiom K of the minimal modal logic, by Sahlqvist's Theorem~\cite{sahlqvist}. We present the necessary formal details later, but for now it suffices to say that Sahlqvist formulas are modal logic formulas with special syntactic properties, which by Sahlqvist's Theorem, are guaranteed to be complete with respect to a corresponding frame.
 
 Both proofs make use of a special property of modal logics. Every modal logic formula is equivalent to a first- or second-order logic formula, in the sense that it is valid on the same frames as the \emph{corresponding} first- or second order formula. The frame conditions of \DASL\ are first order logic formulas, and they each correspond to an axiom schema of the modal logic. This correspondence suffices for soundness. When the modal formulas correspond to first order formulas, and the formulas have a certain special structure, the resulting logic is guaranteed to be complete with respect to the first order frame relations.
 
@@ -1216,36 +1222,36 @@ The result is a first order logic frame condition corresponding to the axiom sch
 	\end{enumerate}
 
 	$\Kns{i}p \iimplies p$. Applying the Standard Translation rules yields $\forall P(\forall y,\ \Rel{k}^i(x,y) \Longrightarrow P(y)) \Longrightarrow P(x)$. We have a single predicate with one instance in the antecedent behind a box. This yields the lambda function $\lambda u.(\Rel{k}^i(x,u))$. We substitute this instance of $P$ into the formula to yield:\\
-	$\forall y, (\Rel{k}^i(x,y)\Longrightarrow \lambda u.(\Rel{k}^i(x,u))(y))\Longrightarrow \lambda u.(\Rel{k}^i(x,u))(x)$, which beta reduces and simplifies to:\\
-	$\forall y, \Rel{k}^i(x,y)\Longrightarrow \Rel{k}^i(x,x)$, which is equivalent to $\Rel{k}^i(x,x)$\footnote{Proof: Assume $\Rel{k}^i(x,x)$. Then by monotonicity, $\forall y,(\Rel{k}^i(x,y) \Longrightarrow \Rel{k}^i(x,x))$. For the other direction, by contraposition, assume $\sim \Rel{k}^i(x,x)$. Then $\exists y, \sim \Rel{k}^i(x,y)$, which is equivalent to $\sim \forall y, \Rel{k}^i(x, y)$}.
+	$\forall y, (\Rel{k}^i(x,y)\Longrightarrow \lambda u.(\Rel{k}^i(x,u))(y))\Longrightarrow \lambda u.(\Rel{k}^i(x,u))(x)$, which beta reduces to:\\
+	$\forall y, (\Rel{k}^i(x,y)\Longrightarrow\Rel{k}^i(x,y))\Longrightarrow \Rel{k}^i(x,x)$, which is equivalent to $\Rel{k}^i(x,x))$.
 	
 	$\Bels{i}\varphi \iimplies \Bels{i}\Kns{i}\varphi$. We skip ahead to this more interesting example.
 	\begin{align*}
-		&\rightsquigarrow \forall P,(\forall y,\Rel{b}^i(x,y)\Longrightarrow P(y)) \Longrightarrow (\forall z, (\Rel{k}^i \circ \Rel{b}^k )(x,z) \Longrightarrow P(z)) \\
-		&\rightsquigarrow \forall P,\forall y,z, (\Rel{k}^i \circ \Rel{b}^k )(x,z)\cdot(\Rel{b}^i(x,y)\Longrightarrow P(y)) \Longrightarrow P(z)\\
-		&\rightsquigarrow \forall y,z, (\Rel{k}^i \circ \Rel{b}^k )(x,z)\cdot(\Rel{b}^i(x,y)\Longrightarrow \lambda u. (\Rel{b}^i(x,u))(y)) \Longrightarrow \lambda u.(\Rel{b}^i(x,u)(z)\\
-		&\rightsquigarrow \forall y,z, (\Rel{k}^i \circ \Rel{b}^k )(x,z)\cdot\Rel{b}^i(x,y)\Longrightarrow \Rel{b}^i(x,z)
+		&\rightsquigarrow \forall P,(\forall y,\Rel{b}^i(x,y)\Longrightarrow P(y)) \Longrightarrow (\forall z,z' (\Rel{b}^k(x,z)\cdot \Rel{k}^i(z,z')) \Longrightarrow P(z')) \\
+		&\rightsquigarrow \forall y,(\Rel{b}^i(x,y)\Longrightarrow \lambda u. (\Rel{b}^i(x,u))(y)) \\ &\text{\ \ \ \ }\Longrightarrow \forall z,z',(\Rel{b}^i(x,z) \cdot \Rel{k}^i(z,z')\Longrightarrow \lambda u.(\Rel{b}^i(x,u))(z'))	\\
+		&\rightsquigarrow \forall y, (\Rel{b}^i(x,y)
+		\Longrightarrow \Rel{b}^i(x,y)) \\ &\text{\ \ \ \ }\Longrightarrow \forall z,z',(\Rel{b}^i(x,z) \cdot \Rel{k}^i(z,z')\Longrightarrow \Rel{b}^i(x,z')\\
+		&\equiv  \forall z,z',(\Rel{b}^i(x,z) \cdot \Rel{k}^i(z,z')\Longrightarrow \Rel{b}^i(x,z')
 	\end{align*}	
-	$\forall z,(\Rel{k}^i \circ \Rel{b}^k )(x,z)$ is equivalent to $\forall z,z', \Rel{b}^i(x,z') \cdot \Rel{k}^i(z',z)$. 
+	$\forall z,(\Rel{k}^i \circ \Rel{b}^k )(x,z)$ is equivalent to $\forall z,z', \Rel{b}^i(x,z) \cdot \Rel{k}^i(z,z')$. 
 	Thus, the above translation simplifies to
-	$\forall z, (\Rel{k}^i \circ \Rel{b}^k )(x,z) \Longrightarrow \Rel{b}^i(x,z)$, which is the subset relation of the frame condition.\footnote{Because $\forall y,z,z', \Rel{b}^i(x,y)\cdot\Rel{b}(x,z')\cdot\Rel{k}(z',z)$ can rewrite $z'$ with $y$ and simplify to $\Rel{b}^i(x,y)\cdot\Rel{k}^i(y,z)$.}
+	$\forall z, (\Rel{k}^i \circ \Rel{b}^k )(x,z) \Longrightarrow \Rel{b}^i(x,z)$, which is the subset relation of the frame condition.
 	
 	$\Bels{i}\varphi \iimplies \BPoss{i}\varphi$.
 	\begin{align*}
 		&\rightsquigarrow \forall P,y, (\Rel{b}^i(x,y)\Longrightarrow P(y)) \Longrightarrow \exists z, (\Rel{b}^i(x,z)\cdot P(z))\\
 		&\rightsquigarrow \forall y, (\Rel{b}^i(x,y)\Longrightarrow \lambda u.(\Rel{b}^i(x,u))(y)) \Longrightarrow \exists z, (\Rel{b}^i(x,z)\cdot \lambda u.(\Rel{b}^i(x,u))(z))\\
-		&\rightsquigarrow \forall y, (\Rel{b}^i(x,y)) \Longrightarrow \exists z, (\Rel{b}^i(x,z))		
+		&\rightsquigarrow \forall y, (\Rel{b}^i(x,y)\Longrightarrow\Rel{b}^i(x,y)) \Longrightarrow \exists z, (\Rel{b}^i(x,z))\\
+		&\equiv \exists z, \Rel{b}^i(x,z)	
 	\end{align*}
-	which is equivalent to frame condition for seriality.\footnote{In one direction by monotonicity, in the other by instantiating the consequent and then the antecedent, and then existentially generalizing.}
+	which is equivalent to frame condition for seriality.
 	
 	$\Kns{i}\varphi \iimplies \Bels{i}\varphi$.
 	\begin{align*}
 		&\rightsquigarrow \forall P, y, (\Rel{k}^i(x,y) \Longrightarrow P(y)) \Longrightarrow \forall z, (\Rel{b}^i(x,z) \Longrightarrow P(z))\\
 		&\rightsquigarrow \forall y, (\Rel{k}^i (x,y) \Longrightarrow \lambda u.(\Rel{k}^i(x,u))(y))\Longrightarrow \forall z, (\Rel{b}^i (x,z) \Longrightarrow \lambda u. (\Rel{k}^i(x, u))(z))\\
-		&\rightsquigarrow \forall y, (\Rel{k}^i(x,y)) \Longrightarrow \forall z, (\Rel{b}^i(x,z) \Longrightarrow \Rel{k}^i(x,z))\\
-		&\equiv \forall y,z,  (\Rel{k}^i(x,y)\Longrightarrow\Rel{b}^i(x,z)\Longrightarrow\Rel{k}^i(x,z))\\
-		&\equiv \forall y,z, (\Rel{k}^i(x,y)\cdot\Rel{b}^i(x,z) \Longrightarrow \Rel{k}^i(x,z))\\
-		&\equiv \forall z, (\Rel{b}^i(x,z)\Longrightarrow\Rel{k}^i(x,z))\footnote{By monotonicity in one direction and intstantiation followed by generalization in the other.}
+		&\rightsquigarrow \forall y, (\Rel{k}^i(x,y) \Longrightarrow \Rel{k}^i(x,y)) \Longrightarrow \forall z, (\Rel{b}^i(x,z) \Longrightarrow \Rel{k}^i(x,z))\\
+		&\equiv \forall z,  \Rel{b}^i(x,z)\Longrightarrow\Rel{k}^i(x,z))\\
 	\end{align*}
 	which is the frame condition for Knowledge implies Belief.
 \end{proof}
@@ -1699,7 +1705,7 @@ Assume $M,w \models \PalPos{A,\laa}\varphi$. By the semantics of $\PalPos{A,\laa
 	&\equiv \Rel{M,M'}^S \subseteq \Rel{M,M'}
 	\end{align*}
 	
-	$\PalPos{A,\laa}p \iimplies \Bels{i}\SPalPos{A,\laa}p$.
+	$\PalPos{A,\laa}\tlnot p \iimplies \Bels{i}\SPalPos{A,\laa}\tlnot p$.
 	\begin{align*}
 		&\equiv \BPoss{i}\SPal{A,\laa}p \iimplies \Pal{A,\laa}p\\
 		&\rightsquigarrow \forall P, (\exists y, (\Rel{b}^i(x,y) \cdot \forall z, (\Rel{M,M'}^S(y,z) \Longrightarrow P(z)))\Longrightarrow \forall z', (\Rel{M,M'}(x,z') \Longrightarrow P(z'))) \\
